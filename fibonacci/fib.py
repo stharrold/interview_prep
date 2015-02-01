@@ -43,7 +43,7 @@ def fib_lookup(idx):
     else:
         fn = fibs[idx]
     logger.debug(("F{idx} = {fn}").format(idx=idx, fn=fn))
-    logger.debug(("len(fibs) = {lf}").format(lf=len(fibs)))
+    logger.debug(("fibs = {fibs}").format(fibs=fibs))
     return fn
 
 
