@@ -3,16 +3,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Global variable of fi
+# Global variable to lookup computed Fibonnaci numbers.
 fibs = [0, 1]
 
 def fib_lookup(idx):
-    """Compute Fibonacci sequence, looked up from an array.
+    """Compute Fibonacci number, looked up from an array.
 
     Parameters
     ----------
     idx : int
-        Index of Fibonacci number, > 0.
+        Index of Fibonacci number, >= 0.
 
     Returns
     -------
@@ -23,6 +23,8 @@ def fib_lookup(idx):
     -----
     From [1]_: 
     F_n = F_n-1 + F_n-2
+    Time complexity is O(1) for in-memory lookup.
+    Space complexity is O(phi^n), where phi is golden ratio, ~1.6.
     
     References
     ----------
@@ -32,7 +34,7 @@ def fib_lookup(idx):
     if len(fibs) - 1 < idx:
         if not idx > 1:
             raise AssertionError(("Program error. Global `fibs` array must\n" +
-                                  "contain at least [0,1]:\n" +
+                                  "contain at least [0, 1]:\n" +
                                   "fibs = {fibs}").format(fibs=fibs))
         # Note: Lookup F_n-1 before F_n-2 to ensure `fibs` array is filled
         # sequentially (densly with respect to index).
@@ -46,15 +48,28 @@ def fib_lookup(idx):
 
 
 def fib_recur(idx):
-    """Compute Fibonacci sequence, recursively.
+    """Compute Fibonacci number, recursively.
 
     Parameters
     ----------
     idx : int
+         Index of Fibonacci number, >= 0.
 
     Returns
     -------
     fn : int
+        Fibonacci number at given index.
+
+    Notes
+    -----
+    From [1]_: 
+    F_n = F_n-1 + F_n-2
+    Time complexity is O(phi^n), where phi is golden ratio, ~1.6.
+    Space complexity is O(2), for 2 ints.
+    
+    References
+    ----------
+    .. [1] http://en.wikipedia.org/wiki/Fibonacci_number
 
     """
     if idx == 0:
@@ -65,4 +80,3 @@ def fib_recur(idx):
         fn = fib_recur(idx-1) + fib_recur(idx-2)
     logger.debug(("F{idx} = {fn}").format(idx=idx, fn=fn))
     return fn
-    
