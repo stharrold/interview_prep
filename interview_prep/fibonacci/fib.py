@@ -1,4 +1,9 @@
+# Import standard packages.
+from __future__ import absolute_import, division, print_function
+import sys
 import logging
+# Import installed packages
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -36,14 +41,16 @@ def fib_lookup(idx):
     
     Notes
     -----
-    Time complexity is O(1) for in-memory lookup.
-    Space complexity is O(phi^n), where phi is golden ratio, ~1.6.
-    From [1]_: 
-    F_n = F_n-1 + F_n-2
+    * Fibonacci sequence [1]_: 
+        F_n = F_n-1 + F_n-2
+    * Complexities [2]_:
+        Time complexity is O(1) to O(n) for dynamic array.
+        Space complexity is O(n) for dynamic array.
     
     References
     ----------
     .. [1] http://en.wikipedia.org/wiki/Fibonacci_number
+    .. [2] http://bigocheatsheet.com/
 
     """
     # Check input.
@@ -59,15 +66,18 @@ def fib_lookup(idx):
         _init_fibs()
     if len(fibs) - 1 < idx:
         if idx > 1:
-            # Note: Lookup F_n-1 before F_n-2 for easier trace.
-            # Computations and memory access is equivalent.
+            # Note: Lookup F_n-1 before F_n-2 for clearer trace.
             try:
                 logger.debug("Recursive call: fib_lookup(idx={idxn1}) + fib_lookup(idx={idxn2})".format(idxn1=idx-1,
                                                                                                         idxn2=idx-2))
                 fn = fib_lookup(idx=idx-1) + fib_lookup(idx=idx-2)
                 fibs.append(fn)
             except RuntimeError as err:
-                print(err, file=sys.stderr)
+                fn = np.NaN
+                print(("RuntimeError: {err}\n" +
+                       "F{idx} is set to {fn}").format(err=err, idx=idx, fn=fn),
+                      file=sys.stderr)
+
         else:
             raise AssertionError(("Program error. `fibs` must be initialized with [0,1]:\n" +
                                   "fibs = {fibs}").format(fibs=fibs))
@@ -93,15 +103,18 @@ def fib_recur(idx):
 
     Notes
     -----
-    Time complexity is O(phi^n), where phi is golden ratio, ~1.6.
-    Space complexity is O(1), for storing 2 ints.
-    From [1]_: 
-    F_n = F_n-1 + F_n-2
+    * Fibonacci sequence [1_]: 
+        F_n = F_n-1 + F_n-2
+    * Complexities [2]_, [3]_:
+        Time complexity is O(phi^n), where phi is golden ratio, ~1.6.
+        Space complexity is O(n), for storing 1 ``int`` for each of n stack frames.
     
     References
     ----------
     .. [1] http://en.wikipedia.org/wiki/Fibonacci_number
-
+    .. [2] http://stackoverflow.com/questions/360748/computational-complexity-of-fibonacci-sequence
+    .. [3] http://www.quora.com/What-is-the-space-complexity-of-a-recursive-fibonacci-function
+    
     """
     # Check input.
     if not isinstance(idx, int):
@@ -115,8 +128,7 @@ def fib_recur(idx):
     elif idx == 1:
         fn = 1
     elif idx > 1:
-        # Note: Lookup F_n-1 before F_n-2 for easier trace.
-        # Computations and memory access is equivalent.
+        # Note: Lookup F_n-1 before F_n-2 for clearer trace.
         try:
             logger.debug("Recursive call: fib_lookup(idx={idxn1}) + fib_lookup(idx={idxn2})".format(idxn1=idx-1,
                                                                                                     idxn2=idx-2))
