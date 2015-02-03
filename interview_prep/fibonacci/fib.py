@@ -1,3 +1,6 @@
+"""Utilities for computing Fibonacci sequence.
+
+"""
 # Import standard packages.
 from __future__ import absolute_import, division, print_function
 import sys
@@ -6,12 +9,14 @@ import logging
 import numpy as np
 
 
+# Globals
 logger = logging.getLogger(__name__)
+fibs = []
 
 
 def _init_fibs():
     """Semi-private function to initialize Fibonacci sequence for lookup.
-    Creates a global variable: fibs = [0, 1]
+    Resets a global variable: fibs = [0, 1]
 
     Parameters
     ----------
@@ -39,15 +44,15 @@ def fib_lookup(idx):
     -------
     fn : int
         Fibonacci number at given index.
-    
+
     Notes
     -----
-    * Fibonacci sequence [1]_: 
+    * Fibonacci sequence [1]_:
         F_n = F_n-1 + F_n-2
     * Complexities [2]_:
         Time complexity is O(1) to O(n) for dynamic array.
         Space complexity is O(n) for dynamic array.
-    
+
     References
     ----------
     .. [1] http://en.wikipedia.org/wiki/Fibonacci_number
@@ -69,8 +74,9 @@ def fib_lookup(idx):
         if idx > 1:
             # Note: Lookup F_n-1 before F_n-2 for clearer trace.
             try:
-                logger.debug("Recursive call: fib_lookup(idx={idxn1}) + fib_lookup(idx={idxn2})".format(idxn1=idx-1,
-                                                                                                        idxn2=idx-2))
+                logger.debug(
+                    ("Recursive call: fib_lookup(idx={idxn1}) + fib_lookup(idx={idxn2})").format(
+                        idxn1=idx-1, idxn2=idx-2))
                 fn = fib_lookup(idx=idx-1) + fib_lookup(idx=idx-2)
                 fibs.append(fn)
             except RuntimeError as err:
@@ -104,18 +110,18 @@ def fib_recur(idx):
 
     Notes
     -----
-    * Fibonacci sequence [1_]: 
+    * Fibonacci sequence [1_]:
         F_n = F_n-1 + F_n-2
     * Complexities [2]_, [3]_:
         Time complexity is O(phi^n), where phi is golden ratio, ~1.6.
         Space complexity is O(n), for storing 1 ``int`` for each of n stack frames.
-    
+
     References
     ----------
     .. [1] http://en.wikipedia.org/wiki/Fibonacci_number
     .. [2] http://stackoverflow.com/questions/360748/computational-complexity-of-fibonacci-sequence
     .. [3] http://www.quora.com/What-is-the-space-complexity-of-a-recursive-fibonacci-function
-    
+
     """
     # Check input.
     if not isinstance(idx, int):
@@ -131,8 +137,9 @@ def fib_recur(idx):
     elif idx > 1:
         # Note: Lookup F_n-1 before F_n-2 for clearer trace.
         try:
-            logger.debug("Recursive call: fib_lookup(idx={idxn1}) + fib_lookup(idx={idxn2})".format(idxn1=idx-1,
-                                                                                                    idxn2=idx-2))
+            logger.debug(
+                ("Recursive call: fib_lookup(idx={idxn1}) + fib_lookup(idx={idxn2})").format(
+                    idxn1=idx-1, idxn2=idx-2))
             fn = fib_recur(idx=idx-1) + fib_recur(idx=idx-2)
         except RuntimeError as err:
             print(err, file=sys.stderr)
