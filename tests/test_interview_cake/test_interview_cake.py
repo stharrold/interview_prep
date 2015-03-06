@@ -6,3 +6,6 @@ def test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,2.,3.], max_profit=
     """
     assert calc_max_profit(prices) == max_profit
     return None
+
+test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,-20.,3.], max_profit=23.)
+
