@@ -22,3 +22,7 @@ def calc_max_profit(prices):
         min_price = min(min_price, price)
         max_profit = max(max_profit, price - min_price)
     return max_profit
+
+test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,-20.,3.], max_profit=23.)
+
+
