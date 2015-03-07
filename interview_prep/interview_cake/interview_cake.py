@@ -173,7 +173,7 @@ def calc_intersection(rect1, rect2):
     
     Raises:
         ValueError:
-            TODO: raise if wrong type or missing attribs.
+            TODO: raise if wrong type or missing keys.
     
     References:
         ..[1] https://www.interviewcake.com/question/rectangular-love
@@ -275,3 +275,90 @@ def calc_intersection(rect1, rect2):
     return recti
 
 
+def calc_overlap(pt1, len1, pt2, len2):
+    """Calculate the overlap of two line segments.
+
+    Args:
+        pt1: float
+            Min coordinate of line segment 1.
+        len1: float
+            Length of line segment 1.
+        pt2: float
+            Min coordinate of line segment 2.
+        len2: float
+            Length of line segment 2.
+
+    Return:
+        pti: float
+            Min coordiante of intersecting line segment.
+        leni: float
+            Length of intersecting line coordinate.
+
+    TODO:
+       Rename calc_overlap, calc_intersection_2 to reflect dimensions.
+    """
+    # TODO: Check input
+    # Order coordinates.
+    if pt1 <= pt2:
+        ((pt_lhs, len_lhs), (pt_rhs, len_rhs)) = ((pt1, len1), (pt2, len2))
+    else:
+        ((pt_lhs, len_lhs), (pt_rhs, len_rhs)) = ((pt2, len2), (pt1, len1))
+    # If segments are nested...
+    if pt_lhs + len_lhs > pt_rhs + len_rhs:
+        (pti, leni) = (pt_rhs, len_rhs)
+    else:
+        leni = pt_lhs + len_lhs - pt_rhs
+        if leni >= 0:
+            # If segments overlap...
+            pti = pt_rhs - pt_lhs
+        else:
+            # ...otherwise segments are disjoint.
+            (pti, leni) = (None, None)
+    return (pti, leni)
+
+
+def calc_intersection_2(rect1, rect2):
+    """Calculate the intersection of two rectangles but with the
+    dementionsality of the problem reduced.
+
+    Args:
+        rect1: dict
+        rect2: dict
+            Rectangles are `dicts` with keys `x`, `y`, `width`, `height`.
+            `x`, `y` are the coordinates of the bottom-left corner.
+    
+    Returns:
+        recti: dict
+            Rectangle of intersection as `dict`. Same format at `rect1`, `rect2`.
+    
+    Raises:
+        ValueError:
+            TODO: raise if wrong type or missing keys.
+    
+    References:
+        ..[1] https://www.interviewcake.com/question/rectangular-love
+
+    """
+    ##########
+    # Check input
+    if not (isinstance(rect1, dict) and isinstance(rect2, dict)):
+        raise ValueError("`rect1` and `rect2` must both be type `dict`")
+    for rect in [rect1, rect2]:
+        for key in ['x', 'y', 'width', 'height']:
+            if not key in rect:
+                raise ValueError("All `rect`s must have the key {key}".format(key=key))
+    ##########
+    # Compute overlap.
+    recti = {}
+    (recti['x'], recti['width']) = calc_overlap(pt1=rect1['x'], len1=rect1['width'],
+                                                pt2=rect2['x'], len2=rect2['width'])
+    (recti['y'], recti['height']) = calc_overlap(pt1=rect1['y'], len1=rect1['height'],
+                                                 pt2=rect2['y'], len2=rect2['height'])
+    # Check if rectangles are disjoint.
+    if (recti['width'] is None or
+        recti['height'] is None):
+        recti = {'x': None,
+                 'y': None,
+                 'width': None,
+                 'height': None}
+    return recti
