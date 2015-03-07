@@ -50,11 +50,19 @@ def test_get_highest_product(ints=[-10,-10,-20,1,3,2], highest_product=600):
     assert ip.interview_cake.interview_cake.get_highest_product_2(ints=ints) == highest_product
     return None
 
-def test_calc_intersection(rect1={'x':0, 'y':0, 'width':3, 'height':3},
-                           rect2={'x':1, 'y':1, 'width':3, 'height':3},
-                           recti={'x':1, 'y':1, 'width':2, 'height':2}):
+def test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
+                           rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0},
+                           recti={'x':1.0, 'y':1.0, 'width':2.0, 'height':2.0}):
     """pytest style test for calc_intersection
 
     """
     assert ip.interview_cake.interview_cake.calc_intersection(rect1=rect1, rect2=rect2) == recti
     return None
+
+
+test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
+                       rect2={'x':3.0, 'y':3.0, 'width':3.0, 'height':3.0},
+                       recti={'x':3.0, 'y':3.0, 'width':0.0, 'height':0.0})
+test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
+                       rect2={'x':4.0, 'y':4.0, 'width':3.0, 'height':3.0},
+                       recti={'x':None, 'y':None, 'width':None, 'height':None})
