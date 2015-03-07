@@ -63,32 +63,53 @@ def get_highest_product(ints):
         highest_product: int
             Product of the 3 largest ints.
 
+    Raises:
+        ValueError:
+            Raised if `len(ints) < 3`.
+
     References:
         ..[1] https://www.interviewcake.com/question/highest-product-of-3
     
     """
     # Check input
-    # TODO: raise ValueError
-    assert len(ints) >= 3
+    if len(ints) < 3:
+        raise ValueError(“`ints` must have at least 3 elements”)
     # Compute top three ints
     # TODO: make top 3 a default arg
     # TODO: use collections.deque?
-    tops = sorted(ints[:3])
-    for iint in ints[3:]:
-        # TODO: math trick?
-        for (idx, top) in enumerate(tops):
-            if iint > top:
-                tops[idx] = iint
-                tops = sorted(tops)
-                break
-            elif iint == top:
-                continue
+    tops_pos = []
+    tops_neg = []
+    for iint in ints:
+        if iint >= 0:
+            if len(tops_pos) < 3:
+                tops_pos.append(iint)
+                tops_pos = sorted(tops_pos) # TODO: optimize
             else:
-                break
+                for (idx, top) in enumerate(tops_pos):
+                    if iint > top:
+                        tops_pos[idx] = iint
+                        break
+                    else:
+                        break
+        else:
+            if len(tops_neg) < 2:
+                tops_neg.append(iint)
+                tops_neg = sorted(tops_neg, key=abs) # TODO; optimize
+            else:
+                for (idx, top) in enumerate(tops_neg):
+                    if abs(iint) > abs(top):
+                        tops_neg[idx] = iint
+                        break
+                    else:
+                        break
     # Compute product
-    highest_product = 1
-    for top in tops:
-        highest_product *= top
-    return highest_product
-    
+    prod_pos = 1
+    for top in tops_pos:
+        prod_pos *= top
+    prod_neg = 1
+    for top in tops_neg:
+        prod_neg *= top
+    prod_pos_neg = prod_neg * max(tops_pos)
+    highest_product = max(prod_pos, prod_pos_neg)
+    return highest_product    
 
