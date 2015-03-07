@@ -13,7 +13,7 @@ def calc_max_profit(prices):
             Maximum profit possible from buying then selling during `prices`.
             
     References:
-      .. [1] https://www.interviewcake.com/question/stock-price
+        .. [1] https://www.interviewcake.com/question/stock-price
     
     """
     # TODO: use indices as internal check that program is working.
@@ -34,6 +34,10 @@ def get_products_of_all_ints_except_at_index(ints):
     Returns:
         prods: list of int
         List of `int` products.
+
+    References:
+        ..[1] https://www.interviewcake.com/question/product-of-other-numbers
+    
     """
     idxs = xrange(len(ints))
     prods = [1]*len(ints)
