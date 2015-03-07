@@ -51,3 +51,44 @@ def get_products_of_all_ints_except_at_index(ints):
         prod *= ints[idx]
     return prods
 
+
+def get_highest_product(ints):
+    """Compute the product of the three largest ints in an array.
+    
+    Args:
+        ints: list
+            List of `ints` with `len(ints) >= 3`
+
+    Returns:
+        highest_product: int
+            Product of the 3 largest ints.
+
+    References:
+        ..[1] https://www.interviewcake.com/question/highest-product-of-3
+    
+    """
+    # Check input
+    # TODO: raise ValueError
+    assert len(ints) >= 3
+    # Compute top three ints
+    # TODO: make top 3 a default arg
+    # TODO: use collections.deque?
+    tops = sorted(ints[:3])
+    for iint in ints[3:]:
+        # TODO: math trick?
+        for (idx, top) in enumerate(tops):
+            if iint > top:
+                tops[idx] = iint
+                tops = sorted(tops)
+                break
+            elif iint == top:
+                continue
+            else:
+                break
+    # Compute product
+    highest_product = 1
+    for top in tops:
+        highest_product *= top
+    return highest_product
+    
+
