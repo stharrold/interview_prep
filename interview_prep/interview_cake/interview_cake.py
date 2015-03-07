@@ -157,3 +157,121 @@ def get_highest_product_2(ints):
         lowest = min(lowest, iint)
     return highest_product
 
+
+def calc_intersection(rect1, rect2):
+    """Calculate the intersection of two rectangles.
+    
+    Args:
+        rect1: dict
+        rect2: dict
+            Rectangles are `dicts` with keys `x`, `y`, `width`, `height`.
+            `x`, `y` are the coordinates of the bottom-left corner.
+    
+    Returns:
+        recti: dict
+            Rectangle of intersection as `dict`. Same format at `rect1`, `rect2`.
+    
+    Raises:
+        ValueError:
+            TODO: raise if wrong type or missing attribs.
+    
+    References:
+        ..[1] https://www.interviewcake.com/question/rectangular-love
+
+    """
+    ##########
+    # Check input
+    if not (isinstance(rect1, dict) and isinstance(rect2, dict)):
+        raise ValueError("`rect1` and `rect2` must both be type `dict`")
+    for rect in [rect1, rect2]:
+        for key in ['x', 'y', 'width', 'height']:
+            if not key in rect:
+                raise ValueError("All `rect`s must have the key {key}".format(key=key))
+    ##########
+    # Strictly order the rectangles in a well-defined way: left-to-right, up-to-down
+    # Assigning by references, so no extra mem usage.
+    (rect_lhs, rect_rhs) = (rect1, rect2) if rect1['x'] <= rect2['x'] else (rect2, rect1)
+    (rect_lwr, rect_upr) = (rect1, rect2) if rect1['y'] <= rect2['y'] else (rect2, rect1)
+    assert rect_lhs != rect_rhs
+    assert rect_lwr != rect_upr
+    ##########
+    # Cases:
+    # Overlapping case:
+    # |
+    # |           xr,yu+hu------------------------xr+wr,yu+hu
+    # |             |                                 |
+    # | xl,yl+hl----|------xl+wl,yl+hl                |
+    # |   |         |        |                        |
+    # |   |       xr,yu------|--------------------xr+wr,yu
+    # |   |                  |
+    # | xl,yl--------------xl+wl,yl
+    # |
+    # 0,0 ------------------------------------------------
+    # xl+wl - xl = (xr - xl) + (xl+wl - xr) ==> wi = xl+wl - xr; xi = xl + (xr - xl) = xr
+    # yl+hl - yl = (yu - yl) + (yl+hl - yu) ==> hi = yl+hl - yu; yi = yl + (yu - yl) = yu
+    #
+    # Overlapping case:
+    # |
+    # |  xl,yu+hu-----------xl+wl,yu+hu
+    # |   |                    |
+    # |   |       xr,yl+hl-----|------------------xr+wr,yl+hl
+    # |   |         |          |                      |
+    # |  xl,yu------|-------xl+wl,yu                  |
+    # |             |                                 |
+    # |          xr,yl----------------------------xr+wr,yl
+    # |
+    # 0,0 ------------------------------------------------
+    # xl+wl - xl = (xr - xl) + (xl+wl - xr) ==> wi = xl+wl - xr; xi = xl + (xr - xl) = xr
+    # yl+hl - yl = (yu - yl) + (yl+hl - yu) ==> hi = yl+hl - yu; yi = yl + (yu - yl) = yu
+    #
+    # Nested case:
+    # |
+    # |  xl,yl+hl-----------------------------------------xl+wl,yl+hl
+    # |     |                                               |
+    # |     |       xr,yu+hu--------------xr+wr,yu+hu       |
+    # |     |          |                      |             |
+    # |     |       xr,yu-----------------xr+wr,yu          |
+    # |     |                                               |
+    # |   xl,yl-------------------------------------------xl+wl,yl
+    # |
+    # 0,0 ------------------------------------------------
+    # xl+wl - xl = (xr - xl) + (xr+wr - xr) + (xl+wl - xr+wr) ==> wi = xr+wr - xr = wr; xi = xl + (xr - xl) = xr
+    # yl+hl - yl = (yu - yl) + (yu+hu - yu) + (yl+hl - yu+hu) ==> hi = yu+hu - yu = hu; yi = yl + (yu - yl) = yu
+    widths_nested = True if rect_lhs['x'] + rect_lhs['width'] > rect_rhs['x'] + rect_rhs['width'] else False
+    heights_nested = True if rect_lwr['y'] + rect_lwr['height'] > rect_upr['y'] + rect_upr['height'] else False
+    #
+    # Disjoint case:
+    # |
+    # |  xl,yl+hl----xl+xw,yl+hl      
+    # |     |          |              xr,yu+hu---------------xr+wr,yu+hu
+    # |     |          |                |                         |
+    # |     |          |                |                         |
+    # |     |          |              xr,yu------------------xr+wr,yu   
+    # |     |          |     
+    # |   xl,yl------xl+xw,yl
+    # |
+    # 0,0 ------------------------------------------------
+    # wi = None, xi = None
+    # hi = None, yi = None
+    if (rect_lhs['x'] + rect_lhs['width'] < rect_rhs['x'] or
+        rect_lwr['y'] + rect_lwr['height'] < rect_upr['y']):
+        disjoint = True
+    else:
+        disjoint = False
+    ##########
+    # Calculate and return rectangle intersection
+    if disjoint:
+        recti = \
+            {'x': None,
+             'y': None,
+             'width': None,
+             'height': None}
+    else:
+        recti = \
+            {'x': rect_rhs['x'],
+             'y': rect_upr['y'],
+             'width': rect_rhs['width'] if widths_nested else rect_lhs['x'] + rect_lhs['width'] - rect_rhs['x'],
+             'height': rech_upr['height'] if heights_nested else rect_lwr['y'] + rect_lwr['height'] - rect_upr['y']}
+    return recti
+
+
