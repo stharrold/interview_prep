@@ -65,7 +65,7 @@ test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
                        rect2={'x':3.0, 'y':3.0, 'width':3.0, 'height':3.0},
                        recti={'x':3.0, 'y':3.0, 'width':0.0, 'height':0.0})
 test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                       rect2={'x':4.0, 'y':4.0, 'width':3.0, 'height':3.0},
+                       rect2={'x':4.0, 'y':0.0, 'width':3.0, 'height':3.0},
                        recti={'x':None, 'y':None, 'width':None, 'height':None})
 
 
@@ -83,6 +83,6 @@ test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
                          rect2={'x':3.0, 'y':3.0, 'width':3.0, 'height':3.0},
                          recti={'x':3.0, 'y':3.0, 'width':0.0, 'height':0.0})
 test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                         rect2={'x':4.0, 'y':4.0, 'width':3.0, 'height':3.0},
+                         rect2={'x':4.0, 'y':0.0, 'width':3.0, 'height':3.0},
                          recti={'x':None, 'y':None, 'width':None, 'height':None})
 

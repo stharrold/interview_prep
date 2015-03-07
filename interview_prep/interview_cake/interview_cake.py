@@ -354,4 +354,11 @@ def calc_intersection_2(rect1, rect2):
                                                 pt2=rect2['x'], len2=rect2['width'])
     (recti['y'], recti['height']) = calc_overlap(pt1=rect1['y'], len1=rect1['height'],
                                                  pt2=rect2['y'], len2=rect2['height'])
+    # Check if rectangles are disjoint.
+    if (recti['width'] is None or
+        recti['height'] is None):
+        recti = {'x': None,
+                 'y': None,
+                 'width': None,
+                 'height': None}
     return recti
