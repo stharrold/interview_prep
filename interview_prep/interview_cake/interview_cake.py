@@ -1,6 +1,11 @@
 """My iterations of answers to questions on Interview Cake.
 """
 
+
+from __future__ import absolute_import, division, print_function
+import copy
+
+
 def calc_max_profit(prices):
     """Compute maximum profit.
     
@@ -406,7 +411,7 @@ def condense_meeting_times(times):
 
 
 def gen_change_combinations(amount, denominations, init_combo=None):
-    “””Create a combination of coins that sum to amount.
+    """Create a combination of coins that sum to amount.
     
     Args:
         amount: int
@@ -423,25 +428,29 @@ def gen_change_combinations(amount, denominations, init_combo=None):
     Yields:
         combo: list
             Generates a combination of `denominations` that sum to `amount`.
-            Example: ([(1, 1, 1, 1), (1, 1, 2), (1, 3), (2, 2)])
+            Example: ([1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2])
     
     See Also:
         count_change_combinations
 
     TODO:
-        - Redo to avoid Python’s recursion limit.
+        - Redo to avoid Python's recursion limit.
     
-    “””
+    """
     # TODO: check input
     if init_combo is None:
         combo = [denominations[0]]
     else:
-        combo = init_combo.append(denominations[0])
+        combo = copy.deepcopy(init_combo)
+        combo.append(denominations[0])
     for (idx, denom) in enumerate(denominations):
         combo[-1] = denom
         remainder = amount - sum(combo)
         if remainder > 0:
-            yield gen_change_combinations(amount=amount, denominations=denominations[idx:], init_combo=combo)
+            for gen_combo in gen_change_combinations(amount=amount,
+                                                 denominations=denominations[idx:],
+                                                 init_combo=combo):
+                yield gen_combo
         elif remainder == 0:
             yield combo
             break
@@ -478,6 +487,6 @@ def count_change_combinations(amount, denominations):
     # TODO: check input
     num = 0
     denominations = sorted(set(denominations))
-    for _ in gen_change_combination(amount=amount, denominations=denominations, init_combo=None):
+    for _ in gen_change_combinations(amount=amount, denominations=denominations, init_combo=None):
            num += 1
     return num

@@ -103,11 +103,12 @@ test_condense_meeting_times(times=[(1, 10), (2, 6), (3, 5), (7, 9)], condensed=[
 
 
 def test_gen_change_combinations(amount=4, denominations=[1, 2, 3], init_combo=None,
-                                 combinations={[1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2], None}):
+                                 combinations=[[1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2]]):
     """pytest style test for gen_change_denominations
 
     """
-    assert list(gen_change_combinations) == combinations
+    assert list(ip.interview_cake.interview_cake.gen_change_combinations(
+        amount=amount, denominations=denominations, init_combo=init_combo)) == combinations
     return None
 
 
@@ -115,5 +116,6 @@ def test_count_change_combinations(amount=4, denominations=[1, 2, 3], num=4):
     """pytest style test for count_change_denominations
     
     """
-    assert count_change_combinations(amount=amount, denominations=denominations) == num
+    assert ip.interview_cake.interview_cake.count_change_combinations(
+        amount=amount, denominations=denominations) == num
     return None
