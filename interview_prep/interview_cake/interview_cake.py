@@ -365,46 +365,40 @@ def calc_intersection_2(rect1, rect2):
 
 
 def condense_meeting_times(times):
-    “””Combine meeting times to contiguous blocks.
+    """Condense meeting times into contiguous blocks.
     
     Args:
         times: list
-            List of tuples of ints representing start, end meeting times.
-            Example: [(1, 3), (2, 4)]
-    
+            List of meeting times as tuples.
+            Example: [(0, 1), (3, 5), (2, 4)]
+
     Returns:
         condensed: list
-            Same format as `times` but concatenated into contiguous time blocks.
-            Example: [(1, 4)]
+            Sorted list of combined meeting times as tuples.
+            Example: [(0, 1), (2, 5)]
+
+    Notes:
+        - interviewcake.com problem #4
+        - Ideal complexity from output: time: O(n), space: O(n)
+        - Realized complexity from algorithm: time: O(nlogn), space: O(n)
     
     References:
         ..[1] https://www.interviewcake.com/question/merging-ranges
-    
-    “””
-    # TODO: check input types, dims.
-    # Ideal: time: O(N); space: O(N)
-    # Initial approach: brute force.
-    # refinement: greedy algorithm
-    # sorted complexity is O(n logn)
-    is_first_iter = True
-    iter_num = 0
-    condensed = sorted(times, key=lambda tup: tup[0])
-    condensed_new = []
-    iter_max = len(times)
-    while condensed_new != condensed and iter_num < iter_max:
-        if not is_first_iter:
-            condensed = copy.deepcopy(condensed_new)
-            condensed_new = []
-        if len(condensed) < 2:
-            break
-        else:
-            for (time_prev, time_next) in (condensed[:-1], condensed[1:]):
-                # If previous end time > next start time, then combine.
-                if time_prev[1] >= time_next[0]:
-                    condensed_new.append(time_prev[0], time_next[1])
-                    
-                else:
-                    condensed_new.append(time_prev)
-        iter_num += 1
-        is_first_iter = False
+        
+    """
+    # TODO: check input
+    # Sort times first by meeting start then by meeting end
+    # to avoid needing to compare all meeting times to each other.
+    # Sorting eliminates need to test if meetings occur before each other
+    # or if they are nested.
+    times = sorted(times, key=lambda tup: (tup[0], tup[1]))
+    condensed = [times[0]]
+    for time in times:
+        cond = condensed[-1]
+        # If meetings are disjoint, append as new meeting.
+        if time[0] > cond[1]:
+            condensed.append(time)
+        # Else if meetings overlap, join.
+        elif cond[0] <= time[0] and time[0] <= cond[1] and cond[1] <= time[1]:
+            condensed[-1] = (cond[0], time[1])
     return condensed
