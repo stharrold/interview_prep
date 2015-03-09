@@ -362,3 +362,49 @@ def calc_intersection_2(rect1, rect2):
                  'width': None,
                  'height': None}
     return recti
+
+
+def condense_meeting_times(times):
+    “””Combine meeting times to contiguous blocks.
+    
+    Args:
+        times: list
+            List of tuples of ints representing start, end meeting times.
+            Example: [(1, 3), (2, 4)]
+    
+    Returns:
+        condensed: list
+            Same format as `times` but concatenated into contiguous time blocks.
+            Example: [(1, 4)]
+    
+    References:
+        ..[1] https://www.interviewcake.com/question/merging-ranges
+    
+    “””
+    # TODO: check input types, dims.
+    # Ideal: time: O(N); space: O(N)
+    # Initial approach: brute force.
+    # refinement: greedy algorithm
+    # sorted complexity is O(n logn)
+    is_first_iter = True
+    iter_num = 0
+    condensed = sorted(times, key=lambda tup: tup[0])
+    condensed_new = []
+    iter_max = len(times)
+    while condensed_new != condensed and iter_num < iter_max:
+        if not is_first_iter:
+            condensed = copy.deepcopy(condensed_new)
+            condensed_new = []
+        if len(condensed) < 2:
+            break
+        else:
+            for (time_prev, time_next) in (condensed[:-1], condensed[1:]):
+                # If previous end time > next start time, then combine.
+                if time_prev[1] >= time_next[0]:
+                    condensed_new.append(time_prev[0], time_next[1])
+                    
+                else:
+                    condensed_new.append(time_prev)
+        iter_num += 1
+        is_first_iter = False
+    return condensed
