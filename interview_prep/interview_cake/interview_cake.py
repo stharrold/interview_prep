@@ -1,6 +1,11 @@
 """My iterations of answers to questions on Interview Cake.
 """
 
+
+from __future__ import absolute_import, division, print_function
+import copy
+
+
 def calc_max_profit(prices):
     """Compute maximum profit.
     
@@ -403,3 +408,85 @@ def condense_meeting_times(times):
         elif cond[0] <= time[0] and time[0] <= cond[1] and cond[1] <= time[1]:
             condensed[-1] = (cond[0], time[1]) # set item takes O(1)
     return condensed
+
+
+def gen_change_combinations(amount, denominations, init_combo=None):
+    """Create a combination of coins that sum to amount.
+    
+    Args:
+        amount: int
+            Value of change to partition into denominations.
+            Example: 4
+        denominations: list
+            Sorted list of unique denominations into which `amount` of change is partitioned.
+            Example: [1,2,3]
+        init_combo: {None}, list, optional
+            Initialize a portion of combination. If `None` (default), then builds
+            combination of `denominations` without prior values.
+            Example: None
+    
+    Yields:
+        combo: list
+            Generates a combination of `denominations` that sum to `amount`.
+            Example: ([1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2])
+    
+    See Also:
+        count_change_combinations
+
+    TODO:
+        - Redo to avoid Python's recursion limit.
+    
+    """
+    # TODO: check input
+    if init_combo is None:
+        combo = [denominations[0]]
+    else:
+        combo = copy.deepcopy(init_combo)
+        combo.append(denominations[0])
+    for (idx, denom) in enumerate(denominations):
+        combo[-1] = denom
+        remainder = amount - sum(combo)
+        if remainder > 0:
+            for gen_combo in gen_change_combinations(amount=amount,
+                                                 denominations=denominations[idx:],
+                                                 init_combo=combo):
+                yield gen_combo
+        elif remainder == 0:
+            yield combo
+            break
+        else:
+            break
+
+
+def count_change_combinations(amount, denominations):
+    """Count the number of possible denominations for a given amount of change.
+    
+    Args:
+        amount: int
+            Value of change to partition into denominations.
+            Example: 4
+        denominations: list
+            List of denominations into which `amount` of change is partitioned.
+            Example: [1,2,3]
+
+    Returns:
+        num: int
+            Number of possible combinations of denominations to total `amount` of change.
+            Example: 4
+
+    See Also
+        gen_change_combinations
+    
+    Notes:
+        - interviewcake.com question #5.
+
+    References:
+        ..[1] https://www.interviewcake.com/question/coin
+
+    """
+    # TODO: check input
+    num = 0
+    denominations = sorted(set(denominations))
+    for _ in gen_change_combinations(amount=amount, denominations=denominations, init_combo=None):
+           num += 1
+    return num
