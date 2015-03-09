@@ -370,6 +370,7 @@ def condense_meeting_times(times):
     Args:
         times: list
             List of meeting times as tuples.
+            List does not need to be sorted.
             Example: [(0, 1), (3, 5), (2, 4)]
 
     Returns:
@@ -378,12 +379,12 @@ def condense_meeting_times(times):
             Example: [(0, 1), (2, 5)]
 
     Notes:
-        - interviewcake.com problem #4
-        - Ideal complexity from output: time: O(n), space: O(n)
-        - Realized complexity from algorithm: time: O(nlogn), space: O(n)
+        - Interviewcake.com problem #4
+        - Complexity: time: O(nlgn), space: O(n)
     
     References:
         ..[1] https://www.interviewcake.com/question/merging-ranges
+        ..[2] https://wiki.python.org/moin/TimeComplexity
         
     """
     # TODO: check input
@@ -400,5 +401,5 @@ def condense_meeting_times(times):
             condensed.append(time)
         # Else if meetings overlap, join.
         elif cond[0] <= time[0] and time[0] <= cond[1] and cond[1] <= time[1]:
-            condensed[-1] = (cond[0], time[1])
+            condensed[-1] = (cond[0], time[1]) # set item takes O(1)
     return condensed
