@@ -4,6 +4,7 @@
 
 from __future__ import absolute_import, division, print_function
 import copy
+import collections
 
 
 def calc_max_profit(prices):
@@ -433,8 +434,8 @@ def gen_change_combinations(amount, denominations, init_combo=None):
     See Also:
         count_change_combinations
 
-    TODO:
-        - Redo to avoid large call stack.
+    Notes:
+        - Because recursive, can cause large call stack.
     
     """
     # TODO: check input
@@ -480,6 +481,7 @@ def count_change_combinations(amount, denominations):
     
     Notes:
         - interviewcake.com question #5.
+        - Because uses a recursive helper function, can cause a large call stack.
         - Complexity:
             time: O(amount*len(denominations))
             space: O(amount*len(denominations)) in call stack
@@ -515,9 +517,11 @@ def count_change_combinations_2(amount, denominations):
 
     Notes:
         - interviewcake.com question #5.
+        - Non-recursive, but iterates through denominations for each amount and
+            requires saving combinations in order to avoid double-counting unique solutions.
         - Complexity:
             time: O(amount*len(denominations))
-            space: O(amount)
+            space: O(amount*len(denominations))
 
     References:
         ..[1] https://www.interviewcake.com/question/coin
@@ -543,5 +547,45 @@ def count_change_combinations_2(amount, denominations):
                         combos[amt].append(tuple(sorted(comb)))
         # Remove duplicates.
         combos[amt] = set(combos[amt])
-    return len(combos[amt])
+    return len(combos[amount]) if combos.has_key(amount) else 0
+
         
+def count_change_combinations_3(amount, denominations):
+    """Count the number of possible combinations for a given amount of change
+    from the given denominations.
+
+    Args:
+        amount: int
+            Value of change to partition into denominations.
+            Example: 4
+        denominations: list
+            List of denominations into which `amount` of change is partitioned.
+            Example: [1, 2, 3]
+
+    Returns:
+        num: int
+            Number of possible combinations of denominations to total `amount` of change.
+            Example: 4
+
+    Notes:
+        - interviewcake.com question #5.
+        - Non-recursive and iterates through amounts for each denomination to eliminate
+            saving combinations in order to avoid double-counting unique solutions.
+        - Complexity:
+            time: O(amount*len(denominations))
+            space: O(amount)
+
+    References:
+        ..[1] https://www.interviewcake.com/question/coin
+    
+    """
+    # TODO: check input
+    # TODO: use collections.Counter?
+    num_combos = collections.defaultdict(int)
+    # Iterate through amount for each denomination to avoid double-counting.
+    # TODO: make self-referencing dict comprehension for 2x speedup
+    for denom in denominations:
+        num_combos[denom] += 1
+        for amt in xrange(denom+1, amount+1):
+            num_combos[amt] += num_combos[amt-denom]
+    return num_combos[amount]
