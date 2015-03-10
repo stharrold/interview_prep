@@ -419,7 +419,7 @@ def gen_change_combinations(amount, denominations, init_combo=None):
             Example: 4
         denominations: list
             Sorted list of unique denominations into which `amount` of change is partitioned.
-            Example: [1,2,3]
+            Example: [1, 2, 3]
         init_combo: {None}, list, optional
             Initialize a portion of combination. If `None` (default), then builds
             combination of `denominations` without prior values.
@@ -434,7 +434,7 @@ def gen_change_combinations(amount, denominations, init_combo=None):
         count_change_combinations
 
     TODO:
-        - Redo to avoid Python's recursion limit.
+        - Redo to avoid large call stack.
     
     """
     # TODO: check input
@@ -459,7 +459,8 @@ def gen_change_combinations(amount, denominations, init_combo=None):
 
 
 def count_change_combinations(amount, denominations):
-    """Count the number of possible denominations for a given amount of change.
+    """Count the number of possible combinations for a given amount of change
+    from the given denominations.
     
     Args:
         amount: int
@@ -467,18 +468,21 @@ def count_change_combinations(amount, denominations):
             Example: 4
         denominations: list
             List of denominations into which `amount` of change is partitioned.
-            Example: [1,2,3]
+            Example: [1, 2, 3]
 
     Returns:
         num: int
             Number of possible combinations of denominations to total `amount` of change.
             Example: 4
 
-    See Also
+    See Also:
         gen_change_combinations
     
     Notes:
         - interviewcake.com question #5.
+        - Complexity:
+            time: O(amount*len(denominations))
+            space: O(amount*len(denominations)) in call stack
 
     References:
         ..[1] https://www.interviewcake.com/question/coin
@@ -490,3 +494,54 @@ def count_change_combinations(amount, denominations):
     for _ in gen_change_combinations(amount=amount, denominations=denominations, init_combo=None):
            num += 1
     return num
+
+
+def count_change_combinations_2(amount, denominations):
+    """Count the number of possible combinations for a given amount of change
+    from the given denominations.
+
+    Args:
+        amount: int
+            Value of change to partition into denominations.
+            Example: 4
+        denominations: list
+            List of denominations into which `amount` of change is partitioned.
+            Example: [1, 2, 3]
+
+    Returns:
+        num: int
+            Number of possible combinations of denominations to total `amount` of change.
+            Example: 4
+
+    Notes:
+        - interviewcake.com question #5.
+        - Complexity:
+            time: O(amount*len(denominations))
+            space: O(amount)
+
+    References:
+        ..[1] https://www.interviewcake.com/question/coin
+    
+    """
+    # TODO: check input
+    combos = {}
+    # Build all possible combinations of denominations by memorizing.
+    for amt in xrange(1, amount+1):
+        combos[amt] = []
+        if amt in denominations:
+            combos[amt].append(tuple([amt]))
+        # Collect combinations from amounts and their complements.
+        amts_gt = [key for key in combos.keys() if key >= round(max(combos)/2)]
+        for amt_gt in amts_gt:
+            amt_lt = amt - amt_gt
+            if amt_lt in combos:
+                for comb_gt in combos[amt_gt]:
+                    for comb_lt in combos[amt_lt]:
+                        comb = []
+                        comb.extend(list(comb_gt))
+                        comb.extend(list(comb_lt))
+                        combos[amt].append(tuple(sorted(comb)))
+        # Remove duplicates.
+        combos[amt] = set(combos[amt])
+    return len(combos[amt])
+        
