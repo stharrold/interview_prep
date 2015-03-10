@@ -119,3 +119,12 @@ def test_count_change_combinations(amount=4, denominations=[1, 2, 3], num=4):
     assert ip.interview_cake.interview_cake.count_change_combinations(
         amount=amount, denominations=denominations) == num
     return None
+
+
+def test_count_change_combinations_2(amount=4, denominations=[1, 2, 3], num=4):
+    """pytest style test for count_change_denominations_2
+    
+    """
+    assert ip.interview_cake.interview_cake.count_change_combinations_2(
+        amount=amount, denominations=denominations) == num
+    return None
