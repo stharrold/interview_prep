@@ -605,7 +605,7 @@ class TempTracker(object):
         - Complexity:
             time for get methods: O(1)
             time for insert: O(number_of_temperatures)
-            space: O(number_of_unique_temperatures)
+            space: O(number_of_unique_temperatures) ~ O(1)
 
     References:
         ..[1] https://www.interviewcake.com/question/temperature-tracker
