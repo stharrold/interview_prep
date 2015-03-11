@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
 """Tests for interview_prep/interview_cake/interview_cake.py
+
 """
 
 
 from __future__ import absolute_import, division, print_function
+import collections
 import sys
 sys.path.insert(0, '.')
 import interview_prep as ip
@@ -136,4 +139,20 @@ def test_count_change_combinations_3(amount=4, denominations=[1, 2, 3], num=4):
     """
     assert ip.interview_cake.interview_cake.count_change_combinations_3(
         amount=amount, denominations=denominations) == num
+    return None
+
+
+def test_TempTracker(temps=[1, 2, 3, 3], temps2=4, ctr=collections.Counter([1, 2, 3, 3])):
+    """pytest style test for class TempTracker
+
+    """
+    temptracker = ip.interview_cake.interview_cake.TempTracker(temps=temps)
+    assert temptracker.ctr == ctr
+    temptracker.insert(temps=temps2)
+    ctr.update([temps2])
+    assert temptracker.ctr == ctr
+    assert temptracker.get_max() == max(ctr)
+    assert temptracker.get_min() == min(ctr)
+    assert temptracker.get_mean() == sum(ctr.elements()) / sum(ctr.values())
+    assert temptracker.get_mode() == ctr.most_common(1)
     return None
