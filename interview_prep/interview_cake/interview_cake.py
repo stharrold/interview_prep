@@ -1,4 +1,6 @@
-"""My iterations of answers to questions on Interview Cake.
+# -*- coding: utf-8 -*-
+"""My iterations of answers to questions on iterviewcake.com.
+
 """
 
 
@@ -580,8 +582,7 @@ def count_change_combinations_3(amount, denominations):
     
     """
     # TODO: check input
-    # TODO: use collections.Counter?
-    num_combos = collections.defaultdict(int)
+    num_combos = collections.Counter()
     # Iterate through amount for each denomination to avoid double-counting.
     # TODO: make self-referencing dict comprehension for 2x speedup
     for denom in denominations:
@@ -589,3 +590,115 @@ def count_change_combinations_3(amount, denominations):
         for amt in xrange(denom+1, amount+1):
             num_combos[amt] += num_combos[amt-denom]
     return num_combos[amount]
+
+
+class TempTracker(object):
+    """Manage temperatures to check consistency with guarantee.
+    Units are degrees Fahrenheit. Assumes 0 deg F <= temp <= 110 deg F.
+
+    Attrs:
+        ctr: collections.Counter
+            Number of temperatures grouped by temperature.
+
+    Notes:
+        - interviewcake.com question #6
+        - Complexity:
+            time for get methods: O(1)
+            time for insert: O(number_of_temperatures)
+            space: O(number_of_unique_temperatures)
+
+    References:
+        ..[1] https://www.interviewcake.com/question/temperature-tracker
+    
+    """
+
+
+    def insert(self, temps):
+        """Insert a new temperature into the record.
+        
+        Args:
+            temps: {list, int}
+            List of `int` temperatures or a single `int` temperature.
+
+        Returns:
+            None
+        
+        """
+        # TODO: check temp value 0-110
+        # Cast to type `list` in case `temps` is only an `int`
+        if temps is None:
+            temps = []
+        elif not isinstance(temps, collections.Iterable):
+            temps = [temps]
+        if not hasattr(self, 'ctr'):
+            self.ctr = collections.Counter(temps)
+        else:
+            self.ctr.update(temps)
+        self._max = max(self.ctr)
+        self._min = min(self.ctr)
+        self._total = sum(self.ctr.elements())
+        self._num = sum(self.ctr.values())
+        self._mean = self._total / self._num
+        self._mode = self.ctr.most_common(1)
+        return None
+
+
+    def __init__(self, temps=None):
+        """Initialize TempTracker.
+        
+        Args:
+            temps: {None}, {list, int}, optional
+                List of `int` temperatures or a single `int` temperature.
+                If `None` (default), initialized to empty `list`.
+
+        Returns:
+            None
+        
+        """
+        # TODO: check temp value 0-110
+        self.insert(temps)
+        return None
+
+
+    def get_max(self):
+        """Compute the maximum temperature.
+
+       Returns:
+           temp: int
+               Maximum temperature.
+        
+        """
+        return self._max
+
+
+    def get_min(self):
+        """Compute the minimum temperature.
+        
+        Returns:
+            temp: int
+                Minimum temperature.
+
+        """
+        return self._min
+
+
+    def get_mean(self):
+        """Compute the mean temperature.
+        
+        Returns:
+            temp: float
+                Mean temperature.
+
+        """
+        return self._mean
+
+
+    def get_mode(self):
+        """Compute the temperature mode.
+        
+        Returns:
+            temp: int
+                Temperature mode.
+        
+        """
+        return self._mode
