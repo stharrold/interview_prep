@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Tests for interview_prep/interview_cake/interview_cake.py
 
@@ -19,7 +20,7 @@ def test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,2.,3.], max_profit=
     return None
 
 
-test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,-20.,3.], max_profit=23.)
+test_calc_max_profit(prices=[5.0, 4.0, 5.0, 3.0, 6.0, 5.0, 9.0, 8.0, 10.0, -20.0, 3.0], max_profit=23.)
 
 
 def test_get_products_of_all_ints_except_at_index(ints=[1,7,3,4], prods=[7*3*4, 1*3*4, 1*7*4, 1*7*3]):
@@ -105,6 +106,7 @@ def test_condense_meeting_times(times=[(0, 1), (3, 9), (4, 5), (8, 10), (2, 4)],
 test_condense_meeting_times(times=[(1, 10), (2, 6), (3, 5), (7, 9)], condensed=[(1, 10)])
 
 
+
 def test_gen_change_combinations(amount=4, denominations=[1, 2, 3], init_combo=None,
                                  combinations=[[1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2]]):
     """pytest style test for gen_change_denominations
@@ -156,3 +158,46 @@ def test_TempTracker(temps=[1, 2, 3, 3], temps2=4, ctr=collections.Counter([1, 2
     assert temptracker.get_mean() == sum(ctr.elements()) / sum(ctr.values())
     assert temptracker.get_mode() == ctr.most_common(1)
     return None
+
+
+def test_is_leaf_node(node=['a'], is_leaf=True):
+    """pytest style test for is_leaf
+
+    """
+    assert ip.interview_cake.interview_cake.is_leaf_node(node=node) == is_leaf
+    return None
+
+
+test_is_leaf_node(node=['a', 'b'], is_leaf=False)
+
+
+def test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[1, 1],
+                                       node_sp=['d'], path_sp=[1, 2], rel_sp='younger_sibling'):
+    """pytest style test for get_younger_sibling_or_parent
+    
+    """
+    assert ip.interview_cake.interview_cake.get_younger_sibling_or_parent(tree=tree, path=path) == \
+        (node_sp, path_sp, rel_sp)
+    try: ip.interview_cake.interview_cake.get_younger_sibling_or_parent(tree=tree, path=[])
+    except ValueError: pass
+    return None
+
+
+test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[1, 2],
+                                   node_sp=['b', ['c'], ['d']], path_sp=[1], rel_sp='parent')
+test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[1],
+                                   node_sp=['e'], path_sp=[2], rel_sp='younger_sibling')
+test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[2],
+                                   node_sp=['a', ['b', ['c'], ['d']], ['e']], path_sp=[], rel_sp='parent')
+
+
+def test_is_super_balanced(tree=['a', ['b', ['c'], ['d']], ['e', ['f', ['g']]]], is_super=True):
+    """pytest style test for is_super_balanced
+
+    """
+    assert ip.interview_cake.interview_cake.is_super_balanced(tree=tree) == is_super
+    return None
+
+
+test_is_super_balanced(tree=['a', ['b', ['c'], ['d']], ['e', ['f', ['g', ['h']]]]], is_super=False)
+
