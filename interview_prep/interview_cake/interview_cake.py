@@ -702,3 +702,152 @@ class TempTracker(object):
         
         """
         return self._mode
+
+
+def is_leaf_node(node):
+    “””Determine if the current node is a leaf node.
+
+    Args:
+        node: list
+            Each node is itself a k-ary tree, represented as a `list` with at most k elements.
+            Examples: [value, lhs, rhs], [value, lhs], [value]
+    
+    Returns:
+        is_leaf: bool
+            `True` if `len(node) == 1`
+            `False` if otherwise.
+            Examples (from `node` examples): False, False, True
+
+    See Also:
+        is_super_balanced
+
+    Notes:
+        - interviewcake.com question #8
+        - Complexity:
+            Time: O(1)
+            Space: O(1)
+
+    References:
+        ..[1] https://www.interviewcake.com/question/balanced-binary-tree
+    
+    “””
+    return len(node) == 1
+
+
+def get_younger_sibling_or_parent(tree, path):
+    “””Determine if the node at the path has a sibling node with an index one larger than its own,
+        i.e. a “younger” sibling. Return if so, otherwise return the node’s parent.
+    
+    Args:
+        tree: list
+            A k-ary tree represented as a `list` with at most k elements.
+            Each node of the k-ary tree is itself a k-ary tree.
+            Example: [value, [value, [value], [value]], [value]]
+        path: list
+            Sequence of indexes leading to node to evaluate.
+            Example: [1, 1]
+
+    Returns:
+        node_sp: {None}, list
+            The node in `tree` identified by `path[-1] += 1`, i.e. the younger sibling of the node
+            identified by `path`, if there there is a younger sibling.
+            Otherwise, the parent of the node is returned. If the node has no parent, then `None`.
+        path_sp: {[]}, list
+            Sequences of indexes leading to `node_sp` within `tree`.
+            If `node_sp` is the root of `tree`, then `[]`.
+        rel_sp: {‘younger_sibling’, ‘parent’}, string
+            Relationship of returned `node_sp` to the node identified by input `path`.
+
+    Raises:
+        ValueError: Raised if `path` does not identify a valid node within `tree`.
+    
+    See Also:
+        is_super_balanced
+
+    Notes:
+        - interviewcake.com question #8
+        - Complexity:
+            Time: O(max_depth) ~ O(logk(num_nodes))
+            Space: O(1)
+
+    References:
+        ..[1] https://www.interviewcake.com/question/balanced-binary-tree
+
+    “””
+    # Check input
+    # The root node is its own parent.
+    if len(path) < 1:
+        raise ValueError(“`path` must identify a valid node within `tree`.”)
+    # Initialize values to track
+    node_sp = tree
+    path_sp = path.copy()
+    path_sp[-1] += 1
+    # Find younger sibling or parent.
+    for (iidx, idx) in enumerate(path_sp):
+        try:
+            node_sp = node_sp[idx]
+            rel_sp = ‘younger_sibling’
+        except IndexError:
+            # node_sp was previously assigned to the parent of the node identified by input `path`
+            if iidx != len(path) - 1:
+                raise ValueError(“`path` must identify a valid node within `tree`.”)
+            path_sp.pop()
+            rel_sp = ‘parent’
+    return (node_sp, path_sp, rel_sp)
+    
+
+def is_super_balanced(tree):
+    “””Evaluate whether a k-ary tree is super balanced,
+    i.e. the maximum difference in depths between leaf nodes is <= 1.
+
+    Args:
+        tree: list
+            A k-ary tree represented as a list of lists.
+            Each element of `tree` is a `list`. The first element of each `list` within
+            `tree` is the value of that node.
+            Example: [val, [val, [val], [val]], [val, [val, [val]]]]
+    
+    Returns:
+        is_super: bool
+            `True` if the maximum difference in depths between leaf nodes is <= 1.
+            `False` if otherwise.
+            Example (from Args:`tree` example): True
+
+    Notes:
+        - interviewcake.com question #8
+        - Complexity:
+            Time: O(num_nodes*logk(num_nodes))
+            Space: O(max_depth) ~ O(logk(num_nodes))
+
+    References:
+        ..[1] https://www.interviewcake.com/question/balanced-binary-tree
+    
+    “””
+    # TODO: Check input.
+    # Initialize values to track.
+    min_depth = None
+    max_depth = None
+    # TODO: remove current_path to reduce space
+    current_path = None
+    is_super = None
+    current_node = tree
+    # Iterate through the tree.
+    while ((current_path is None) or (len(current_path) > 0)) and
+        ((is_super is None) or is_super):
+        # Depth-first search of first child to find a leaf node.
+        while not is_leaf_node(node=current_node):
+            current_node = current_node[1]
+            current_path.append(1) if current_path is not None else current_path = [1]
+        # Current node is a leaf node. Evaluate its depth.
+        min_depth = min(min_depth, len(current_path)) if min_depth is not None else min_depth = len(current_path)
+        max_depth = max(max_depth, len(current_path)) if max_depth is not None else max_depth = len(current_path)
+        is_super = (max_depth - min_depth <= 1)
+        if is_super:
+            break
+        # Set the current node to the leaf node’s sibling if it exists, or the sibling of its parent.
+        # TODO: finding the next node is not optimal.
+        relationship = None
+        while ((relationship is None) or (relationship == ‘parent’)) and
+            (len(current_path) > 0):
+            (current_node, current_path, relationship) = get_younger_sibling_or_parent(tree=tree, path=current_path)
+    return is_super
