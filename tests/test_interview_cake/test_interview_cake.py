@@ -19,7 +19,7 @@ def test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,2.,3.], max_profit=
     return None
 
 
-test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,-20.,3.], max_profit=23.)
+test_calc_max_profit(prices=[5.0, 4.0, 5.0, 3.0, 6.0, 5.0, 9.0, 8.0, 10.0, -20.0, 3.0], max_profit=23.)
 
 
 def test_get_products_of_all_ints_except_at_index(ints=[1,7,3,4], prods=[7*3*4, 1*3*4, 1*7*4, 1*7*3]):
@@ -102,7 +102,8 @@ def test_condense_meeting_times(times=[(0, 1), (3, 9), (4, 5), (8, 10), (2, 4)],
     return None
 
 
-test_condense_meeting_times(times=[(1, 10), (2, 6), (3, 5), (7, 9)], condensed=[(1, 10)])
+test_condense_meeting_times(times=[(1, 10), (2, 6), (3, 5), (7, 9)]), condensed=[(1, 10)])
+
 
 
 def test_gen_change_combinations(amount=4, denominations=[1, 2, 3], init_combo=None,
