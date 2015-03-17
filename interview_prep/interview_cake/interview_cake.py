@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """My iterations of answers to questions on iterviewcake.com.
 
@@ -705,7 +706,7 @@ class TempTracker(object):
 
 
 def is_leaf_node(node):
-    “””Determine if the current node is a leaf node.
+    """Determine if the current node is a leaf node.
 
     Args:
         node: list
@@ -730,13 +731,13 @@ def is_leaf_node(node):
     References:
         ..[1] https://www.interviewcake.com/question/balanced-binary-tree
     
-    “””
+    """
     return len(node) == 1
 
 
 def get_younger_sibling_or_parent(tree, path):
-    “””Determine if the node at the path has a sibling node with an index one larger than its own,
-        i.e. a “younger” sibling. Return if so, otherwise return the node’s parent.
+    """Determine if the node at the path has a sibling node with an index one larger than its own,
+        i.e. a "younger" sibling. Return if so, otherwise return the node's parent.
     
     Args:
         tree: list
@@ -755,7 +756,7 @@ def get_younger_sibling_or_parent(tree, path):
         path_sp: {[]}, list
             Sequences of indexes leading to `node_sp` within `tree`.
             If `node_sp` is the root of `tree`, then `[]`.
-        rel_sp: {‘younger_sibling’, ‘parent’}, string
+        rel_sp: {'younger_sibling', 'parent'}, string
             Relationship of returned `node_sp` to the node identified by input `path`.
 
     Raises:
@@ -773,11 +774,11 @@ def get_younger_sibling_or_parent(tree, path):
     References:
         ..[1] https://www.interviewcake.com/question/balanced-binary-tree
 
-    “””
+    """
     # Check input
     # The root node is its own parent.
     if len(path) < 1:
-        raise ValueError(“`path` must identify a valid node within `tree`.”)
+        raise ValueError("`path` must identify a valid node within `tree`.")
     # Initialize values to track
     node_sp = tree
     path_sp = path.copy()
@@ -786,18 +787,18 @@ def get_younger_sibling_or_parent(tree, path):
     for (iidx, idx) in enumerate(path_sp):
         try:
             node_sp = node_sp[idx]
-            rel_sp = ‘younger_sibling’
+            rel_sp = 'younger_sibling'
         except IndexError:
             # node_sp was previously assigned to the parent of the node identified by input `path`
             if iidx != len(path) - 1:
-                raise ValueError(“`path` must identify a valid node within `tree`.”)
+                raise ValueError("`path` must identify a valid node within `tree`.")
             path_sp.pop()
-            rel_sp = ‘parent’
+            rel_sp = 'parent'
     return (node_sp, path_sp, rel_sp)
     
 
 def is_super_balanced(tree):
-    “””Evaluate whether a k-ary tree is super balanced,
+    """Evaluate whether a k-ary tree is super balanced,
     i.e. the maximum difference in depths between leaf nodes is <= 1.
 
     Args:
@@ -822,7 +823,7 @@ def is_super_balanced(tree):
     References:
         ..[1] https://www.interviewcake.com/question/balanced-binary-tree
     
-    “””
+    """
     # TODO: Check input.
     # Initialize values to track.
     min_depth = None
@@ -844,10 +845,10 @@ def is_super_balanced(tree):
         is_super = (max_depth - min_depth <= 1)
         if is_super:
             break
-        # Set the current node to the leaf node’s sibling if it exists, or the sibling of its parent.
+        # Set the current node to the leaf node's sibling if it exists, or the sibling of its parent.
         # TODO: finding the next node is not optimal.
         relationship = None
-        while ((relationship is None) or (relationship == ‘parent’)) and
+        while ((relationship is None) or (relationship == 'parent')) and
             (len(current_path) > 0):
             (current_node, current_path, relationship) = get_younger_sibling_or_parent(tree=tree, path=current_path)
     return is_super

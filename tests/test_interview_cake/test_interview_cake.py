@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Tests for interview_prep/interview_cake/interview_cake.py
 
@@ -159,10 +160,10 @@ def test_TempTracker(temps=[1, 2, 3, 3], temps2=4, ctr=collections.Counter([1, 2
     return None
 
 
-def test_is_leaf_node(node=[‘a’], is_leaf=True):
-    “””pytest style test for is_leaf
+def test_is_leaf_node(node=['a'], is_leaf=True):
+    """pytest style test for is_leaf
 
-    “””
+    """
     assert ip.interview_cake.interview_cake.is_leaf(node=node) == is_leaf
     return None
 
@@ -170,11 +171,11 @@ def test_is_leaf_node(node=[‘a’], is_leaf=True):
 test_is_leaf_node(node=['a', 'b'], is_leaf=False)
 
 
-def test_get_younger_sibling_or_parent(tree=[‘a’, [‘b’, [‘c’], [‘d’]], [‘e’]], path=[1, 1],
-                                       node_sp=[‘d’], path_sp=[1, 2], rel_sp=’younger_sibling’):
-    “””pytest style test for get_younger_sibling_or_parent
+def test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[1, 1],
+                                       node_sp=['d'], path_sp=[1, 2], rel_sp='younger_sibling'):
+    """pytest style test for get_younger_sibling_or_parent
     
-    “””
+    """
     assert ip.interview_cake.interview_cake.get_younger_sibling_or_parent(tree=tree, path=path) == \
         (node_sp, path_sp, rel_sp)
     try: get_younger_sibling_or_parent(tree=tree, path=[])
@@ -182,20 +183,20 @@ def test_get_younger_sibling_or_parent(tree=[‘a’, [‘b’, [‘c’], [‘d
     return None
 
 
-test_get_younger_sibling_or_parent(tree=[‘a’, [‘b’, [‘c’], [‘d’]], [‘e’]], path=[1, 2],
-                                   node_sp=[‘b’, [‘c’], [‘d’]], path_sp=[1], ‘parent’)
-test_get_younger_sibling_or_parent(tree=[‘a’, [‘b’, [‘c’], [‘d’]], [‘e’]], path=[1],
-                                   node_sp=['e'], path_sp=[2], ‘younger_sibling’)
-test_get_younger_sibling_or_parent(tree=[‘a’, [‘b’, [‘c’], [‘d’]], [‘e’]], path=[2],
-                                   node_sp=[‘a’, [‘b’, [‘c’], [‘d’]], [‘e’]], path_sp=[], ‘parent’)
+test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[1, 2],
+                                   node_sp=['b', ['c'], ['d']], path_sp=[1], 'parent')
+test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[1],
+                                   node_sp=['e'], path_sp=[2], 'younger_sibling')
+test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[2],
+                                   node_sp=['a', ['b', ['c'], ['d']], ['e']], path_sp=[], 'parent')
 
 
-def test_is_super_balanced(tree=[‘a’, [‘b’, [‘c’], [‘d’]], [‘e’, [‘f’, [‘g’]]]], is_super=True):
-    “””pytest style test for is_super_balanced
+def test_is_super_balanced(tree=['a', ['b', ['c'], ['d']], ['e', ['f', ['g']]]], is_super=True):
+    """pytest style test for is_super_balanced
 
-    “””
+    """
     assert is_super_balanced(tree=tree) == is_super
     return None
 
 
-test_is_super_balanced(tree=[‘a’, [‘b’, [‘c’], [‘d’]], [‘e’, [‘f’, [‘g’, [‘h’]]]]], is_super=False)
+test_is_super_balanced(tree=['a', ['b', ['c'], ['d']], ['e', ['f', ['g', ['h']]]]], is_super=False)
