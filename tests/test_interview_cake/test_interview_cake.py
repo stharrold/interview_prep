@@ -103,7 +103,7 @@ def test_condense_meeting_times(times=[(0, 1), (3, 9), (4, 5), (8, 10), (2, 4)],
     return None
 
 
-test_condense_meeting_times(times=[(1, 10), (2, 6), (3, 5), (7, 9)]), condensed=[(1, 10)])
+test_condense_meeting_times(times=[(1, 10), (2, 6), (3, 5), (7, 9)], condensed=[(1, 10)])
 
 
 
@@ -164,7 +164,7 @@ def test_is_leaf_node(node=['a'], is_leaf=True):
     """pytest style test for is_leaf
 
     """
-    assert ip.interview_cake.interview_cake.is_leaf(node=node) == is_leaf
+    assert ip.interview_cake.interview_cake.is_leaf_node(node=node) == is_leaf
     return None
 
 
@@ -178,25 +178,26 @@ def test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], p
     """
     assert ip.interview_cake.interview_cake.get_younger_sibling_or_parent(tree=tree, path=path) == \
         (node_sp, path_sp, rel_sp)
-    try: get_younger_sibling_or_parent(tree=tree, path=[])
+    try: ip.interview_cake.interview_cake.get_younger_sibling_or_parent(tree=tree, path=[])
     except ValueError: pass
     return None
 
 
 test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[1, 2],
-                                   node_sp=['b', ['c'], ['d']], path_sp=[1], 'parent')
+                                   node_sp=['b', ['c'], ['d']], path_sp=[1], rel_sp='parent')
 test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[1],
-                                   node_sp=['e'], path_sp=[2], 'younger_sibling')
+                                   node_sp=['e'], path_sp=[2], rel_sp='younger_sibling')
 test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], path=[2],
-                                   node_sp=['a', ['b', ['c'], ['d']], ['e']], path_sp=[], 'parent')
+                                   node_sp=['a', ['b', ['c'], ['d']], ['e']], path_sp=[], rel_sp='parent')
 
 
 def test_is_super_balanced(tree=['a', ['b', ['c'], ['d']], ['e', ['f', ['g']]]], is_super=True):
     """pytest style test for is_super_balanced
 
     """
-    assert is_super_balanced(tree=tree) == is_super
+    assert ip.interview_cake.interview_cake.is_super_balanced(tree=tree) == is_super
     return None
 
 
 test_is_super_balanced(tree=['a', ['b', ['c'], ['d']], ['e', ['f', ['g', ['h']]]]], is_super=False)
+

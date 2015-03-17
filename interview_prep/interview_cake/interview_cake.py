@@ -781,7 +781,7 @@ def get_younger_sibling_or_parent(tree, path):
         raise ValueError("`path` must identify a valid node within `tree`.")
     # Initialize values to track
     node_sp = tree
-    path_sp = path.copy()
+    path_sp = copy.copy(path)
     path_sp[-1] += 1
     # Find younger sibling or parent.
     for (iidx, idx) in enumerate(path_sp):
@@ -833,22 +833,24 @@ def is_super_balanced(tree):
     is_super = None
     current_node = tree
     # Iterate through the tree.
-    while ((current_path is None) or (len(current_path) > 0)) and
-        ((is_super is None) or is_super):
+    while ((current_path is None) or (len(current_path) > 0)) and ((is_super is None) or is_super):
         # Depth-first search of first child to find a leaf node.
         while not is_leaf_node(node=current_node):
             current_node = current_node[1]
-            current_path.append(1) if current_path is not None else current_path = [1]
+            if current_path is not None: current_path.append(1)
+            else: current_path = [1]
         # Current node is a leaf node. Evaluate its depth.
-        min_depth = min(min_depth, len(current_path)) if min_depth is not None else min_depth = len(current_path)
-        max_depth = max(max_depth, len(current_path)) if max_depth is not None else max_depth = len(current_path)
+        if min_depth is not None: min_depth = min(min_depth, len(current_path))
+        else: min_depth = len(current_path)
+        if max_depth is not None: max_depth = max(max_depth, len(current_path))
+        else: max_depth = len(current_path)
         is_super = (max_depth - min_depth <= 1)
-        if is_super:
+        # Break if find one example of violating super-balanced.
+        if not is_super:
             break
         # Set the current node to the leaf node's sibling if it exists, or the sibling of its parent.
         # TODO: finding the next node is not optimal.
         relationship = None
-        while ((relationship is None) or (relationship == 'parent')) and
-            (len(current_path) > 0):
+        while ((relationship is None) or (relationship == 'parent')) and (len(current_path) > 0):
             (current_node, current_path, relationship) = get_younger_sibling_or_parent(tree=tree, path=current_path)
     return is_super
