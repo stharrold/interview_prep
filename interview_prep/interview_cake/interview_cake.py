@@ -8,6 +8,7 @@
 from __future__ import absolute_import, division, print_function
 import copy
 import collections
+import pdb
 
 
 def calc_max_profit(prices):
@@ -933,13 +934,14 @@ def _get_next_node_path_values(bin_tree, current_path):
     orig_path_len = len(current_path)
     next_path = _get_next_path(current_path=current_path)
     next_node = bin_tree
-    next_values = []
+    next_values = [next_node[0]]
     next_path_is_valid = None
     while not next_path_is_valid:
         try:
             for idx in next_path:
                 next_node = next_node[idx]
-                next_values.append(next_node[0])
+                if next_node is not None: next_values.append(next_node[0])
+                else: next_values.append(None)
             next_path_is_valid = True
         except IndexError:
             next_path_is_valid = False
@@ -951,7 +953,7 @@ def _get_next_node_path_values(bin_tree, current_path):
             next_values = []
     if not next_path_is_valid:
         (next_node, next_path, next_values) = (None, None, None)
-    return (next_node, next_path)
+    return (next_node, next_path, next_values)
 
 
 def is_valid_bin_search_tree(bin_tree):
@@ -971,7 +973,7 @@ def is_valid_bin_search_tree(bin_tree):
         `False` otherwise.
 
     See Also:
-        get_next_node_path
+        _get_next_node_path_values
   
     Notes:
         - interviewcake.com question #9
@@ -988,33 +990,46 @@ def is_valid_bin_search_tree(bin_tree):
 
     """
     # TODO: check that `bin_tree` is valid binary tree
-    (current_node, current_path, current_values) = (bin_tree, [], bin_tree[0])
+    (current_node, current_path, current_values) = (bin_tree, [], [bin_tree[0]])
     is_bst = None
     while ((current_node is not None) and
            (is_bst is None or is_bst is True)):
-        (lhs_value, rhs_value) = (current_node[1], current_node[2])
-        for (rev_idx, current_value) in enumerate(reversed(current_values)):
-            if rev_idx == 1:
-                if lhs_value is not None: is_bst_lhs = lhs_value < current_value
-                else: is_bst_lhs = True
-                if rhs_value is not None: is_bst_rhs = current_value < rhs_value
-                else: is_bst_rhs = True
-            else:
-                if path_val[-rev_idx+1] == 1:
-                    if lhs_value is not None: is_bst_lhs = current_value < lhs_value
-                    else: is_bst_lhs = True
-                    if rhs_value is not None: is_bst_rhs = current_value < rhs_value
-                    else: is_bst_lsh = True
-                else:
+        if current_node[1] is not None: lhs_value = current_node[1][0]
+        else: lhs_value = None
+        if current_node[2] is not None: rhs_value = current_node[2][0]
+        else: rhs_value = None
+        if len(current_values) == 0:
+            if lhs_value is not None: is_bst_lhs = lhs_value < current_value
+            else: is_bst_lhs = True
+            if rhs_value is not None: is_bst_rhs = current_value < rhs_value
+            else: is_bst_rhs = True
+        else:
+            for (rev_idx, current_value) in enumerate(reversed(current_values), start=1):
+                # Compare the value of a parent node with its lhs, rhs child nodes.
+                if rev_idx == 1:
                     if lhs_value is not None: is_bst_lhs = lhs_value < current_value
                     else: is_bst_lhs = True
-                    if rhs_value is not None: is_bst_rhs = rhs_value < current_value
-                    else: is_bst_lsh = True
-            is_bst = (is_bst_lhs and is_bst_lhs)
-            if not is_bst:
-                break
+                    if rhs_value is not None: is_bst_rhs = current_value < rhs_value
+                    else: is_bst_rhs = True
+                # Compare the value of a grandparent+ node with its lhs, rhs grandchild+ nodes.
+                # If the grandparent node's child is lhs, then its granchildren must also be lhs.
+                else:
+                    if current_values[-rev_idx+1] == 1:
+                        if lhs_value is not None: is_bst_lhs = lhs_value < current_value
+                        else: is_bst_lhs = True
+                        if rhs_value is not None: is_bst_rhs = rhs_value < current_value
+                        else: is_bst_lsh = True
+                    else:
+                        if lhs_value is not None: is_bst_lhs = current_value < lhs_value
+                        else: is_bst_lhs = True
+                        if rhs_value is not None: is_bst_rhs = current_value < rhs_value
+                        else: is_bst_lsh = True
+                is_bst = (is_bst_lhs and is_bst_lhs)
+                if not is_bst:
+                    break
         if not is_bst:
             break
-        (current_node, current_path, current_values) = get_next_node_path_values(bin_tree, current_path)
+        (current_node, current_path, current_values) = _get_next_node_path_values(bin_tree=bin_tree,
+                                                                                  current_path=current_path)
     return is_bst
 
