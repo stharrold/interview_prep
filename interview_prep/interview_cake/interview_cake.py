@@ -857,7 +857,7 @@ def is_super_balanced(tree):
 
 
 def _get_next_path(current_path):
-    “””Semi-private method to get next path in a breadth-first search of a binary tree.
+    """Semi-private method to get next path in a breadth-first search of a binary tree.
 
     Args:
         current_path: list
@@ -878,7 +878,7 @@ def _get_next_path(current_path):
             Time: O(len_path) ~ O(log2(num_nodes_of_bin_tree))
             Space: O(len_path) ~ O(log2(num_nodes_of_bin_tree))
 
-    “””
+    """
     # Find a cousin node at the same depth otherwise descend to next depth of binary tree.
     next_path = copy.copy(current_path)
     found_cousin_node_at_same_depth = None
@@ -895,7 +895,7 @@ def _get_next_path(current_path):
 
 
 def _get_next_node_path_values(bin_tree, current_path):
-    “””Get the next node, path, and node values in a breadth-first search of a binary tree.
+    """Get the next node, path, and node values in a breadth-first search of a binary tree.
 
     Args:
         bin_tree: list
@@ -928,7 +928,7 @@ def _get_next_node_path_values(bin_tree, current_path):
             Time: O(num_nodes*log2(num_nodes)^2)
             Space: O(log2(num_nodes_of_bin_tree))
 
-    “””
+    """
     # TODO: memoize which nodes we’ve seen to reduce time
     orig_path_len = len(current_path)
     next_path = _get_next_path(current_path=current_path)
@@ -955,7 +955,7 @@ def _get_next_node_path_values(bin_tree, current_path):
 
 
 def is_valid_bin_search_tree(bin_tree):
-    “””Determine if a binary tree is a valid binary search tree,
+    """Determine if a binary tree is a valid binary search tree,
     i.e. where every node is less than its rhs child and greater than
     the lhs child.
 
@@ -986,7 +986,7 @@ def is_valid_bin_search_tree(bin_tree):
     References:
         ..[1] https://www.interviewcake.com/question/bst-checker
 
-    “””
+    """
     # TODO: check that `bin_tree` is valid binary tree
     (current_node, current_path, current_values) = (bin_tree, [], bin_tree[0])
     is_bst = None
