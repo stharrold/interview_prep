@@ -854,3 +854,167 @@ def is_super_balanced(tree):
         while ((relationship is None) or (relationship == 'parent')) and (len(current_path) > 0):
             (current_node, current_path, relationship) = get_younger_sibling_or_parent(tree=tree, path=current_path)
     return is_super
+
+
+def _get_next_path(current_path):
+    “””Semi-private method to get next path in a breadth-first search of a binary tree.
+
+    Args:
+        current_path: list
+            Path to current node of within a binary tree.
+            Example: [1, 2, 2]; [2, 2, 2]
+
+    Returns:
+        next_path: list
+            Path of `next_node` of a full binary tree following breadth-first search.
+            Example from Args: current_path: [2, 1, 1]; [1, 1, 1, 1]
+
+    See Also:
+        is_valid_bin_search, _get_next_node_path
+
+    Notes:
+        - Assumes that binary tree is full. Calling scope must check that path is valid.
+        - Complexity:
+            Time: O(len_path) ~ O(log2(num_nodes_of_bin_tree))
+            Space: O(len_path) ~ O(log2(num_nodes_of_bin_tree))
+
+    “””
+    # Find a cousin node at the same depth otherwise descend to next depth of binary tree.
+    next_path = copy.copy(current_path)
+    found_cousin_node_at_same_depth = None
+    for rev_path_idx, bin_tree_idx in enumerate(reversed(current_path), start=1):
+        if bin_tree_idx == 2:
+            next_path[-rev_path_idx] = 1
+        else:
+            next_path[-rev_path_idx] = 2
+            found_cousin_node_at_same_depth = True
+            break
+    if not found_cousin_node_at_same_depth:
+        next_path.append(1)
+    return next_path
+
+
+def _get_next_node_path_values(bin_tree, current_path):
+    “””Get the next node, path, and node values in a breadth-first search of a binary tree.
+
+    Args:
+        bin_tree: list
+            Binary tree represented as a `list` with 3 elements.
+            Leaf nodes have format [value, `None`, `None`]
+            Example: [50, [30, None, [40, None, None]], [70, [60, None, None], None]]
+        current_path: list
+            Path to current node of `bin_tree`.
+            Example: [1, 2]
+
+    Returns:
+        next_node: list
+            Next node of `bin_tree` following breadth-first search.
+            `None` if at maximum depth, far rhs of binary tree.
+            Example: [60, None, None]
+        next_path: list
+            Path of `next_node` of `bin_tree` following breadth-first search.
+            `None` if at maximum depth, far rhs of binary tree.
+            Example: [2, 1]
+        next_values: list
+            Node values of nodes along `next_path`.
+            `None` if at maximum depth, far rhs of binary tree.
+            Example: [50, 70, 60]
+
+    See Also:
+        is_valid_bin_search, _get_next_path
+
+    Notes:
+        - Complexity:
+            Time: O(num_nodes*log2(num_nodes)^2)
+            Space: O(log2(num_nodes_of_bin_tree))
+
+    “””
+    # TODO: memoize which nodes we’ve seen to reduce time
+    orig_path_len = len(current_path)
+    next_path = _get_next_path(current_path=current_path)
+    next_node = bin_tree
+    next_values = []
+    next_path_is_valid = None
+    while not next_path_is_valid:
+        try:
+            for idx in next_path:
+                next_node = next_node[idx]
+                next_values.append(next_node[0])
+            next_path_is_valid = True
+        except IndexError:
+            next_path_is_valid = False
+            next_path_len = len(next_path)
+            if next_path_len - orig_path_len > 1:
+                break
+            next_path = _get_next_path(current_path=next_path)
+            next_node = bin_tree
+            next_values = []
+    if not next_path_is_valid:
+        (next_node, next_path, next_values) = (None, None, None)
+    return (next_node, next_path)
+
+
+def is_valid_bin_search_tree(bin_tree):
+    “””Determine if a binary tree is a valid binary search tree,
+    i.e. where every node is less than its rhs child and greater than
+    the lhs child.
+
+    Args:
+        bin_tree: list
+        Binary tree represented as a `list` with 3 elements.
+        Leaf nodes have format [value, `None`, `None`]
+        Example: [value, lhs, rhs], where lhs and rhs are each binary trees.
+
+    Returns:
+        is_bst: bool
+        `True` if `bin_tree` is a valid binary search tree.
+        `False` otherwise.
+
+    See Also:
+        get_next_node_path
+  
+    Notes:
+        - interviewcake.com question #9
+        - Complexity:
+            Ideal:
+                Time: O(num_nodes)
+                Space: O(log2(num_nodes))
+            Realized:
+                Time: O(num_nodes*log2(num_nodes)^2)
+                Space: O(log2(num_nodes))
+    
+    References:
+        ..[1] https://www.interviewcake.com/question/bst-checker
+
+    “””
+    # TODO: check that `bin_tree` is valid binary tree
+    (current_node, current_path, current_values) = (bin_tree, [], bin_tree[0])
+    is_bst = None
+    while ((current_node is not None) and
+           (is_bst is None or is_bst is True)):
+        (lhs_value, rhs_value) = (current_node[1], current_node[2])
+        for (rev_idx, current_value) in enumerate(reversed(current_values)):
+            if rev_idx == 1:
+                if lhs_value is not None: is_bst_lhs = lhs_value < current_value
+                else: is_bst_lhs = True
+                if rhs_value is not None: is_bst_rhs = current_value < rhs_value
+                else: is_bst_rhs = True
+            else:
+                if path_val[-rev_idx+1] == 1:
+                    if lhs_value is not None: is_bst_lhs = current_value < lhs_value
+                    else: is_bst_lhs = True
+                    if rhs_value is not None: is_bst_rhs = current_value < rhs_value
+                    else: is_bst_lsh = True
+                else:
+                    if lhs_value is not None: is_bst_lhs = lhs_value < current_value
+                    else: is_bst_lhs = True
+                    if rhs_value is not None: is_bst_rhs = rhs_value < current_value
+                    else: is_bst_lsh = True
+            is_bst = (is_bst_lhs and is_bst_lhs)
+            if not is_bst:
+                break
+        if not is_bst:
+            break
+        (current_node, current_path, current_values) = get_next_node_path_values(bin_tree, current_path)
+    return is_bst
+
