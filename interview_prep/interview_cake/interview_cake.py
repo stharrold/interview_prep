@@ -8,7 +8,6 @@
 from __future__ import absolute_import, division, print_function
 import copy
 import collections
-import pdb
 
 
 def calc_max_profit(prices):
@@ -998,35 +997,29 @@ def is_valid_bin_search_tree(bin_tree):
         else: lhs_value = None
         if current_node[2] is not None: rhs_value = current_node[2][0]
         else: rhs_value = None
-        if len(current_values) == 0:
-            if lhs_value is not None: is_bst_lhs = lhs_value < current_value
-            else: is_bst_lhs = True
-            if rhs_value is not None: is_bst_rhs = current_value < rhs_value
-            else: is_bst_rhs = True
-        else:
-            for (rev_idx, current_value) in enumerate(reversed(current_values), start=1):
-                # Compare the value of a parent node with its lhs, rhs child nodes.
-                if rev_idx == 1:
+        for (rev_idx, current_value) in enumerate(reversed(current_values), start=1):
+            # Compare the value of a parent node with its lhs, rhs child nodes.
+            if rev_idx == 1:
+                if lhs_value is not None: is_bst_lhs = lhs_value < current_value
+                else: is_bst_lhs = True
+                if rhs_value is not None: is_bst_rhs = current_value < rhs_value
+                else: is_bst_rhs = True
+            # Compare the value of a grandparent+ node with its lhs, rhs grandchild+ nodes.
+            # If the grandparent node's child is lhs, then its granchildren must also be lhs.
+            else:
+                if current_path[-rev_idx+1] == 1:
                     if lhs_value is not None: is_bst_lhs = lhs_value < current_value
+                    else: is_bst_lhs = True
+                    if rhs_value is not None: is_bst_rhs = rhs_value < current_value
+                    else: is_bst_rhs = True
+                else:
+                    if lhs_value is not None: is_bst_lhs = current_value < lhs_value
                     else: is_bst_lhs = True
                     if rhs_value is not None: is_bst_rhs = current_value < rhs_value
                     else: is_bst_rhs = True
-                # Compare the value of a grandparent+ node with its lhs, rhs grandchild+ nodes.
-                # If the grandparent node's child is lhs, then its granchildren must also be lhs.
-                else:
-                    if current_values[-rev_idx+1] == 1:
-                        if lhs_value is not None: is_bst_lhs = lhs_value < current_value
-                        else: is_bst_lhs = True
-                        if rhs_value is not None: is_bst_rhs = rhs_value < current_value
-                        else: is_bst_lsh = True
-                    else:
-                        if lhs_value is not None: is_bst_lhs = current_value < lhs_value
-                        else: is_bst_lhs = True
-                        if rhs_value is not None: is_bst_rhs = current_value < rhs_value
-                        else: is_bst_lsh = True
-                is_bst = (is_bst_lhs and is_bst_lhs)
-                if not is_bst:
-                    break
+            is_bst = (is_bst_lhs and is_bst_rhs)
+            if not is_bst:
+                break
         if not is_bst:
             break
         (current_node, current_path, current_values) = _get_next_node_path_values(bin_tree=bin_tree,

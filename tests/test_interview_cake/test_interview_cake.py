@@ -229,7 +229,8 @@ def test_get_next_node_path_values(
 
 
 def test_is_valid_bin_search_tree(
-    bin_tree=[50, [30, [10, None, None], [40, None, None]], [70, [60, None, None], [80, None, None]]],is_bst=True):
+    bin_tree=[50, [30, [10, None, None], [40, None, None]], [70, [60, None, None], [80, None, None]]],
+    is_bst=True):
     """pytest style test for is_valid_bin_search_tree.
 
     """
@@ -237,7 +238,10 @@ def test_is_valid_bin_search_tree(
     return None
 
 
-#test_is_valid_bin_search_tree(
-#    bin_tree=[50, [30, [10, None, None], [60, None, None]], [70, [60, None, None], [80, None, None]]],
-#    is_bst=False)
+test_is_valid_bin_search_tree(
+    bin_tree=[50, [30, [10, None, None], [60, None, None]], [70, [60, None, None], [80, None, None]]],
+    is_bst=False)
+test_is_valid_bin_search_tree(
+    bin_tree=[50, [30, [10, None, None], [40, None, None]], [70, [40, None, None], [80, None, None]]],
+    is_bst=False)
 
