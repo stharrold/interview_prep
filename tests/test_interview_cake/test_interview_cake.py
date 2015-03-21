@@ -201,3 +201,47 @@ def test_is_super_balanced(tree=['a', ['b', ['c'], ['d']], ['e', ['f', ['g']]]],
 
 test_is_super_balanced(tree=['a', ['b', ['c'], ['d']], ['e', ['f', ['g', ['h']]]]], is_super=False)
 
+
+def test_get_next_path(current_path=[1, 2, 2], next_path=[2, 1, 1]):
+    """pytest style test for _get_next_path.
+
+    """
+    assert ip.interview_cake.interview_cake._get_next_path(current_path=current_path) == next_path
+    return None
+
+
+test_get_next_path(current_path=[2, 2, 2], next_path=[1, 1, 1, 1])
+
+
+def test_get_next_node_path_values(
+    bin_tree=[50, [30, [10, None, None], [40, None, None]], [70, [60, None, None], [80, None, None]]],
+    current_path=[1, 2], next_node=[60, None, None], next_path=[2, 1], next_values=[50, 70, 60]):
+    """pytest style test for _get_next_node_path.
+
+    """
+    for (test, ref) in zip(
+        ip.interview_cake.interview_cake._get_next_node_path_values(
+            bin_tree=bin_tree,
+            current_path=current_path),
+        (next_node, next_path, next_values)):
+        assert test == ref
+    return None
+
+
+def test_is_valid_bin_search_tree(
+    bin_tree=[50, [30, [10, None, None], [40, None, None]], [70, [60, None, None], [80, None, None]]],
+    is_bst=True):
+    """pytest style test for is_valid_bin_search_tree.
+
+    """
+    assert ip.interview_cake.interview_cake.is_valid_bin_search_tree(bin_tree=bin_tree) == is_bst
+    return None
+
+
+test_is_valid_bin_search_tree(
+    bin_tree=[50, [30, [10, None, None], [60, None, None]], [70, [60, None, None], [80, None, None]]],
+    is_bst=False)
+test_is_valid_bin_search_tree(
+    bin_tree=[50, [30, [10, None, None], [40, None, None]], [70, [40, None, None], [80, None, None]]],
+    is_bst=False)
+
