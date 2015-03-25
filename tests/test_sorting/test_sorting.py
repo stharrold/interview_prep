@@ -11,3 +11,16 @@ sys.path.insert(0, '.')
 import interview_prep as ip
 
 
+def test_median_pivot(vals=[0, 1, 2, 3, 4], pivot_val=2, pivot_idx=2):
+    """pytest style test for _median_pivot.
+
+    """
+    assert _median_pivot(vals=vals) == (pivot_val, pivot_idx)
+
+
+def test_quicksort(vals=[5, 0, 2, 5, 4, 6, 5, 6], sorted_vals=[0, 2, 4, 5, 5, 5, 6, 6]):
+    """pytest style test for quicksort
+
+    """
+    assert test_quicksort(vals=vals) == sorted_vals
+    return None
