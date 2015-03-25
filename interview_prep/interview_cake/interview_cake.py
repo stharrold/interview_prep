@@ -983,6 +983,11 @@ def is_valid_bin_search_tree(bin_tree):
             Realized:
                 Time: O(num_nodes*log2(num_nodes)^2)
                 Space: O(log2(num_nodes))
+
+    TODO:
+        - Redo with depth-first search
+        - Memoize bounds of ancestor nodes rather than all ancestor nodes.
+        - Use array rather than list of lists.
     
     References:
         ..[1] https://www.interviewcake.com/question/bst-checker
@@ -1025,4 +1030,3 @@ def is_valid_bin_search_tree(bin_tree):
         (current_node, current_path, current_values) = _get_next_node_path_values(bin_tree=bin_tree,
                                                                                   current_path=current_path)
     return is_bst
-

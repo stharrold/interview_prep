@@ -244,4 +244,3 @@ test_is_valid_bin_search_tree(
 test_is_valid_bin_search_tree(
     bin_tree=[50, [30, [10, None, None], [40, None, None]], [70, [40, None, None], [80, None, None]]],
     is_bst=False)
-
