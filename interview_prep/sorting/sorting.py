@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 import copy
+import pdb
 
 
 def _median_pivot(vals):
@@ -33,11 +34,15 @@ def _median_pivot(vals):
     """
     # Evaluate only three potential pivot values per (sub)sequence.
     pivot_idxs = [0, int(len(vals)/2), -1]
-    pivots = [vals[idx] for idx in pivot_idxs]
-    (min_pivot, max_pivot) = (min(pivots), max(pivots))
-    for (idx, pivot) in zip(pivot_idxs, pivots):
-        if pivot != min_pivot and pivot != max_pivot:
-            (pivot_val, pivot_idx) = (pivot, idx)
+    pivot_vals = [vals[idx] for idx in pivot_idxs]
+    if (pivot_vals[0] <= pivot_vals[1] <= pivot_vals[2] or
+        pivot_vals[2] <= pivot_vals[1] <= pivot_vals[0]):
+        (pivot_val, pivot_idx) = (pivot_vals[1], pivot_idxs[1])
+    elif (pivot_vals[1] <= pivot_vals[0] <= pivot_vals[2] or
+          pivot_vals[2] <= pivot_vals[0] <= pivot_vals[1]):
+        (pivot_val, pivot_idx) = (pivot_vals[0], pivot_idxs[0])
+    else:
+        (pivot_val, pivot_idx) = (pivot_vals[2], pivot_idxs[2])
     return (pivot_val, pivot_idx)
 
 
@@ -81,27 +86,28 @@ def quicksort(vals):
         tmp_vals_gteq = []
         while len(tmp_vals) > 0:
             val = tmp_vals.pop()
-            if val < pivot:
+            if val < pivot_val:
                 tmp_vals_lt.append(val)
             else:
                 tmp_vals_gteq.append(val)
-        if len(seq_lt) <= 1: lt_sorted = True
+        if len(tmp_vals_lt) <= 1: lt_sorted = True
         else: lt_sorted = False
-        if len(seq_gteq) <= 1: gteq_sorted = True
+        if len(tmp_vals_gteq) <= 1: gteq_sorted = True
         else: gteq_sorted = False
         # Order of appending in sorted list is from least to greatest.
         if lt_sorted:
-            sorted_vals.extend(seq_lt)
+            sorted_vals.extend(tmp_vals_lt)
             sorted_vals.append(pivot_val)
             if gteq_sorted:
-                sorted_vals.extend(seq_gteq)
+                sorted_vals.extend(tmp_vals_gteq)
         # Order of stack to sort is from greatest to least.
-        if not lt_sorted and len(seq_lt) > 1:
+        if not lt_sorted and len(tmp_vals_lt) > 1:
             subseqs_to_sort.append(tmp_vals_gteq)
             subseqs_to_sort.append([pivot_val])
             subseqs_to_sort.append(tmp_vals_lt)
         else:
-            if not gteq_sorted and len(seq_gteq) > 1:
+            if not gteq_sorted and len(tmp_vals_gteq) > 1:
                 subseqs_to_sort.append(tmp_vals_gteq)
-        tmp_vals = subseqs_to_sort.pop()
+        if len(subseqs_to_sort) > 0:
+            tmp_vals = subseqs_to_sort.pop()
     return sorted_vals
