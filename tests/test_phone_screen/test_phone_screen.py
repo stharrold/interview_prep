@@ -31,17 +31,18 @@ def test_calc_nth_fib(nth=5, nth_fib=3):
 def test_print_mult_table(
     max_fac=2,
     ref_stdout=\
-"""  x   0   1   2
-  0   0   0   0
-  1   0   1   2
-  2   0   2   4
+"""  x   0   1   2 
+  0   0   0   0 
+  1   0   1   2 
+  2   0   2   4 
 """):
     """pytest style test for print_mult_table
+
     """
     stdout_orig = sys.stdout
-    captured_stdout = cStingIO.StringIO()
-    sys.stdout = captured_output
-    print_mult_table(max_fac=max_fac)
+    captured_stdout = cStringIO.StringIO()
+    sys.stdout = captured_stdout
+    ip.phone_screen.phone_screen.print_mult_table(max_fac=max_fac)
     sys.stdout = stdout_orig
     assert captured_stdout.getvalue() == ref_stdout
     return None

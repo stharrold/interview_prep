@@ -7,6 +7,7 @@ https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 
 
 from __future__ import absolute_import, division, print_function
+import math
 
 
 def reverse_string(string):
@@ -101,13 +102,13 @@ def print_mult_table(max_fac=12):
     # Define custom print function for rows of multiplication table.
     max_prod = max_fac*max_fac
     max_digits = int(math.log10(max_prod))
-    fmt = "\{elt:>{dig}d\}".format(dig=max_digits)
+    fmt = "{elt:>" + str(3) + "d}"
     print_elt = lambda elt: print(fmt.format(elt=elt), end=' ')
     # Print multiplication table.
     for row_fac in xrange(max_fac+1):
         # Print header row
         if row_fac == 0:
-            print("  x", sep=' ')
+            print("  x", end=' ')
             map(print_elt, xrange(max_fac+1))
             print()
         # Print header column element for every row.
