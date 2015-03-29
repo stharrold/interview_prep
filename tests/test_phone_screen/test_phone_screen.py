@@ -11,7 +11,7 @@ sys.path.insert(0, '.')
 import interview_prep as ip
 
 
-def test_reverse_string(string=’asdfjkl;’, revd=’;lkjfdsa’):
+def test_reverse_string(string='asdfjkl;', revd=';lkjfdsa'):
     """pytest style test for reverse_string.
 
     """
