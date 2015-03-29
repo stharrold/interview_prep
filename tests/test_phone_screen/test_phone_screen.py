@@ -17,3 +17,11 @@ def test_reverse_string(string='asdfjkl;', revd=';lkjfdsa'):
     """
     assert ip.phone_screen.phone_screen.reverse_string(string=string) == revd
     return None
+
+
+def test_calc_nth_fib(nth=5, nth_fib=3):
+    """pytest style test for calc_nth_fib.
+
+    """
+    assert ip.phone_screen.phone_screen.calc_nth_fib(nth=nth) == nth_fib
+    return None

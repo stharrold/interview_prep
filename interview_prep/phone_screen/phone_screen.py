@@ -64,7 +64,7 @@ def calc_nth_fib(nth):
     while len(fibs) < nth:
         fibs.append(fibs[-2] + fibs[-1])
     # Check computation.
-    if nth = 0:
+    if nth == 0:
         assert fibs[nth-1] == fibs[0]
     else:
         assert fibs[nth-1] == fibs[-1]
