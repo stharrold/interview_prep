@@ -39,9 +39,10 @@ def test_print_mult_table(
     """pytest style test for print_mult_table
     """
     stdout_orig = sys.stdout
-    captured_stdout = cStingIO.StringIO()
-    sys.stdout = captured_output
-    print_mult_table(max_fac=max_fac)
+    captured_stdout = cStringIO.StringIO()
+    sys.stdout = captured_stdout
+    ip.phone_screen.phone_screen.print_mult_table(max_fac=max_fac)
     sys.stdout = stdout_orig
+    pdb.set_trace()
     assert captured_stdout.getvalue() == ref_stdout
     return None
