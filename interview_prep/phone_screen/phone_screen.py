@@ -108,7 +108,7 @@ def print_mult_table(max_fac=12):
     for row_fac in xrange(max_fac+1):
         # Print header row
         if row_fac == 0:
-            print("  x", sep=' ')
+            print("  x", end=' ')
             map(print_elt, xrange(max_fac+1))
             print()
         # Print header column element for every row.
