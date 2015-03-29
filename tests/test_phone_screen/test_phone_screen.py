@@ -25,3 +25,4 @@ def test_calc_nth_fib(nth=5, nth_fib=3):
     """
     assert ip.phone_screen.phone_screen.calc_nth_fib(nth=nth) == nth_fib
     return None
+
