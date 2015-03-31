@@ -9,6 +9,8 @@ from __future__ import absolute_import, division, print_function
 import sys
 sys.path.insert(0, '.')
 import cStringIO
+import tempfile
+import os
 import interview_prep as ip
 
 
@@ -45,4 +47,21 @@ def test_print_mult_table(
     ip.phone_screen.phone_screen.print_mult_table(max_fac=max_fac)
     sys.stdout = stdout_orig
     assert captured_stdout.getvalue() == ref_stdout
+    return None
+
+
+def test_sum_ints(contents=\
+"""1
+2
+3
+""",
+total=6):
+    """pytest style test for sum_ints
+
+    """
+    (_, fname) = tempfile.mkstemp()
+    with open(fname, 'wb') as fobj:
+        fobj.write(contents)
+    assert ip.phone_screen.phone_screen.sum_ints(fname=fname) == total
+    os.remove(fname)
     return None

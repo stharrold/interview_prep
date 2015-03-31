@@ -90,9 +90,13 @@ def print_mult_table(max_fac=12):
             Raised if `max_fac` < 0.
 
     Notes:
+        - Example 3 from [1].
         - Complexity:
             Time: O(n^2)
             Space: O(1)
+
+    References:
+        ..[1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 
     """
     # Check input
@@ -117,3 +121,32 @@ def print_mult_table(max_fac=12):
         map(print_elt, (row_fac*col_fac for col_fac in xrange(max_fac+1)))
         print()
     return None
+
+
+def sum_ints(fname):
+    """Sum the ints from a text file, one per line
+
+    Args:
+        fname: string
+            Path to file. File contains one `int` per line.
+
+    Returns:
+        total: int
+            Sum of all `int`s in file `fname`.
+
+    Notes:
+        - Example 4 from [1]
+        - Complexity:
+            Time: O(n), n is number of lines in `fname` file.
+            Space: O(1)
+
+    References:
+        ..[1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
+    
+    """
+    # TODO: check input
+    total = 0
+    with open(fname, 'rb') as fobj:
+        for line in fobj:
+            total += int(line.strip())
+    return total
