@@ -273,3 +273,18 @@ lsts = [
 ref_idxs_rot = [0, 3, 2, 1, 0, 4, 3, 2, 1]
 for (lst, ref_idx_rot) in zip(lsts, ref_idxs_rot):
 	test_q13_find_rotation_index(lst=lst, ref_idx_rot=ref_idx_rot)
+
+
+def test_q14_movies_match_flight(
+    flight_length=200, movie_lengths=[100, 90, 100], ref_found_match=True):
+    r"""Pytest for q14_movies_match_flight.
+    
+    """
+    test_found_match = ic.q14_movies_match_flight(
+        flight_length=flight_length, movie_lengths=movie_lengths)
+    assert ref_found_match == test_found_match
+    return None
+
+
+test_q14_movies_match_flight(
+    flight_length=200, movie_lengths=[30, 30, 200], ref_found_match=False)
