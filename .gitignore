@@ -54,4 +54,4 @@ docs/_build/
 target/
 
 # IPython Notebooks
-ipynbs/.ipynbs_checkpoints/
+.ipynb_checkpoints/
