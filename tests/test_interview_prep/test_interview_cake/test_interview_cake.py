@@ -27,8 +27,9 @@ def test_get_products_of_all_ints_except_at_index(ints=[1,7,3,4], prods=[7*3*4, 
     """pytest style test
     
     """
-    prod_pairs = filter(lambda tup: tup[0] == tup[1],
-                        zip(ip.interview_cake.interview_cake.get_products_of_all_ints_except_at_index(ints), prods))
+    prod_pairs = list(filter(
+        lambda tup: tup[0] == tup[1],
+        zip(ip.interview_cake.interview_cake.get_products_of_all_ints_except_at_index(ints), prods)))
     assert len(prod_pairs) == len(ints)
     return None
 

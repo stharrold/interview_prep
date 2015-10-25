@@ -48,7 +48,7 @@ def get_products_of_all_ints_except_at_index(ints):
         ..[1] https://www.interviewcake.com/question/product-of-other-numbers
     
     """
-    idxs = xrange(len(ints))
+    idxs = range(len(ints))
     prods = [1]*len(ints)
     prod = 1
     for idx in idxs:
@@ -533,7 +533,7 @@ def count_change_combinations_2(amount, denominations):
     # TODO: check input
     combos = {}
     # Build all possible combinations of denominations by memorizing.
-    for amt in xrange(1, amount+1):
+    for amt in range(1, amount+1):
         combos[amt] = []
         if amt in denominations:
             combos[amt].append(tuple([amt]))
@@ -550,7 +550,7 @@ def count_change_combinations_2(amount, denominations):
                         combos[amt].append(tuple(sorted(comb)))
         # Remove duplicates.
         combos[amt] = set(combos[amt])
-    return len(combos[amount]) if combos.has_key(amount) else 0
+    return len(combos[amount]) if amount in combos else 0
 
         
 def count_change_combinations_3(amount, denominations):
@@ -588,7 +588,7 @@ def count_change_combinations_3(amount, denominations):
     # TODO: make self-referencing dict comprehension for 2x speedup
     for denom in denominations:
         num_combos[denom] += 1
-        for amt in xrange(denom+1, amount+1):
+        for amt in range(denom+1, amount+1):
             num_combos[amt] += num_combos[amt-denom]
     return num_combos[amount]
 
