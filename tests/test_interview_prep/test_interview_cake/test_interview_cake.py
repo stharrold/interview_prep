@@ -1,22 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Tests for interview_prep/interview_cake/interview_cake.py
+r"""Tests for interview_prep/interview_cake/interview_cake.py
 
 """
 
 
-from __future__ import absolute_import, division, print_function
+# Import standard packages.
 import collections
 import sys
 sys.path.insert(0, '.')
-import interview_prep as ip
+# Import installed packages.
+# Import local packages.
+import interview_prep.interview_cake.interview_cake as ic
 
 
 def test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,2.,3.], max_profit=7.0):
     """pytest style test for calc_max_profit
     
     """
-    assert ip.interview_cake.interview_cake.calc_max_profit(prices) == max_profit
+    assert ic.calc_max_profit(prices) == max_profit
     return None
 
 
@@ -27,8 +29,9 @@ def test_get_products_of_all_ints_except_at_index(ints=[1,7,3,4], prods=[7*3*4, 
     """pytest style test
     
     """
-    prod_pairs = filter(lambda tup: tup[0] == tup[1],
-                        zip(ip.interview_cake.interview_cake.get_products_of_all_ints_except_at_index(ints), prods))
+    prod_pairs = list(filter(
+        lambda tup: tup[0] == tup[1],
+        zip(ic.get_products_of_all_ints_except_at_index(ints), prods)))
     assert len(prod_pairs) == len(ints)
     return None
 
@@ -43,7 +46,7 @@ def test_get_highest_product(ints=[-10,-10,-20,1,3,2], highest_product=600):
     """pytest style test for get_highest_product
 
     """
-    assert ip.interview_cake.interview_cake.get_highest_product(ints=ints) == highest_product
+    assert ic.get_highest_product(ints=ints) == highest_product
     return None
 
 
@@ -51,7 +54,7 @@ def test_get_highest_product_2(ints=[-10,-10,-20,1,3,2], highest_product=600):
     """pytest style test for get_highest_product_2
 
     """
-    assert ip.interview_cake.interview_cake.get_highest_product_2(ints=ints) == highest_product
+    assert ic.get_highest_product_2(ints=ints) == highest_product
     return None
 
 
@@ -61,7 +64,7 @@ def test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
     """pytest style test for calc_intersection
 
     """
-    assert ip.interview_cake.interview_cake.calc_intersection(rect1=rect1, rect2=rect2) == recti
+    assert ic.calc_intersection(rect1=rect1, rect2=rect2) == recti
     return None
 
 
@@ -79,7 +82,7 @@ def test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0}
     """pytest style test for calc_intersection_2
 
     """
-    assert ip.interview_cake.interview_cake.calc_intersection_2(rect1=rect1, rect2=rect2) == recti
+    assert ic.calc_intersection_2(rect1=rect1, rect2=rect2) == recti
     return None
 
 
@@ -99,7 +102,7 @@ def test_condense_meeting_times(times=[(0, 1), (3, 9), (4, 5), (8, 10), (2, 4)],
         - interviewcake.com problem #4
 
     """
-    assert ip.interview_cake.interview_cake.condense_meeting_times(times=times) == condensed
+    assert ic.condense_meeting_times(times=times) == condensed
     return None
 
 
@@ -112,7 +115,7 @@ def test_gen_change_combinations(amount=4, denominations=[1, 2, 3], init_combo=N
     """pytest style test for gen_change_denominations
 
     """
-    assert list(ip.interview_cake.interview_cake.gen_change_combinations(
+    assert list(ic.gen_change_combinations(
         amount=amount, denominations=denominations, init_combo=init_combo)) == combinations
     return None
 
@@ -121,7 +124,7 @@ def test_count_change_combinations(amount=4, denominations=[1, 2, 3], num=4):
     """pytest style test for count_change_denominations
     
     """
-    assert ip.interview_cake.interview_cake.count_change_combinations(
+    assert ic.count_change_combinations(
         amount=amount, denominations=denominations) == num
     return None
 
@@ -130,7 +133,7 @@ def test_count_change_combinations_2(amount=4, denominations=[1, 2, 3], num=4):
     """pytest style test for count_change_denominations_2
     
     """
-    assert ip.interview_cake.interview_cake.count_change_combinations_2(
+    assert ic.count_change_combinations_2(
         amount=amount, denominations=denominations) == num
     return None
 
@@ -139,7 +142,7 @@ def test_count_change_combinations_3(amount=4, denominations=[1, 2, 3], num=4):
     """pytest style test for count_change_denominations_3
 
     """
-    assert ip.interview_cake.interview_cake.count_change_combinations_3(
+    assert ic.count_change_combinations_3(
         amount=amount, denominations=denominations) == num
     return None
 
@@ -148,7 +151,7 @@ def test_TempTracker(temps=[1, 2, 3, 3], temps2=4, ctr=collections.Counter([1, 2
     """pytest style test for class TempTracker
 
     """
-    temptracker = ip.interview_cake.interview_cake.TempTracker(temps=temps)
+    temptracker = ic.TempTracker(temps=temps)
     assert temptracker.ctr == ctr
     temptracker.insert(temps=temps2)
     ctr.update([temps2])
@@ -164,7 +167,7 @@ def test_is_leaf_node(node=['a'], is_leaf=True):
     """pytest style test for is_leaf
 
     """
-    assert ip.interview_cake.interview_cake.is_leaf_node(node=node) == is_leaf
+    assert ic.is_leaf_node(node=node) == is_leaf
     return None
 
 
@@ -176,9 +179,9 @@ def test_get_younger_sibling_or_parent(tree=['a', ['b', ['c'], ['d']], ['e']], p
     """pytest style test for get_younger_sibling_or_parent
     
     """
-    assert ip.interview_cake.interview_cake.get_younger_sibling_or_parent(tree=tree, path=path) == \
+    assert ic.get_younger_sibling_or_parent(tree=tree, path=path) == \
         (node_sp, path_sp, rel_sp)
-    try: ip.interview_cake.interview_cake.get_younger_sibling_or_parent(tree=tree, path=[])
+    try: ic.get_younger_sibling_or_parent(tree=tree, path=[])
     except ValueError: pass
     return None
 
@@ -195,7 +198,7 @@ def test_is_super_balanced(tree=['a', ['b', ['c'], ['d']], ['e', ['f', ['g']]]],
     """pytest style test for is_super_balanced
 
     """
-    assert ip.interview_cake.interview_cake.is_super_balanced(tree=tree) == is_super
+    assert ic.is_super_balanced(tree=tree) == is_super
     return None
 
 
@@ -206,7 +209,7 @@ def test_get_next_path(current_path=[1, 2, 2], next_path=[2, 1, 1]):
     """pytest style test for _get_next_path.
 
     """
-    assert ip.interview_cake.interview_cake._get_next_path(current_path=current_path) == next_path
+    assert ic._get_next_path(current_path=current_path) == next_path
     return None
 
 
@@ -220,7 +223,7 @@ def test_get_next_node_path_values(
 
     """
     for (test, ref) in zip(
-        ip.interview_cake.interview_cake._get_next_node_path_values(
+        ic._get_next_node_path_values(
             bin_tree=bin_tree,
             current_path=current_path),
         (next_node, next_path, next_values)):
@@ -234,7 +237,7 @@ def test_is_valid_bin_search_tree(
     """pytest style test for is_valid_bin_search_tree.
 
     """
-    assert ip.interview_cake.interview_cake.is_valid_bin_search_tree(bin_tree=bin_tree) == is_bst
+    assert ic.is_valid_bin_search_tree(bin_tree=bin_tree) == is_bst
     return None
 
 
@@ -244,3 +247,29 @@ test_is_valid_bin_search_tree(
 test_is_valid_bin_search_tree(
     bin_tree=[50, [30, [10, None, None], [40, None, None]], [70, [40, None, None], [80, None, None]]],
     is_bst=False)
+
+
+def test_q13_find_rotation_index(
+    lst=['c', 'd', 'a','b'],
+    ref_idx_rot=2):
+    r"""Pytest for q13_find_rotation_index.
+    
+    """
+    test_idx_rot = ic.q13_find_rotation_index(lst=lst)
+    assert ref_idx_rot == test_idx_rot
+    return None
+    
+
+lsts = [
+    ['a','b','c','d'],
+    ['b','c','d','a'],
+    ['c','d','a','b'],
+    ['d','a','b','c'],
+    ['a','b','c','d','e'],
+    ['b','c','d','e','a'],
+    ['c','d','e','a','b'],
+    ['d','e','a','b','c'],
+    ['e','a','b','c','d']]
+ref_idxs_rot = [0, 3, 2, 1, 0, 4, 3, 2, 1]
+for (lst, ref_idx_rot) in zip(lsts, ref_idxs_rot):
+	test_q13_find_rotation_index(lst=lst, ref_idx_rot=ref_idx_rot)

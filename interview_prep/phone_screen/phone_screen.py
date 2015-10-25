@@ -6,8 +6,10 @@ https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 """
 
 
-from __future__ import absolute_import, division, print_function
+# Import standard packages.
 import math
+# Import installed packages.
+# Import local packages.
 
 
 def reverse_string(string):
@@ -105,20 +107,20 @@ def print_mult_table(max_fac=12):
                           "max_fac = {max_fac}").format(max_fac=max_fac))
     # Define custom print function for rows of multiplication table.
     max_prod = max_fac*max_fac
-    max_digits = int(math.log10(max_prod))
-    fmt = "{elt:>" + str(3) + "d}"
+    max_digits = int(math.log10(max_prod)) + 1
+    fmt = "{elt:>" + str(max_digits) + "d}"
     print_elt = lambda elt: print(fmt.format(elt=elt), end=' ')
     # Print multiplication table.
-    for row_fac in xrange(max_fac+1):
+    for row_fac in range(max_fac+1):
         # Print header row
         if row_fac == 0:
-            print("  x", end=' ')
-            map(print_elt, xrange(max_fac+1))
+            print(' '*(max_digits-1) + 'x', end=' ')
+            [print_elt(elt) for elt in range(max_fac+1)]
             print()
         # Print header column element for every row.
         print_elt(elt=row_fac)
         # Print products
-        map(print_elt, (row_fac*col_fac for col_fac in xrange(max_fac+1)))
+        [print_elt(row_fac*col_fac) for col_fac in range(max_fac+1)]
         print()
     return None
 
@@ -135,13 +137,13 @@ def sum_ints(fname):
             Sum of all `int`s in file `fname`.
 
     Notes:
-        - Example 4 from [1]
-        - Complexity:
+        * Example 4 from [1]
+        * Complexity:
             Time: O(n), n is number of lines in `fname` file.
             Space: O(1)
 
     References:
-        ..[1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
+        .. [1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
     
     """
     # TODO: check input

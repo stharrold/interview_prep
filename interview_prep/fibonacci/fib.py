@@ -1,12 +1,16 @@
-"""Utilities for computing Fibonacci sequence.
+#!/usr/bin/env python
+# -*- coding=utf-8 -*-
+r"""Utilities for computing Fibonacci sequence.
 
 """
+
+
 # Import standard packages.
-from __future__ import absolute_import, division, print_function
 import sys
 import logging
 # Import installed packages
 import numpy as np
+# Import local packages.
 
 
 # Globals

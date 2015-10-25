@@ -1,21 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Tests for interview_prep/phone_screen/phone_screen.py
+r"""Pytests for interview_prep/phone_screen/phone_screen.py
 
 """
 
 
-from __future__ import absolute_import, division, print_function
+# Import standard packages.
+import io
+import os
 import sys
 sys.path.insert(0, '.')
-import cStringIO
 import tempfile
-import os
+# Import installed packages.
+# Import local packages.
 import interview_prep as ip
 
 
 def test_reverse_string(string='asdfjkl;', revd=';lkjfdsa'):
-    """pytest style test for reverse_string.
+    """Pytest for reverse_string.
 
     """
     assert ip.phone_screen.phone_screen.reverse_string(string=string) == revd
@@ -23,7 +25,7 @@ def test_reverse_string(string='asdfjkl;', revd=';lkjfdsa'):
 
 
 def test_calc_nth_fib(nth=5, nth_fib=3):
-    """pytest style test for calc_nth_fib.
+    """Pytest for calc_nth_fib.
 
     """
     assert ip.phone_screen.phone_screen.calc_nth_fib(nth=nth) == nth_fib
@@ -33,16 +35,16 @@ def test_calc_nth_fib(nth=5, nth_fib=3):
 def test_print_mult_table(
     max_fac=2,
     ref_stdout=\
-"""  x   0   1   2 
-  0   0   0   0 
-  1   0   1   2 
-  2   0   2   4 
+"""x 0 1 2 
+0 0 0 0 
+1 0 1 2 
+2 0 2 4 
 """):
-    """pytest style test for print_mult_table
+    """Pytest for print_mult_table.
 
     """
     stdout_orig = sys.stdout
-    captured_stdout = cStringIO.StringIO()
+    captured_stdout = io.StringIO()
     sys.stdout = captured_stdout
     ip.phone_screen.phone_screen.print_mult_table(max_fac=max_fac)
     sys.stdout = stdout_orig
@@ -55,13 +57,14 @@ def test_sum_ints(contents=\
 2
 3
 """,
-total=6):
-    """pytest style test for sum_ints
+ref_total=6):
+    """Pytest for sum_ints.
 
     """
     (_, fname) = tempfile.mkstemp()
-    with open(fname, 'wb') as fobj:
+    with open(fname, 'w') as fobj:
         fobj.write(contents)
-    assert ip.phone_screen.phone_screen.sum_ints(fname=fname) == total
+    test_total = ip.phone_screen.phone_screen.sum_ints(fname=fname)
+    assert ref_total == test_total
     os.remove(fname)
     return None

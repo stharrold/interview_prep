@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""My iterations of answers to questions on iterviewcake.com.
+r"""My iterations of answers to questions on iterviewcake.com.
 
 """
 
 
-from __future__ import absolute_import, division, print_function
+# Import standard packages.
 import copy
 import collections
+# Import installed packages.
+# Import local packages.
 
 
 def calc_max_profit(prices):
@@ -48,7 +50,7 @@ def get_products_of_all_ints_except_at_index(ints):
         ..[1] https://www.interviewcake.com/question/product-of-other-numbers
     
     """
-    idxs = xrange(len(ints))
+    idxs = range(len(ints))
     prods = [1]*len(ints)
     prod = 1
     for idx in idxs:
@@ -533,7 +535,7 @@ def count_change_combinations_2(amount, denominations):
     # TODO: check input
     combos = {}
     # Build all possible combinations of denominations by memorizing.
-    for amt in xrange(1, amount+1):
+    for amt in range(1, amount+1):
         combos[amt] = []
         if amt in denominations:
             combos[amt].append(tuple([amt]))
@@ -550,7 +552,7 @@ def count_change_combinations_2(amount, denominations):
                         combos[amt].append(tuple(sorted(comb)))
         # Remove duplicates.
         combos[amt] = set(combos[amt])
-    return len(combos[amount]) if combos.has_key(amount) else 0
+    return len(combos[amount]) if amount in combos else 0
 
         
 def count_change_combinations_3(amount, denominations):
@@ -588,7 +590,7 @@ def count_change_combinations_3(amount, denominations):
     # TODO: make self-referencing dict comprehension for 2x speedup
     for denom in denominations:
         num_combos[denom] += 1
-        for amt in xrange(denom+1, amount+1):
+        for amt in range(denom+1, amount+1):
             num_combos[amt] += num_combos[amt-denom]
     return num_combos[amount]
 
@@ -990,7 +992,7 @@ def is_valid_bin_search_tree(bin_tree):
         - Use array rather than list of lists.
     
     References:
-        ..[1] https://www.interviewcake.com/question/bst-checker
+        .. [1] https://www.interviewcake.com/question/bst-checker
 
     """
     # TODO: check that `bin_tree` is valid binary tree
@@ -1030,3 +1032,54 @@ def is_valid_bin_search_tree(bin_tree):
         (current_node, current_path, current_values) = _get_next_node_path_values(bin_tree=bin_tree,
                                                                                   current_path=current_path)
     return is_bst
+
+
+def q13_find_rotation_index(lst: list) -> int:
+    r"""Find the rotation index.
+    
+    Args:
+        lst (list): List of sorted words but rotated.
+        
+    Returns:
+    	idx_rot (int): Rotation index.
+    
+    Notes:
+        * interviewcake.com question #13
+        * Complexity:
+            * Ideal:
+                * Time: log2(len(lst))
+                * Space: O(1)
+            * Realized:
+                * Time: log2(len(lst))
+                * Space: O(1)
+    
+    References:
+        .. [1] https://www.interviewcake.com/question/python/find-rotation-point
+    
+    """
+    # Initialize indexes
+    idx_ceil = len(lst) - 1
+    idx_ceil_prev = idx_ceil
+    idx_floor = 0
+    idx_rot = None
+    # Check if list is sorted.
+    if lst[idx_floor] < lst[idx_ceil]:
+        idx_rot = idx_floor
+    else:
+        # Deterministic stopping criteria to avoid infinite loops.
+        # No recursion to avoid building call stack.
+        # log2 x bounded by x.
+        for inum in range(len(lst)):
+            if idx_floor == idx_ceil - 1:
+                idx_rot = idx_ceil
+                break
+            else:
+                # If 1st half of list is sorted,
+                # check 2nd half on next iteration.
+                idx_ceil = int(idx_floor + (idx_ceil - idx_floor)/2)
+                if lst[idx_floor] < lst[idx_ceil]:
+                    idx_floor = idx_ceil
+                    idx_ceil = idx_ceil_prev
+                else:
+                    idx_ceil_prev = idx_ceil
+    return idx_rot

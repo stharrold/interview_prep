@@ -1,10 +1,15 @@
-"""Tests for interview_prep/fibonacci/fib.py
+#!/usr/bin/env python
+# -*- coding=utf-8 -*-
+r"""Tests for interview_prep/fibonacci/fib.py
 
 """
 
-from __future__ import absolute_import, division, print_function
+
+# Import standard packages.
 import sys
 sys.path.insert(0, '.')
+# Import installed packages.
+# Import local packages.
 import interview_prep as ip
 
 

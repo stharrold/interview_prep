@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""My iterations of sorting algorithms.
+r"""My iterations of sorting algorithms.
 
 """
 
 
-from __future__ import absolute_import, division, print_function
+# Import standard packages.
+# Import installed packages.
+# Import local packages.
 import copy
-import pdb
 
 
 def _median_pivot(vals):
