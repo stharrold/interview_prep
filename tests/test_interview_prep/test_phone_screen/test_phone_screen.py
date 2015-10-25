@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Pytests for interview_prep/phone_screen/phone_screen.py
+r"""Pytests for interview_prep/phone_screen/phone_screen.py
 
 """
 
@@ -8,10 +8,10 @@
 # Import standard packages.
 import io
 import os
-import pdb
 import sys
 sys.path.insert(0, '.')
 import tempfile
+# Import installed packages.
 # Import local packages.
 import interview_prep as ip
 
@@ -36,11 +36,11 @@ def test_print_mult_table(
     max_fac=2,
     ref_stdout=\
 """x 0 1 2 
- 0 0 0 0 
- 1 0 1 2 
- 2 0 2 4 
+0 0 0 0 
+1 0 1 2 
+2 0 2 4 
 """):
-    """pytest style test for print_mult_table
+    """Pytest for print_mult_table.
 
     """
     stdout_orig = sys.stdout
@@ -57,13 +57,14 @@ def test_sum_ints(contents=\
 2
 3
 """,
-total=6):
-    """Pytest for sum_ints
+ref_total=6):
+    """Pytest for sum_ints.
 
     """
     (_, fname) = tempfile.mkstemp()
-    with open(fname, 'wb') as fobj:
+    with open(fname, 'w') as fobj:
         fobj.write(contents)
-    assert ip.phone_screen.phone_screen.sum_ints(fname=fname) == total
+    test_total = ip.phone_screen.phone_screen.sum_ints(fname=fname)
+    assert ref_total == test_total
     os.remove(fname)
     return None

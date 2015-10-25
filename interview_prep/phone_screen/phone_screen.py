@@ -6,9 +6,10 @@ https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 """
 
 
-# Import standard packages
-import pdb
+# Import standard packages.
 import math
+# Import installed packages.
+# Import local packages.
 
 
 def reverse_string(string):
@@ -136,13 +137,13 @@ def sum_ints(fname):
             Sum of all `int`s in file `fname`.
 
     Notes:
-        - Example 4 from [1]
-        - Complexity:
+        * Example 4 from [1]
+        * Complexity:
             Time: O(n), n is number of lines in `fname` file.
             Space: O(1)
 
     References:
-        ..[1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
+        .. [1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
     
     """
     # TODO: check input

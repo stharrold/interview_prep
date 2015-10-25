@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Tests for interview_prep/interview_cake/interview_cake.py
+r"""Tests for interview_prep/interview_cake/interview_cake.py
 
 """
 
 
-from __future__ import absolute_import, division, print_function
+# Import standard packages.
 import collections
 import sys
 sys.path.insert(0, '.')
+# Import installed packages.
+# Import local packages.
 import interview_prep as ip
 
 

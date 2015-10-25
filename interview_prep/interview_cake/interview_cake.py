@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""My iterations of answers to questions on iterviewcake.com.
+r"""My iterations of answers to questions on iterviewcake.com.
 
 """
 
 
-from __future__ import absolute_import, division, print_function
+# Import standard packages.
 import copy
 import collections
+# Import installed packages.
+# Import local packages.
 
 
 def calc_max_profit(prices):
