@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-r"""My iterations of answers to questions on iterviewcake.com.
+r"""My answers to questions on iterviewcake.com.
 
 """
 
@@ -1044,7 +1044,7 @@ def q13_find_rotation_index(lst: list) -> int:
     	idx_rot (int): Rotation index.
     
     Notes:
-        * interviewcake.com question #13
+        * interviewcake.com question #13, "Find Rotation Point".
         * Complexity:
             * Ideal:
                 * Time: log2(len(lst))
@@ -1057,6 +1057,13 @@ def q13_find_rotation_index(lst: list) -> int:
         .. [1] https://www.interviewcake.com/question/python/find-rotation-point
     
     """
+    # Check input.
+    for (arg, cls) in q13_find_rotation_index.__annotations__.items():
+        if arg != 'return':
+            if not isinstance(locals()[arg], cls):
+                raise TypeError(
+                    ("{arg} must be an instance of {cls}").format(
+                        arg=arg, cls=cls))
     # Initialize indexes
     idx_ceil = len(lst) - 1
     idx_ceil_prev = idx_ceil
@@ -1083,3 +1090,65 @@ def q13_find_rotation_index(lst: list) -> int:
                 else:
                     idx_ceil_prev = idx_ceil
     return idx_rot
+
+
+def q14_movies_match_flight(flight_length: int, movie_lengths: list) -> bool:
+    r"""Check if the sum of two movie lengths exactly equals the flight length.
+    
+    Args:
+        flight_length (int): Length (duration) of the flight. Units: minutes.
+        movie_lengths (list): List of `int` as the lengths (durations) of
+            movies. Units: minutes.
+        
+    Returns:
+        found_match (bool):
+            True: There are two movies whose sum lengths exactly matches the
+                length of the flight.
+            False: There are not two movies...
+        
+    Notes:
+        * interviewcake.com question #14, "Inflight Entertainment" [1]_.
+        * Complexity:
+            * Ideal:
+                * Time: O(n)
+                * Space: O(n)
+            * Realized:
+                * Time: O(n)
+                * Space: O(n)
+    
+    References:
+        .. [1] https://www.interviewcake.com/question/python/
+            inflight-entertainment
+    
+    """
+    # Check input.
+    for (arg, cls) in q14_movies_match_flight.__annotations__.items():
+        if arg != 'return':
+            if not isinstance(locals()[arg], cls):
+                raise ValueError(
+                    ("{arg} must be an instance of {cls}").format(
+                        arg=arg, cls=cls))
+    # Memoize movie lengths seen.
+    # Without `collections.defaultdict`:
+    # `in` calls `dict.__contains__`, which is O(1) lookup for Python 3x.
+    #found_match = False
+    #movie_lengths_seen = dict()
+    #for movie_length1 in movie_lengths:
+    #    movie_length2 = flight_length - movie_length1
+    #    if movie_length2 in movie_lengths_seen:
+    #        found_match = True
+    #        break
+    #    # Add movie_length1 after testing for movie_length2 to avoid watching
+    #    # movie1 twice.
+    #    movie_lengths_seen[movie_length1] = True
+    # With `collections.defaultdict`:
+    movie_lengths_seen = collections.defaultdict(lambda: False)
+    for movie_length1 in movie_lengths:
+        movie_length2 = flight_length - movie_length1
+        found_match = movie_lengths_seen[movie_length2]
+        if found_match:
+            break
+        # Add movie_length1 after testing for movie_length2 to avoid watching
+        # movie1 twice.
+        movie_lengths_seen[movie_length1] = True
+    return found_match
