@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-r"""My iterations of answers to questions on iterviewcake.com.
+r"""My answers to questions on iterviewcake.com.
 
 """
 
@@ -1134,17 +1134,21 @@ def q14_movies_match_flight(flight_length: int, movie_lengths: list) -> bool:
     #found_match = False
     #movie_lengths_seen = dict()
     #for movie_length1 in movie_lengths:
-    #    movie_lengths_seen[movie_length1] = True
     #    movie_length2 = flight_length - movie_length1
     #    if movie_length2 in movie_lengths_seen:
     #        found_match = True
     #        break
+    #    # Add movie_length1 after testing for movie_length2 to avoid watching
+    #    # movie1 twice.
+    #    movie_lengths_seen[movie_length1] = True
     # With `collections.defaultdict`:
     movie_lengths_seen = collections.defaultdict(lambda: False)
     for movie_length1 in movie_lengths:
-        movie_lengths_seen[movie_length1] = True
         movie_length2 = flight_length - movie_length1
         found_match = movie_lengths_seen[movie_length2]
         if found_match:
             break
+        # Add movie_length1 after testing for movie_length2 to avoid watching
+        # movie1 twice.
+        movie_lengths_seen[movie_length1] = True
     return found_match

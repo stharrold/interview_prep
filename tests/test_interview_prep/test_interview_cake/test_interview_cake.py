@@ -285,6 +285,14 @@ def test_q14_movies_match_flight(
     assert ref_found_match == test_found_match
     return None
 
-
-test_q14_movies_match_flight(
-    flight_length=200, movie_lengths=[30, 30, 200], ref_found_match=False)
+flight_lengths = [200, 200]
+movie_lengths_list = [
+    [100, 50, 50],
+    [200, 30, 30]]
+ref_found_matches = [False, False]
+for (flight_length, movie_lengths, ref_found_match) in \
+    zip(flight_lengths, movie_lengths_list, ref_found_matches):
+    test_q14_movies_match_flight(
+        flight_length=flight_length,
+        movie_lengths=movie_lengths,
+        ref_found_match=ref_found_match)
