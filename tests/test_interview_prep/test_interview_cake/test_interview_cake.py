@@ -10,8 +10,26 @@ import collections
 import sys
 sys.path.insert(0, '.')
 # Import installed packages.
+import pytest
 # Import local packages.
 import interview_prep.interview_cake.interview_cake as ic
+
+
+def test_check_arguments() -> None:
+    r"""Pytest for check_arguments.
+    
+    """
+    def myfunc(arg0: int, arg1: str) -> float:
+        ic.check_arguments(
+            antns=myfunc.__annotations__,
+            lcls=locals())
+        return 1.0
+    # Nothing should be raised.
+    myfunc(arg0=1, arg1='mystring')
+    # Raise ValueError.
+    with pytest.raises(ValueError):
+        myfunc(arg0=1.0, arg1='mystring')
+    return None
 
 
 def test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,2.,3.], max_profit=7.0):
@@ -285,14 +303,39 @@ def test_q14_movies_match_flight(
     assert ref_found_match == test_found_match
     return None
 
-flight_lengths = [200, 200]
-movie_lengths_list = [
-    [100, 50, 50],
-    [200, 30, 30]]
-ref_found_matches = [False, False]
-for (flight_length, movie_lengths, ref_found_match) in \
-    zip(flight_lengths, movie_lengths_list, ref_found_matches):
-    test_q14_movies_match_flight(
-        flight_length=flight_length,
-        movie_lengths=movie_lengths,
-        ref_found_match=ref_found_match)
+
+def test_q14_movies_match_flight_suppl() -> None:
+    r"""Supplemental pytests for q14_movies_match_flight.
+    
+    """
+    flight_lengths = [200, 200]
+    movie_lengths_list = [
+        [100, 50, 50],
+        [200, 30, 30]]
+    ref_found_matches = [False, False]
+    for (flight_length, movie_lengths, ref_found_match) in \
+        zip(flight_lengths, movie_lengths_list, ref_found_matches):
+        test_q14_movies_match_flight(
+            flight_length=flight_length,
+            movie_lengths=movie_lengths,
+            ref_found_match=ref_found_match)
+    return None
+
+
+def test_q15_fib(idx:int=4, ref_fnum:int=3) -> None:
+    r"""Pytest for q15_fib.
+    
+    """
+    test_fnum = ic.q15_fib(idx=idx)
+    assert ref_fnum == test_fnum
+    return None
+
+
+def test_q15_fib_suppl() -> None:
+    r"""Supplemental pytests for q15_fib.
+    
+    """
+    with pytest.raises(ValueError):
+        ic.q15_fib(idx=1.0)
+        ic.q15_fib(idx=-1)
+    return None
