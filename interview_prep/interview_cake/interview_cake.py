@@ -12,6 +12,37 @@ import collections
 # Import local packages.
 
 
+def check_arguments(antns, lcls) -> None:
+    r"""Check types of a function's arguments. Call from within the function.
+    
+    Args:
+        antns: Annotations of enclosing function.
+        lcls: Local variables.
+    
+    Returns:
+        None
+        
+    Raises:
+        ValueError: Raised if arguments do not match annotated arguments.
+    
+    Notes:
+        * Example usage:
+            ```
+            def myfunc(arg0: int, arg1: str) -> float:
+               check_arguments(antns=myfunc.__annotations__, lcls=locals())
+            ```
+    
+    """
+    for (arg, cls) in antns.items():
+        if arg != 'return':
+            if not isinstance(lcls[arg], cls):
+                raise ValueError(
+                    ("type({arg}) must be {cls}\n" +
+                     "type({arg}) = {typ}").format(
+                        arg=arg, cls=cls, typ=type(lcls[arg])))
+    return None
+
+
 def calc_max_profit(prices):
     """Compute maximum profit.
     
@@ -1121,13 +1152,9 @@ def q14_movies_match_flight(flight_length: int, movie_lengths: list) -> bool:
             inflight-entertainment
     
     """
-    # Check input.
-    for (arg, cls) in q14_movies_match_flight.__annotations__.items():
-        if arg != 'return':
-            if not isinstance(locals()[arg], cls):
-                raise ValueError(
-                    ("{arg} must be an instance of {cls}").format(
-                        arg=arg, cls=cls))
+    check_arguments(
+        antns=q14_movies_match_flight.__annotations__,
+        lcls=locals())
     # Memoize movie lengths seen.
     # Without `collections.defaultdict`:
     # `in` calls `dict.__contains__`, which is O(1) lookup for Python 3x.
@@ -1152,3 +1179,44 @@ def q14_movies_match_flight(flight_length: int, movie_lengths: list) -> bool:
         # movie1 twice.
         movie_lengths_seen[movie_length1] = True
     return found_match
+
+
+def q15_fib(idx: int) -> int:
+    r"""Compute the nth Fibonacci number.
+    
+    Args:
+        idx (int): Nth Fibonacci number to compute.
+            `idx` >= 0.
+    
+    Returns:
+        fnum (int): Nth Fibonacci number.
+        
+    Raises:
+        ValueError: Raised if `idx` < 0 or is not `int`.
+    
+    Notes:
+        * fib(n) = fib(n-1) + fib(n-2)
+            where fib(0) = 0, fib(1) = 1.
+
+    """
+    # Check arguments.
+    check_arguments(
+        antns=q15_fib.__annotations__,
+        lcls=locals())
+    if idx < 0:
+        raise ValueError(
+            ("`idx` must be >= 0:\n" +
+             "idx = {idx}").format(idx=idx))
+    # Compute nth Fibonacci number.
+    for inum in range(idx+1):
+        if inum == 0:
+            fnum = 0
+            fnum_prev2 = 0
+        elif inum == 1:
+            fnum = 1
+            fnum_prev1 = 1
+        else:
+            fnum = fnum_prev1 + fnum_prev2
+            fnum_prev2 = fnum_prev1
+            fnum_prev1 = fnum
+    return fnum

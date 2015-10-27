@@ -10,22 +10,22 @@ import sys
 sys.path.insert(0, '.')
 # Import installed packages.
 # Import local packages.
-import interview_prep as ip
+import interview_prep.fibonacci.fib as fib
 
 
 def test__init_fibs(fibs=[0, 1]):
-    ip.fibonacci.fib._init_fibs()
-    assert ip.fibonacci.fib.fibs == fibs
+    fib._init_fibs()
+    assert fib.fibs == fibs
     return None
 
 
 def test_fib_lookup(idx=5, fn=5, fibs=[0, 1, 1, 2, 3, 5]):
-    del(ip.fibonacci.fib.fibs)
-    assert (ip.fibonacci.fib.fib_lookup(idx=5) == fn
-            and ip.fibonacci.fib.fibs == fibs)
+    del(fib.fibs)
+    assert (fib.fib_lookup(idx=5) == fn
+            and fib.fibs == fibs)
     return None
 
     
 def test_fib_recur(idx=5, fn=5):
-    assert ip.fibonacci.fib.fib_recur(idx=5) == fn
+    assert fib.fib_recur(idx=5) == fn
     return None
