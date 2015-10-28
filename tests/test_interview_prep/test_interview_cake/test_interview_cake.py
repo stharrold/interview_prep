@@ -10,6 +10,7 @@ import collections
 import sys
 sys.path.insert(0, '.')
 # Import installed packages.
+import numpy as np
 import pytest
 # Import local packages.
 import interview_prep.interview_cake.interview_cake as ic
@@ -338,4 +339,38 @@ def test_q15_fib_suppl() -> None:
     with pytest.raises(ValueError):
         ic.q15_fib(idx=1.0)
         ic.q15_fib(idx=-1)
+    return None
+
+
+def test_q16_max_duffel_bag_value(
+    cake_tuples:list=[(7, 160), (3, 90), (2, 15)],
+    capacity:int=20,
+    ref_bag_value:int=555) -> None:
+    r"""Pytest for q16_max_duffel_bag_value.
+    
+    """
+    test_bag_value = ic.q16_max_duffel_bag_value(
+        cake_tuples=cake_tuples, capacity=capacity)
+    assert np.isclose(ref_bag_value, test_bag_value)
+    return None
+    
+    
+def test_q16_max_duffel_bag_value_suppl() -> None:
+    r"""Supplemental pytests for q16_max_duffel_bag_value.
+    
+    """
+    with pytest.raises(ValueError):
+        ic.q16_max_duffel_bag_value(
+            cake_tuples=[(7, 160), (3, 90), (2, 15)],
+            capacity=-1)
+        ic.q16_max_duffel_bag_value(
+            cake_tuples=[(7, 160), (-1, 90), (2, 15)],
+            capacity=20)
+        ic.q16_max_duffel_bag_value(
+            cake_tuples=[(7, 160), (3, -1), (2, 15)],
+            capacity=20)
+    test_q16_max_duffel_bag_value(
+        cake_tuples=[(0, 160), (3, 90), (2, 15)],
+        capacity=20,
+        ref_bag_value=np.inf)
     return None

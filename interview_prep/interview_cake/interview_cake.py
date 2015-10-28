@@ -8,7 +8,10 @@ r"""My answers to questions on iterviewcake.com.
 # Import standard packages.
 import copy
 import collections
+import operator
+import pdb
 # Import installed packages.
+import numpy as np
 # Import local packages.
 
 
@@ -1195,8 +1198,19 @@ def q15_fib(idx: int) -> int:
         ValueError: Raised if `idx` < 0 or is not `int`.
     
     Notes:
+        * interviewcake.com question #15, "Compute Nth Fibonacci Number" [1]_.
         * fib(n) = fib(n-1) + fib(n-2)
             where fib(0) = 0, fib(1) = 1.
+        * Complexity:
+            * Ideal:
+                * Time: O(log2(n))
+                * Space: O(1)
+            * Realized:
+                * Time: O(n)
+                * Space: O(1)
+    
+    References:
+        .. [1] https://www.interviewcake.com/question/python/nth-fibonacci
 
     """
     # Check arguments.
@@ -1220,3 +1234,65 @@ def q15_fib(idx: int) -> int:
             fnum_prev2 = fnum_prev1
             fnum_prev1 = fnum
     return fnum
+
+
+def q16_max_duffel_bag_value(cake_tuples:list, capacity:int) -> int:
+    r"""Compute max value that the duffel bag can hold.
+    
+    Args:
+        cake_tuples (list): `list` of `tuple`s (cake_weight, cake_value)
+            cake_weight, cake_value > 0
+        capacity (int): Max weight that the duffel bag can hold.
+    
+    Returns:
+        bag_value (int): Max value that the duffel bag can hold.
+            Returns `numpy.inf` if there is a cake with weight = 0.
+        
+        
+    Notes:
+        * interviewcake.com question #16, "The Cake Thief"
+        * Complexity:
+            * n = len(cake_tuples)
+            * Ideal:
+                * Time: 
+                * Space: 
+            * Realized:
+                * Time: O(n*log2(n))
+                * Space: O(1)
+                
+    References:
+        .. [1] https://www.interviewcake.com/question/python/cake-thief
+    
+    """
+    check_arguments(
+        antns=q16_max_duffel_bag_value.__annotations__,
+        lcls=locals())
+    for tup in cake_tuples:
+        for item in tup:
+            if item < 0:
+                raise ValueError(
+                    ("All elements in `cake_tuples` must be >= 0:\n" +
+                     "cake_tuples =\n" +
+                     "{ct}").format(ct=cake_tuples))
+    if capacity < 0:
+        raise ValueError(
+            ("`capacity` must be >= 0\n" +
+             "capacity = {cap}").format(cap=capacity))
+    # Optimize value-to-weight ratio.
+    (cake_weights, cake_values) = zip(*cake_tuples)
+    if 0 in cake_weights:
+        bag_value = np.inf
+    else:
+        cake_triples = sorted(
+            [(cake_weight, cake_value, cake_value/cake_weight)
+             for (cake_weight, cake_value) in cake_tuples],
+            key=operator.itemgetter(2),
+            reverse=True)
+        bag_value = 0
+        res = capacity
+        for (cake_weight, cake_value, _) in cake_triples:
+            if res >= cake_weight:
+                num_cakes = int(res/cake_weight)
+                bag_value += num_cakes*cake_value
+                res -= num_cakes*cake_weight
+    return bag_value
