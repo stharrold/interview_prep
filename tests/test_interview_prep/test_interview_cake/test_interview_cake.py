@@ -10,7 +10,6 @@ import collections
 import sys
 sys.path.insert(0, '.')
 # Import installed packages.
-import numpy as np
 import pytest
 # Import local packages.
 import interview_prep.interview_cake.interview_cake as ic
@@ -344,14 +343,14 @@ def test_q15_fib_suppl() -> None:
 
 def test_q16_max_duffel_bag_value(
     cake_tuples:list=[(7, 160), (3, 90), (2, 15)],
-    capacity:int=20,
+    bag_capacity:int=20,
     ref_bag_value:int=555) -> None:
     r"""Pytest for q16_max_duffel_bag_value.
     
     """
     test_bag_value = ic.q16_max_duffel_bag_value(
-        cake_tuples=cake_tuples, capacity=capacity)
-    assert np.isclose(ref_bag_value, test_bag_value)
+        cake_tuples=cake_tuples, bag_capacity=bag_capacity)
+    assert ref_bag_value == test_bag_value
     return None
     
     
@@ -361,22 +360,22 @@ def test_q16_max_duffel_bag_value_suppl() -> None:
     """
     with pytest.raises(ValueError):
         ic.q16_max_duffel_bag_value(
-            cake_tuples=[(7, 160), (3, 90), (2, 15)], capacity=-1)
+            cake_tuples=[(7, 160), (3, 90), (2, 15)], bag_capacity=-1)
         ic.q16_max_duffel_bag_value(
-            cake_tuples=[(7, 160), (-1, 90), (2, 15)], capacity=20)
+            cake_tuples=[(7, 160), (-1, 90), (2, 15)], bag_capacity=20)
         ic.q16_max_duffel_bag_value(
-            cake_tuples=[(7, 160), (3, -1), (2, 15)], capacity=20)
+            cake_tuples=[(7, 160), (3, -1), (2, 15)], bag_capacity=20)
         ic.q16_max_duffel_bag_value(
-            cake_tuples=[(7, 160), (3, 90.0), (2, 15)], capacity=20)
+            cake_tuples=[(7, 160), (3, 90.0), (2, 15)], bag_capacity=20)
     test_q16_max_duffel_bag_value(
         cake_tuples=[(0, 160), (3, 90), (2, 15)],
-        capacity=20, ref_bag_value=np.inf)
+        bag_capacity=20, ref_bag_value=sys.maxsize)
     test_q16_max_duffel_bag_value(
-        cake_tuples=[(0, 0), (3, 90), (2, 15)], capacity=20, ref_bag_value=555)
+        cake_tuples=[(0, 0), (3, 90), (2, 15)], bag_capacity=20, ref_bag_value=555)
     test_q16_max_duffel_bag_value(
-        cake_tuples=[(1, 30), (50, 200)], capacity=100, ref_bag_value=3000)
+        cake_tuples=[(1, 30), (50, 200)], bag_capacity=100, ref_bag_value=3000)
     test_q16_max_duffel_bag_value(
-        cake_tuples=[(3, 40), (5, 70)], capacity=8, ref_bag_value=110)
+        cake_tuples=[(3, 40), (5, 70)], bag_capacity=8, ref_bag_value=110)
     test_q16_max_duffel_bag_value(
-        cake_tuples=[(3, 40), (5, 70)], capacity=9, ref_bag_value=120)
+        cake_tuples=[(3, 40), (5, 70)], bag_capacity=9, ref_bag_value=120)
     return None
