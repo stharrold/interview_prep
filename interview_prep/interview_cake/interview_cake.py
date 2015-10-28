@@ -8,12 +8,16 @@ r"""My answers to questions on iterviewcake.com.
 # Import standard packages.
 import copy
 import collections
+import operator
+import pdb
+import sys
 # Import installed packages.
 # Import local packages.
 
 
 def check_arguments(antns, lcls) -> None:
-    r"""Check types of a function's arguments. Call from within the function.
+    r"""Check types of a function's input arguments.
+    Call from within the function.
     
     Args:
         antns: Annotations of enclosing function.
@@ -1195,8 +1199,19 @@ def q15_fib(idx: int) -> int:
         ValueError: Raised if `idx` < 0 or is not `int`.
     
     Notes:
+        * interviewcake.com question #15, "Compute Nth Fibonacci Number" [1]_.
         * fib(n) = fib(n-1) + fib(n-2)
             where fib(0) = 0, fib(1) = 1.
+        * Complexity:
+            * Ideal:
+                * Time: O(log2(n))
+                * Space: O(1)
+            * Realized:
+                * Time: O(n)
+                * Space: O(1)
+    
+    References:
+        .. [1] https://www.interviewcake.com/question/python/nth-fibonacci
 
     """
     # Check arguments.
@@ -1220,3 +1235,67 @@ def q15_fib(idx: int) -> int:
             fnum_prev2 = fnum_prev1
             fnum_prev1 = fnum
     return fnum
+
+
+def q16_max_duffel_bag_value(cake_tuples:list, bag_capacity:int) -> int:
+    r"""Compute max value that the duffel bag can hold.
+    
+    Args:
+        cake_tuples (list): `list` of `tuple`s (cake_weight, cake_value)
+            cake_weight, cake_value > 0
+        bag_capacity (int): Max weight that the duffel bag can hold.
+    
+    Returns:
+        bag_value (int): Max value that the duffel bag can hold.
+            Returns `numpy.inf` if there is a cake with weight = 0.
+        
+    Notes:
+        * interviewcake.com question #16, "The Cake Thief"
+        * Complexity:
+            * (n, k) = (len(cake_tuples), bag_capacity)
+            * Ideal:
+                * Time: O(n*k)
+                * Space: O(k)
+            * Realized:
+                * Time: O(n*k)
+                * Space: O(k)
+                
+    References:
+        .. [1] https://www.interviewcake.com/question/python/cake-thief
+    
+    """
+    check_arguments(
+        antns=q16_max_duffel_bag_value.__annotations__,
+        lcls=locals())
+    for tup in cake_tuples:
+        for item in tup:
+            if item < 0:
+                raise ValueError(
+                    ("All items in `cake_tuples` must be >= 0:\n" +
+                     "cake_tuples =\n" +
+                     "{ct}").format(ct=cake_tuples))
+            elif not isinstance(item, int):
+                raise ValueError(
+                    ("All items in `cake_tuples` must be type `int`:\n" +
+                     "cake_tuples =\n" +
+                     "{ct}").format(ct=cake_tuples))
+    if bag_capacity < 0:
+        raise ValueError(
+            ("`bag_capacity` must be >= 0\n" +
+             "bag_capacity = {bc}").format(bc=bag_capacity))
+    # With dynamic programming:
+    bag_value = 0
+    for (cake_weight, cake_value) in cake_tuples:
+        if cake_weight == 0 and cake_value > 0:
+            bag_value = sys.maxsize
+    if bag_value != sys.maxsize:
+        bag_values_max = [0]*(bag_capacity + 1)
+        for bag_capacity_current in range(len(bag_values_max)):
+            for (cake_weight, cake_value) in cake_tuples:
+                if cake_weight <= bag_capacity_current:
+                    bag_values_max[bag_capacity_current] = max(
+                        bag_values_max[bag_capacity_current],
+                        cake_value + bag_values_max[
+                            bag_capacity_current - cake_weight])
+        bag_value = bag_values_max[bag_capacity]
+    return bag_value

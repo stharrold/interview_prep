@@ -339,3 +339,43 @@ def test_q15_fib_suppl() -> None:
         ic.q15_fib(idx=1.0)
         ic.q15_fib(idx=-1)
     return None
+
+
+def test_q16_max_duffel_bag_value(
+    cake_tuples:list=[(7, 160), (3, 90), (2, 15)],
+    bag_capacity:int=20,
+    ref_bag_value:int=555) -> None:
+    r"""Pytest for q16_max_duffel_bag_value.
+    
+    """
+    test_bag_value = ic.q16_max_duffel_bag_value(
+        cake_tuples=cake_tuples, bag_capacity=bag_capacity)
+    assert ref_bag_value == test_bag_value
+    return None
+    
+    
+def test_q16_max_duffel_bag_value_suppl() -> None:
+    r"""Supplemental pytests for q16_max_duffel_bag_value.
+    
+    """
+    with pytest.raises(ValueError):
+        ic.q16_max_duffel_bag_value(
+            cake_tuples=[(7, 160), (3, 90), (2, 15)], bag_capacity=-1)
+        ic.q16_max_duffel_bag_value(
+            cake_tuples=[(7, 160), (-1, 90), (2, 15)], bag_capacity=20)
+        ic.q16_max_duffel_bag_value(
+            cake_tuples=[(7, 160), (3, -1), (2, 15)], bag_capacity=20)
+        ic.q16_max_duffel_bag_value(
+            cake_tuples=[(7, 160), (3, 90.0), (2, 15)], bag_capacity=20)
+    test_q16_max_duffel_bag_value(
+        cake_tuples=[(0, 160), (3, 90), (2, 15)],
+        bag_capacity=20, ref_bag_value=sys.maxsize)
+    test_q16_max_duffel_bag_value(
+        cake_tuples=[(0, 0), (3, 90), (2, 15)], bag_capacity=20, ref_bag_value=555)
+    test_q16_max_duffel_bag_value(
+        cake_tuples=[(1, 30), (50, 200)], bag_capacity=100, ref_bag_value=3000)
+    test_q16_max_duffel_bag_value(
+        cake_tuples=[(3, 40), (5, 70)], bag_capacity=8, ref_bag_value=110)
+    test_q16_max_duffel_bag_value(
+        cake_tuples=[(3, 40), (5, 70)], bag_capacity=9, ref_bag_value=120)
+    return None
