@@ -1252,10 +1252,10 @@ def q16_max_duffel_bag_value(cake_tuples:list, capacity:int) -> int:
     Notes:
         * interviewcake.com question #16, "The Cake Thief"
         * Complexity:
-            * n = len(cake_tuples)
+            * (n, k) = (len(cake_tuples), capacity)
             * Ideal:
-                * Time: 
-                * Space: 
+                * Time: O(n*k)
+                * Space: O(k)
             * Realized:
                 * Time: O(n*log2(n))
                 * Space: O(1)
@@ -1271,28 +1271,78 @@ def q16_max_duffel_bag_value(cake_tuples:list, capacity:int) -> int:
         for item in tup:
             if item < 0:
                 raise ValueError(
-                    ("All elements in `cake_tuples` must be >= 0:\n" +
+                    ("All items in `cake_tuples` must be >= 0:\n" +
+                     "cake_tuples =\n" +
+                     "{ct}").format(ct=cake_tuples))
+            elif not isinstance(item, int):
+                raise ValueError(
+                    ("All items in `cake_tuples` must be type `int`:\n" +
                      "cake_tuples =\n" +
                      "{ct}").format(ct=cake_tuples))
     if capacity < 0:
         raise ValueError(
             ("`capacity` must be >= 0\n" +
              "capacity = {cap}").format(cap=capacity))
+    # With sorting:
     # Optimize value-to-weight ratio.
-    (cake_weights, cake_values) = zip(*cake_tuples)
-    if 0 in cake_weights:
-        bag_value = np.inf
-    else:
-        cake_triples = sorted(
-            [(cake_weight, cake_value, cake_value/cake_weight)
-             for (cake_weight, cake_value) in cake_tuples],
-            key=operator.itemgetter(2),
-            reverse=True)
-        bag_value = 0
-        res = capacity
-        for (cake_weight, cake_value, _) in cake_triples:
-            if res >= cake_weight:
-                num_cakes = int(res/cake_weight)
-                bag_value += num_cakes*cake_value
-                res -= num_cakes*cake_weight
+    # bag_value = 0
+    # cake_triples = list()
+    # for (cake_weight, cake_value) in cake_tuples:
+    #     if cake_weight == 0 and cake_value == 0:
+    #         continue
+    #     elif cake_weight == 0 and cake_value > 0: 
+    #         bag_value = np.inf
+    #         break
+    #     elif cake_weight > 0 and cake_value >= 0:
+    #         cake_triples.append(
+    #             (cake_weight, cake_value, cake_value/cake_weight))
+    # if bag_value < np.inf:
+    #     cake_triples = sorted(
+    #         cake_triples,
+    #         key=operator.itemgetter(2),
+    #         reverse=True)
+    #     res = capacity
+    #     for (cake_weight, cake_value, _) in cake_triples:
+    #         if res >= cake_weight:
+    #             num_cakes = int(res/cake_weight)
+    #             bag_value += num_cakes*cake_value
+    #             res -= num_cakes*cake_weight
+    # Without sorting:
+    cakes_seen = dict()
+    res = capacity
+    res_prev1 = res
+    res_prev2 = res
+    bag_value = 0
+    for _ in range(capacity):
+        cake_value_weight_ratio_max = 0
+        cake_weight_best = 0
+        cake_value_best = 0
+        for (cake_weight, cake_value) in cake_tuples:
+            if (cake_weight, cake_value) in cakes_seen:
+                continue
+            else:
+                if cake_value == 0:
+                    cakes_seen[(cake_weight, cake_value)] = True
+                    continue
+                elif cake_weight == 0 and cake_value > 0:
+                    bag_value = np.inf
+                    break
+                elif res >= cake_weight and cake_weight > 0 and cake_value > 0:
+                    cake_value_weight_ratio = cake_value / cake_weight
+                    if cake_value_weight_ratio > cake_value_weight_ratio_max:
+                        cake_value_weight_ratio_max = cake_value_weight_ratio
+                        cake_weight_best = cake_weight
+                        cake_value_best = cake_value
+                else:
+                    continue
+        # Update bag_value after iterating through cakes.
+        if cake_value_weight_ratio_max != 0:
+            num_cakes = int(res/cake_weight_best)
+            bag_value += num_cakes*cake_value_best
+            res -= num_cakes*cake_weight_best
+        # Test for solution convergence.
+        res_prev2 = res_prev1
+        res_prev1 = res
+        if res == res_prev1 and res == res_prev2:
+            break
     return bag_value

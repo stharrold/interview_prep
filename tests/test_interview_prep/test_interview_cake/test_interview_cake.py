@@ -361,16 +361,22 @@ def test_q16_max_duffel_bag_value_suppl() -> None:
     """
     with pytest.raises(ValueError):
         ic.q16_max_duffel_bag_value(
-            cake_tuples=[(7, 160), (3, 90), (2, 15)],
-            capacity=-1)
+            cake_tuples=[(7, 160), (3, 90), (2, 15)], capacity=-1)
         ic.q16_max_duffel_bag_value(
-            cake_tuples=[(7, 160), (-1, 90), (2, 15)],
-            capacity=20)
+            cake_tuples=[(7, 160), (-1, 90), (2, 15)], capacity=20)
         ic.q16_max_duffel_bag_value(
-            cake_tuples=[(7, 160), (3, -1), (2, 15)],
-            capacity=20)
+            cake_tuples=[(7, 160), (3, -1), (2, 15)], capacity=20)
+        ic.q16_max_duffel_bag_value(
+            cake_tuples=[(7, 160), (3, 90.0), (2, 15)], capacity=20)
     test_q16_max_duffel_bag_value(
         cake_tuples=[(0, 160), (3, 90), (2, 15)],
-        capacity=20,
-        ref_bag_value=np.inf)
+        capacity=20, ref_bag_value=np.inf)
+    test_q16_max_duffel_bag_value(
+        cake_tuples=[(0, 0), (3, 90), (2, 15)], capacity=20, ref_bag_value=555)
+    test_q16_max_duffel_bag_value(
+        cake_tuples=[(1, 30), (50, 200)], capacity=100, ref_bag_value=3000)
+    test_q16_max_duffel_bag_value(
+        cake_tuples=[(3, 40), (5, 70)], capacity=8, ref_bag_value=110)
+    test_q16_max_duffel_bag_value(
+        cake_tuples=[(3, 40), (5, 70)], capacity=9, ref_bag_value=120)
     return None
