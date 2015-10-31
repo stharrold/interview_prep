@@ -48,22 +48,34 @@ def test_calc_nth_fib_suppl() -> None:
 
 
 def test_print_mult_table(
-    max_fac=2,
-    ref_stdout=\
+    max_fac:int=2,
+    ref_stdout:str=\
 """x 0 1 2 
 0 0 0 0 
 1 0 1 2 
 2 0 2 4 
-"""):
+""") -> None:
     """Pytest for print_mult_table.
 
     """
-    stdout_orig = sys.stdout
-    captured_stdout = io.StringIO()
-    sys.stdout = captured_stdout
+    # Create a string buffer to capture print statements and
+    # assign to the `sys.stdout` pointer. Capture the output then
+    # reassign `sys.stdout` to original stream. 
+    test_stdout = io.StringIO()
+    sys.stdout = test_stdout
     ps.print_mult_table(max_fac=max_fac)
-    sys.stdout = stdout_orig
-    assert captured_stdout.getvalue() == ref_stdout
+    sys.stdout = sys.__stdout__
+    assert test_stdout.getvalue() == ref_stdout
+    return None
+
+
+def test_print_mult_table_suppl() -> None:
+    r"""Supplemental pytests for print_mult_table.
+    
+    """
+    with pytest.raises(ValueError):
+        ps.print_mult_table(max_fac=1.0)
+        ps.print_mult_table(max_fac=-1)
     return None
 
 

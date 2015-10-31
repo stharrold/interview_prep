@@ -7,7 +7,6 @@ r"""My interations of answers to common phone screen questions.
 
 # Import standard packages.
 import collections
-import math
 import pdb
 import sys
 # Import installed packages.
@@ -84,40 +83,48 @@ def calc_nth_fib(nth:int) -> int:
     return fib
 
 
-def print_mult_table(max_fac=12):
-    """Print to stdout a multiplication table.
+def print_mult_table(
+    max_fac:int=12) -> None:
+    """Print a multiplication table to stdout.
     
     Args:
-        max_fac: {12}, int, optional
-            Maximum factor up to which to make table.`max_fac` >= 0.
+        max_fac (int, optional, default=12):  Factor up to which to make table.
+            `max_fac` >= 0.
             Example: max_fac=12 (default) makes multiplication table
-            0x0, 0x1, ... 12x11, 12x12.
+            0x0,  0x1,  ..., 0x12
+            1x0,  1x1,  ..., 1x12
+            ...,  ...,  ..., ...
+            12x0, 12x1, ..., 12x12
 
     Returns:
-        None
-            Prints table to `stdout`.
+        None: Prints table to `stdout`.
 
     Raises:
-        ValueError:
-            Raised if `max_fac` < 0.
+        ValueError: Raised if `max_fac` < 0.
 
     Notes:
-        - Example 3 from [1].
-        - Complexity:
-            Time: O(n^2)
-            Space: O(1)
+        * Example 3 from [1].
+        * Complexity:
+            * n = max_fac
+            * Time: O(n^2)
+            * Space: O(1)
 
     References:
-        ..[1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
+        .. [1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 
     """
     # Check input
+    utils.check_arguments(
+        antns=print_mult_table.__annotations__,
+        lcls=locals())
     if max_fac < 0:
-        raise ValueError(("`max_fac` must be >= 0\n" +
-                          "max_fac = {max_fac}").format(max_fac=max_fac))
-    # Define custom print function for rows of multiplication table.
+        raise ValueError(
+            ("`max_fac` must be >= 0\n" +
+             "max_fac = {max_fac}").format(max_fac=max_fac))
+    # Define custom print function for factors and products (elements)
+    # of multiplication table,
     max_prod = max_fac*max_fac
-    max_digits = int(math.log10(max_prod)) + 1
+    max_digits = len(str(max_prod))
     fmt = "{elt:>" + str(max_digits) + "d}"
     print_elt = lambda elt: print(fmt.format(elt=elt), end=' ')
     # Print multiplication table.
