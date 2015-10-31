@@ -9,10 +9,10 @@ r"""Pytests for interview_prep/phone_screen/phone_screen.py
 import io
 import os
 import sys
-sys.path.insert(0, '.')
 import tempfile
 # Import installed packages.
 # Import local packages.
+sys.path.insert(0, os.path.curdir)
 import interview_prep.phone_screen.phone_screen as ps
 
 

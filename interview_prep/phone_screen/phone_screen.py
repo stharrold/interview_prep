@@ -6,7 +6,9 @@ r"""My interations of answers to common phone screen questions.
 
 
 # Import standard packages.
+import collections
 import math
+import sys
 # Import installed packages.
 # Import local packages.
 import interview_prep.utils as utils
@@ -24,43 +26,66 @@ def reverse_string(string:str) -> str:
     Notes:
         * Example 1 from [1]_.
         * Complexity:
-            Time: O(n)
-            Space: O(n)
+            * n = len(string)
+            * Time: O(n)
+            * Space: O(n)
 
     References:
         .. [1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 
     """
+    utils.check_arguments(
+        antns=reverse_string.__annotations__,
+        lcls=locals())
     string_rev = string[::-1]
     return string_rev
 
 
-def calc_nth_fib(nth):
-    """Calculate the nth Fibonacci number.
+def calc_nth_fib(nth:int) -> int:
+    """Calculate the nth Fibonacci number (0-indexed).
 
     Args:
-        nth: int
-            The sequence number of the Fibonaci number to calculate.
-            `nth` >= 1
+        nth (int): The index number of the Fibonacci number to calculate.
+            `nth` >= 0
 
     Returns:
-        nth_fib: int
-            The `nth` Fibonacci number in sequence.
+        fib_nth (int): The `nth` Fibonacci number in sequence.
+    
+    Raises:
+        ValueError: Raised if `nth` < 0. 
 
     Notes:
-        - Complexity:
-            Time: O(n), n = `nth`
-            Space: O(n), n = `nth`
+        * fib(0) = 0, fib(1) = 1, fib(n) = fib(n-1) + fib(n-2).
+        * Complexity:
+            * n = `nth`
+            * Time: O(n)
+            * Space: O(1)
 
     """
-    # TODO: check input
-    # TODO: save state information between calls with global or class.
-    # TODO: use array.array for efficient storage.
-    # Check input
-    if nth < 1:
-        raise ValueError(("`nth` must be >= 1\n" +
-                          "nth = {nth}").format(nth=nth))
-    # Initialize Fibonacci sequence and append to reach nth Fibonacci number.
+    # # Check arguments.
+    # utils.check_arguments(
+    #     antns=calc_nth_fib.__annotations__,
+    #     lcls=locals())
+    # if nth < 0:
+    #     raise ValueError(
+    #         ("`nth` must be >= 0\n" +
+    #          "nth = {nth}").format(nth=nth))
+    # Initialize Fibonacci sequence to reach nth Fibonacci number.
+    # fib_prevs = collections.deque()
+    # for idx in range(nth):
+    #     if idx == 0:
+    #         fib_idx = 0
+    #     elif idx == 1:
+    #         fib_idx = 1
+    #     elif idx > 1:
+    #         fib_idx = fib_prev1 + fib_prev2
+    #         fib_prev2 = fib
+    #         fib_prev1 = fib_idx
+    #     else:
+    #         raise AssertionError(
+    #             ("Program error. `idx` must be >= `nth`\n" +
+    #              "idx = {idx}\nnth = {nth}").format(idx=idx, nth=nth))
+        
     fibs = [0, 1]
     while len(fibs) < nth:
         fibs.append(fibs[-2] + fibs[-1])

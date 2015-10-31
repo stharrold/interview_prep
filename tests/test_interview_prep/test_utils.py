@@ -7,11 +7,12 @@ r"""Pytests for interview_prep/test_interview_prep/test_utils.py
 
 # Import standard packages.
 import collections
+import os
 import sys
-sys.path.insert(0, '.')
 # Import installed packages.
 import pytest
 # Import local packages.
+sys.path.insert(0, os.path.curdir)
 import interview_prep.utils as utils
 
 
