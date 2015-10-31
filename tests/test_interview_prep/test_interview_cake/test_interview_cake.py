@@ -7,11 +7,12 @@ r"""Tests for interview_prep/interview_cake/interview_cake.py
 
 # Import standard packages.
 import collections
+import os
 import sys
-sys.path.insert(0, '.')
 # Import installed packages.
 import pytest
 # Import local packages.
+sys.path.insert(0, os.path.curdir)
 import interview_prep.interview_cake.interview_cake as ic
 
 

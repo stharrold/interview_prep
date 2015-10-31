@@ -11,12 +11,15 @@ import os
 import sys
 import tempfile
 # Import installed packages.
+import pytest
 # Import local packages.
 sys.path.insert(0, os.path.curdir)
 import interview_prep.phone_screen.phone_screen as ps
 
 
-def test_reverse_string(string='asdfjkl;', string_rev=';lkjfdsa'):
+def test_reverse_string(
+    string:str='asdfjkl;',
+    string_rev:str=';lkjfdsa') -> None:
     """Pytest for reverse_string.
 
     """
@@ -24,11 +27,23 @@ def test_reverse_string(string='asdfjkl;', string_rev=';lkjfdsa'):
     return None
 
 
-def test_calc_nth_fib(nth=5, nth_fib=3):
+def test_calc_nth_fib(
+    nth:int=4,
+    fib:int=3) -> None:
     """Pytest for calc_nth_fib.
 
     """
-    assert ps.calc_nth_fib(nth=nth) == nth_fib
+    assert ps.calc_nth_fib(nth=nth) == fib
+    return None
+
+
+def test_calc_nth_fib_suppl() -> None:
+    r"""Supplemental pytests for calc_nth_fib.
+    
+    """
+    with pytest.raises(ValueError):
+        ps.calc_nth_fib(nth=1.0)
+        ps.calc_nth_fib(nth=-1)
     return None
 
 

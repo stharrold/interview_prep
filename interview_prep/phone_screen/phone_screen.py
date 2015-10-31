@@ -8,6 +8,7 @@ r"""My interations of answers to common phone screen questions.
 # Import standard packages.
 import collections
 import math
+import pdb
 import sys
 # Import installed packages.
 # Import local packages.
@@ -49,7 +50,7 @@ def calc_nth_fib(nth:int) -> int:
             `nth` >= 0
 
     Returns:
-        fib_nth (int): The `nth` Fibonacci number in sequence.
+        fib (int): The `nth` Fibonacci number in sequence.
     
     Raises:
         ValueError: Raised if `nth` < 0. 
@@ -62,39 +63,25 @@ def calc_nth_fib(nth:int) -> int:
             * Space: O(1)
 
     """
-    # # Check arguments.
-    # utils.check_arguments(
-    #     antns=calc_nth_fib.__annotations__,
-    #     lcls=locals())
-    # if nth < 0:
-    #     raise ValueError(
-    #         ("`nth` must be >= 0\n" +
-    #          "nth = {nth}").format(nth=nth))
+    # Check arguments.
+    utils.check_arguments(
+        antns=calc_nth_fib.__annotations__,
+        lcls=locals())
+    if nth < 0:
+        raise ValueError(
+            ("`nth` must be >= 0\n" +
+             "nth = {nth}").format(nth=nth))
     # Initialize Fibonacci sequence to reach nth Fibonacci number.
-    # fib_prevs = collections.deque()
-    # for idx in range(nth):
-    #     if idx == 0:
-    #         fib_idx = 0
-    #     elif idx == 1:
-    #         fib_idx = 1
-    #     elif idx > 1:
-    #         fib_idx = fib_prev1 + fib_prev2
-    #         fib_prev2 = fib
-    #         fib_prev1 = fib_idx
-    #     else:
-    #         raise AssertionError(
-    #             ("Program error. `idx` must be >= `nth`\n" +
-    #              "idx = {idx}\nnth = {nth}").format(idx=idx, nth=nth))
-        
-    fibs = [0, 1]
-    while len(fibs) < nth:
-        fibs.append(fibs[-2] + fibs[-1])
-    # Check computation.
-    if nth == 0:
-        assert fibs[nth-1] == fibs[0]
+    maxlen = 2
+    fibs_prev = collections.deque(maxlen=maxlen)
+    fibs_prev.extend(range(maxlen))
+    if nth < maxlen:
+        fib = fibs_prev[nth]
     else:
-        assert fibs[nth-1] == fibs[-1]
-    return fibs[nth-1]
+        idxs_res = range((nth - maxlen) + 1)
+        [fibs_prev.append(sum(fibs_prev)) for idx in idxs_res]
+        fib = fibs_prev[-1]
+    return fib
 
 
 def print_mult_table(max_fac=12):
