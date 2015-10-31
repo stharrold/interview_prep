@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""My interations of answers to
-https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
+r"""My interations of answers to common phone screen questions.
 
 """
 
@@ -10,31 +9,30 @@ https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 import math
 # Import installed packages.
 # Import local packages.
+import interview_prep.utils as utils
 
 
-def reverse_string(string):
+def reverse_string(string:str) -> str:
     """Reverse a string.
     
     Args:
-        string: str
-            String with __getslice__ method.
+        string (str): String with __getslice__ method.
 
     Returns:
-        revd: str
-            Reversed `string`.
+        string_rev (str): Reversed `string`.
 
     Notes:
-        - Example 1 from [1]
-        - Complexity:
+        * Example 1 from [1]_.
+        * Complexity:
             Time: O(n)
-            Space: O(1)
+            Space: O(n)
 
     References:
-        ..[1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
-        ..[2] http://stackoverflow.com/questions/931092/reverse-a-string-in-python
+        .. [1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 
     """
-    return string[::-1]
+    string_rev = string[::-1]
+    return string_rev
 
 
 def calc_nth_fib(nth):

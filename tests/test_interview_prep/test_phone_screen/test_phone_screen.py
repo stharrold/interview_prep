@@ -16,11 +16,11 @@ import tempfile
 import interview_prep.phone_screen.phone_screen as ps
 
 
-def test_reverse_string(string='asdfjkl;', revd=';lkjfdsa'):
+def test_reverse_string(string='asdfjkl;', string_rev=';lkjfdsa'):
     """Pytest for reverse_string.
 
     """
-    assert ps.reverse_string(string=string) == revd
+    assert ps.reverse_string(string=string) == string_rev
     return None
 
 

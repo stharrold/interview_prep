@@ -19,6 +19,7 @@ def test_check_arguments() -> None:
     r"""Pytest for check_arguments.
     
     """
+    # TODO: replace with interview_prep.test_utils.test_check_arguments()
     def myfunc(arg0: int, arg1: str) -> float:
         ic.check_arguments(
             antns=myfunc.__annotations__,
