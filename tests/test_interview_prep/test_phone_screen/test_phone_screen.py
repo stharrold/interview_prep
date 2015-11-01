@@ -79,19 +79,29 @@ def test_print_mult_table_suppl() -> None:
     return None
 
 
-def test_sum_ints(contents=\
+def test_sum_ints(contents:str=\
 """1
 2
 3
 """,
-ref_total=6):
-    """Pytest for sum_ints.
+ref_total:int=6) -> None:
+    r"""Pytest for sum_ints.
 
     """
-    (_, fname) = tempfile.mkstemp()
-    with open(fname, 'w') as fobj:
+    (_, path) = tempfile.mkstemp(text=True)
+    with open(path, 'wt') as fobj:
         fobj.write(contents)
-    test_total = ps.sum_ints(fname=fname)
+    test_total = ps.sum_ints(path=path)
     assert ref_total == test_total
-    os.remove(fname)
+    os.remove(path)
+    return None
+
+
+def test_sum_ints_suppl() -> None:
+    r"""Supplemental pytests for sum_ints.
+    
+    """
+    with pytest.raises(ValueError):
+        ps.sum_ints(path=r'/path/does/not/exist.txt')
+        ps.sum_ints(path=1)
     return None

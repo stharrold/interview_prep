@@ -7,6 +7,7 @@ r"""My interations of answers to common phone screen questions.
 
 # Import standard packages.
 import collections
+import os
 import pdb
 import sys
 # Import installed packages.
@@ -15,7 +16,7 @@ import interview_prep.utils as utils
 
 
 def reverse_string(string:str) -> str:
-    """Reverse a string.
+    r"""Reverse a string.
     
     Args:
         string (str): String with __getslice__ method.
@@ -42,7 +43,7 @@ def reverse_string(string:str) -> str:
 
 
 def calc_nth_fib(nth:int) -> int:
-    """Calculate the nth Fibonacci number (0-indexed).
+    r"""Calculate the nth Fibonacci number (0-indexed).
 
     Args:
         nth (int): The index number of the Fibonacci number to calculate.
@@ -83,9 +84,8 @@ def calc_nth_fib(nth:int) -> int:
     return fib
 
 
-def print_mult_table(
-    max_fac:int=12) -> None:
-    """Print a multiplication table to stdout.
+def print_mult_table(max_fac:int=12) -> None:
+    r"""Print a multiplication table to stdout.
     
     Args:
         max_fac (int, optional, default=12):  Factor up to which to make table.
@@ -142,30 +142,38 @@ def print_mult_table(
     return None
 
 
-def sum_ints(fname):
-    """Sum the ints from a text file, one per line
+def sum_ints(path:str) -> int:
+    r"""Sum the integers from a text file, one integer per line.
 
     Args:
-        fname: string
-            Path to file. File contains one `int` per line.
+        path(str): Path to file. File contains one `int` per line.
 
     Returns:
-        total: int
-            Sum of all `int`s in file `fname`.
+        total(int): Total sum of all `int`s in the file.
 
     Notes:
-        * Example 4 from [1]
+        * Example 4 from [1]_.
         * Complexity:
-            Time: O(n), n is number of lines in `fname` file.
-            Space: O(1)
+            * n = number of lines in `path` file.
+            * Time: O(n)
+            * Space: O(1)
 
     References:
-        .. [1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
+        .. [1] https://sites.google.com/site/steveyegge2/
+               five-essential-phone-screen-questions
     
     """
-    # TODO: check input
+    # Check input.
+    utils.check_arguments(
+        antns=sum_ints.__annotations__,
+        lcls=locals())
+    if not os.path.exists(path):
+        raise ValueError(
+            ("`path` does not exist:\n" +
+             "path =\n{path}").format(path=path))
+    # Sum the lines in the file.
     total = 0
-    with open(fname, 'rb') as fobj:
+    with open(path, 'rt') as fobj:
         for line in fobj:
             total += int(line.strip())
     return total
