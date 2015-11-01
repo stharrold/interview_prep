@@ -13,7 +13,7 @@ import sys
 import pytest
 # Import local packages.
 sys.path.insert(0, os.path.curdir)
-import interview_prep.interview_cake.interview_cake as ic
+import interview_prep.interview_cake as ic
 
 
 def test_q1_calc_max_profit(
@@ -36,21 +36,30 @@ def test_q1_calc_max_profit_suppl() -> None:
     return None
 
 
-def test_get_products_of_all_ints_except_at_index(ints=[1,7,3,4], prods=[7*3*4, 1*3*4, 1*7*4, 1*7*3]):
-    """pytest style test
+def test_q2_get_products_of_all_ints_except_at_index(
+    ints:list=[1, 7, 3, 4],
+    ref_prods:list=[7*3*4, 1*3*4, 1*7*4, 1*7*3]) -> None:
+    """Pytest for q2_get_products_of_all_ints_except_at_index.
     
     """
-    prod_pairs = list(filter(
-        lambda tup: tup[0] == tup[1],
-        zip(ic.get_products_of_all_ints_except_at_index(ints), prods)))
-    assert len(prod_pairs) == len(ints)
+    test_prods = ic.q2_get_products_of_all_ints_except_at_index(ints)
+    assert len(ref_prods) == len(test_prods)
+    for (ref_prod, test_prod) in zip(ref_prods, test_prods):
+        assert ref_prod == test_prod
     return None
 
 
-test_get_products_of_all_ints_except_at_index()
-test_get_products_of_all_ints_except_at_index(ints=[0,0,0], prods=[0,0,0])
-test_get_products_of_all_ints_except_at_index(ints=[5], prods=[1])
-test_get_products_of_all_ints_except_at_index(ints=[], prods=[])
+def test_q2_get_products_of_all_ints_except_at_index_suppl() -> None:
+    r"""Supplemental tests for q2_get_products_of_all_ints_except_at_index.
+    
+    """
+    test_q2_get_products_of_all_ints_except_at_index(
+        ints=[0, 0, 0], ref_prods=[0, 0, 0])
+    test_q2_get_products_of_all_ints_except_at_index(
+        ints=[5], ref_prods=[1])
+    test_q2_get_products_of_all_ints_except_at_index(
+        ints=[], ref_prods=[])
+    return None
 
 
 def test_get_highest_product(ints=[-10,-10,-20,1,3,2], highest_product=600):

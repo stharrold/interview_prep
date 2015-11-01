@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-r"""My answers to questions on iterviewcake.com.
+r"""My answers to questions on interviewcake.com.
 
 """
 
@@ -32,7 +32,7 @@ def q1_calc_max_profit(prices: list) -> float:
         * Complexity:
             * n = len(prices)
             * Ideal: Time=O(n), Space=O(1)
-            * Realized: Time=, Space=
+            * Realized: Time=O(n), Space=O(1)
     
     References:
         .. [1] https://www.interviewcake.com/question/stock-price
@@ -51,21 +51,32 @@ def q1_calc_max_profit(prices: list) -> float:
     return max_profit
 
 
-def q2_get_product_of_all_ints_except_at_index(ints):
-    r"""Get product of all ints save one for each index.
+def q2_get_products_of_all_ints_except_at_index(
+    ints:list) -> list:
+    r"""Calculate the products of all integers except for the one each index.
 
     Args:
-        ints: list of int
-        List of `int` factors.
+        ints (list): `list` of `int` factors.
 
     Returns:
-        prods: list of int
-        List of `int` products.
+        prods (list): `list` of `int` products
+    
+    Notes:
+        * interviewcake.com question #2, "Product of All Other Numbers".
+        * Complexity:
+            * n = len(prices)
+            * Ideal: Time=O(n), Space=O(1)
+            * Realized: Time=O(n), Space=O(1)
 
     References:
         ..[1] https://www.interviewcake.com/question/product-of-other-numbers
     
     """
+    # Check arguments.
+    utils.check_arguments(
+        antns=q2_get_products_of_all_ints_except_at_index.__annotations__,
+        lcls=locals())
+    # 
     idxs = range(len(ints))
     prods = [1]*len(ints)
     prod = 1

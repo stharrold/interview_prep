@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
-r"""Code for interview questions.
+r"""My answers to example interview questions.
 
 """
 
