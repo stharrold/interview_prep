@@ -8,7 +8,6 @@ r"""My interations of answers to common phone screen questions.
 # Import standard packages.
 import collections
 import os
-import pdb
 import sys
 # Import installed packages.
 # Import local packages.
