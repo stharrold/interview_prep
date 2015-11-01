@@ -16,33 +16,24 @@ sys.path.insert(0, os.path.curdir)
 import interview_prep.interview_cake.interview_cake as ic
 
 
-def test_check_arguments() -> None:
-    r"""Pytest for check_arguments.
+def test_q1_calc_max_profit(
+    prices:list=[5.0, 4.0, 5.0, 3.0, 6.0, 5.0, 9.0, 8.0, 10.0, 2.0, 3.0],
+    ref_max_profit:float=7.0) -> None:
+    r"""Pytest for q1_calc_max_profit.
     
     """
-    # TODO: replace with interview_prep.test_utils.test_check_arguments()
-    def myfunc(arg0: int, arg1: str) -> float:
-        ic.check_arguments(
-            antns=myfunc.__annotations__,
-            lcls=locals())
-        return 1.0
-    # Nothing should be raised.
-    myfunc(arg0=1, arg1='mystring')
-    # Raise ValueError.
-    with pytest.raises(ValueError):
-        myfunc(arg0=1.0, arg1='mystring')
+    assert ref_max_profit == ic.q1_calc_max_profit(prices)
     return None
 
 
-def test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,2.,3.], max_profit=7.0):
-    """pytest style test for calc_max_profit
+def test_q1_calc_max_profit_suppl() -> None:
+    r"""Supplemental pytests for q1_calc_max_profit.
     
     """
-    assert ic.calc_max_profit(prices) == max_profit
+    test_q1_calc_max_profit(
+        prices=[5.0, 4.0, 5.0, 3.0, 6.0, 5.0, 9.0, 8.0, 10.0, -20.0, 3.0],
+        ref_max_profit=23.0)
     return None
-
-
-test_calc_max_profit(prices=[5.0, 4.0, 5.0, 3.0, 6.0, 5.0, 9.0, 8.0, 10.0, -20.0, 3.0], max_profit=23.)
 
 
 def test_get_products_of_all_ints_except_at_index(ints=[1,7,3,4], prods=[7*3*4, 1*3*4, 1*7*4, 1*7*3]):

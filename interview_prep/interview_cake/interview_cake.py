@@ -9,61 +9,41 @@ r"""My answers to questions on iterviewcake.com.
 import copy
 import collections
 import operator
+import os
 import pdb
 import sys
 # Import installed packages.
 # Import local packages.
+import interview_prep.utils as utils
 
 
-def check_arguments(antns, lcls) -> None:
-    r"""Check types of a function's input arguments.
-    Call from within the function.
+def q1_calc_max_profit(prices: list) -> float:
+    r"""Compute maximum profit from stock prices.
     
     Args:
-        antns: Annotations of enclosing function.
-        lcls: Local variables.
+        prices (list): List of prices as `float`. Index is number of minutes
+            since beginning of trading day.
     
     Returns:
-        None
-        
-    Raises:
-        ValueError: Raised if arguments do not match annotated arguments.
+        max_profit (float): Maximum profit possible from buying then selling.
     
     Notes:
-        * Example usage:
-            ```
-            def myfunc(arg0: int, arg1: str) -> float:
-               check_arguments(antns=myfunc.__annotations__, lcls=locals())
-            ```
+        * interviewcake.com question #1, "Apple Stocks".
+        * Complexity:
+            * n = len(prices)
+            * Ideal: Time=O(n), Space=O(1)
+            * Realized: Time=, Space=
     
-    """
-    # TODO: replace with interview_prep.utils.check_arguments()
-    for (arg, cls) in antns.items():
-        if arg != 'return':
-            if not isinstance(lcls[arg], cls):
-                raise ValueError(
-                    ("type({arg}) must be {cls}\n" +
-                     "type({arg}) = {typ}").format(
-                        arg=arg, cls=cls, typ=type(lcls[arg])))
-    return None
-
-
-def calc_max_profit(prices):
-    """Compute maximum profit.
-    
-    Args:
-        prices: array_like
-            Iterable with prices. Index is number of minutes since beginning of trading day.
-    
-    Returns:
-        max_profit: float
-            Maximum profit possible from buying then selling during `prices`.
-            
     References:
         .. [1] https://www.interviewcake.com/question/stock-price
     
     """
-    # TODO: use indices as internal check that program is working.
+    # Check arguments.
+    utils.check_arguments(
+        antns=q1_calc_max_profit.__annotations__,
+        lcls=locals())
+    # Calculate max_profit sequentially with min_price since the fund must be
+    # bought before being sold.
     (min_price, max_profit) = (prices[0], 0.0)
     for price in prices:
         min_price = min(min_price, price)
@@ -71,8 +51,8 @@ def calc_max_profit(prices):
     return max_profit
 
 
-def get_products_of_all_ints_except_at_index(ints):
-    """Get product of all ints save one for each idx.
+def q2_get_product_of_all_ints_except_at_index(ints):
+    r"""Get product of all ints save one for each index.
 
     Args:
         ints: list of int
@@ -1157,7 +1137,8 @@ def q14_movies_match_flight(flight_length: int, movie_lengths: list) -> bool:
             inflight-entertainment
     
     """
-    check_arguments(
+    # Check arguments.
+    utils.check_arguments(
         antns=q14_movies_match_flight.__annotations__,
         lcls=locals())
     # Memoize movie lengths seen.
@@ -1201,8 +1182,7 @@ def q15_fib(idx: int) -> int:
     
     Notes:
         * interviewcake.com question #15, "Compute Nth Fibonacci Number" [1]_.
-        * fib(n) = fib(n-1) + fib(n-2)
-            where fib(0) = 0, fib(1) = 1.
+        * fib(n) = fib(n-1) + fib(n-2), fib(0) = 0, fib(1) = 1.
         * Complexity:
             * Ideal:
                 * Time: O(log2(n))
@@ -1216,7 +1196,7 @@ def q15_fib(idx: int) -> int:
 
     """
     # Check arguments.
-    check_arguments(
+    utils.check_arguments(
         antns=q15_fib.__annotations__,
         lcls=locals())
     if idx < 0:
@@ -1265,7 +1245,8 @@ def q16_max_duffel_bag_value(cake_tuples:list, bag_capacity:int) -> int:
         .. [1] https://www.interviewcake.com/question/python/cake-thief
     
     """
-    check_arguments(
+    # Check arguments.
+    utils.check_arguments(
         antns=q16_max_duffel_bag_value.__annotations__,
         lcls=locals())
     for tup in cake_tuples:
