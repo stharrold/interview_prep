@@ -1,113 +1,129 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""My interations of answers to
-https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
+r"""My interations of answers to common phone screen questions.
 
 """
 
 
 # Import standard packages.
-import math
+import collections
+import os
+import sys
 # Import installed packages.
 # Import local packages.
+import interview_prep.utils as utils
 
 
-def reverse_string(string):
-    """Reverse a string.
+def reverse_string(string:str) -> str:
+    r"""Reverse a string.
     
     Args:
-        string: str
-            String with __getslice__ method.
+        string (str): String with __getslice__ method.
 
     Returns:
-        revd: str
-            Reversed `string`.
+        string_rev (str): Reversed `string`.
 
     Notes:
-        - Example 1 from [1]
-        - Complexity:
-            Time: O(n)
-            Space: O(1)
+        * Example 1 from [1]_.
+        * Complexity:
+            * n = len(string)
+            * Time: O(n)
+            * Space: O(n)
 
     References:
-        ..[1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
-        ..[2] http://stackoverflow.com/questions/931092/reverse-a-string-in-python
+        .. [1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 
     """
-    return string[::-1]
+    utils.check_arguments(
+        antns=reverse_string.__annotations__,
+        lcls=locals())
+    string_rev = string[::-1]
+    return string_rev
 
 
-def calc_nth_fib(nth):
-    """Calculate the nth Fibonacci number.
+def calc_nth_fib(nth:int) -> int:
+    r"""Calculate the nth Fibonacci number (0-indexed).
 
     Args:
-        nth: int
-            The sequence number of the Fibonaci number to calculate.
-            `nth` >= 1
+        nth (int): The index number of the Fibonacci number to calculate.
+            `nth` >= 0
 
     Returns:
-        nth_fib: int
-            The `nth` Fibonacci number in sequence.
+        fib (int): The `nth` Fibonacci number in sequence.
+    
+    Raises:
+        ValueError: Raised if `nth` < 0. 
 
     Notes:
-        - Complexity:
-            Time: O(n), n = `nth`
-            Space: O(n), n = `nth`
+        * fib(0) = 0, fib(1) = 1, fib(n) = fib(n-1) + fib(n-2).
+        * Complexity:
+            * n = `nth`
+            * Time: O(n)
+            * Space: O(1)
 
     """
-    # TODO: check input
-    # TODO: save state information between calls with global or class.
-    # TODO: use array.array for efficient storage.
-    # Check input
-    if nth < 1:
-        raise ValueError(("`nth` must be >= 1\n" +
-                          "nth = {nth}").format(nth=nth))
-    # Initialize Fibonacci sequence and append to reach nth Fibonacci number.
-    fibs = [0, 1]
-    while len(fibs) < nth:
-        fibs.append(fibs[-2] + fibs[-1])
-    # Check computation.
-    if nth == 0:
-        assert fibs[nth-1] == fibs[0]
+    # Check arguments.
+    utils.check_arguments(
+        antns=calc_nth_fib.__annotations__,
+        lcls=locals())
+    if nth < 0:
+        raise ValueError(
+            ("`nth` must be >= 0\n" +
+             "nth = {nth}").format(nth=nth))
+    # Initialize Fibonacci sequence to reach nth Fibonacci number.
+    maxlen = 2
+    fibs_prev = collections.deque(maxlen=maxlen)
+    fibs_prev.extend(range(maxlen))
+    if nth < maxlen:
+        fib = fibs_prev[nth]
     else:
-        assert fibs[nth-1] == fibs[-1]
-    return fibs[nth-1]
+        idxs_res = range((nth - maxlen) + 1)
+        [fibs_prev.append(sum(fibs_prev)) for idx in idxs_res]
+        fib = fibs_prev[-1]
+    return fib
 
 
-def print_mult_table(max_fac=12):
-    """Print to stdout a multiplication table.
+def print_mult_table(max_fac:int=12) -> None:
+    r"""Print a multiplication table to stdout.
     
     Args:
-        max_fac: {12}, int, optional
-            Maximum factor up to which to make table.`max_fac` >= 0.
+        max_fac (int, optional, default=12):  Factor up to which to make table.
+            `max_fac` >= 0.
             Example: max_fac=12 (default) makes multiplication table
-            0x0, 0x1, ... 12x11, 12x12.
+            0x0,  0x1,  ..., 0x12
+            1x0,  1x1,  ..., 1x12
+            ...,  ...,  ..., ...
+            12x0, 12x1, ..., 12x12
 
     Returns:
-        None
-            Prints table to `stdout`.
+        None: Prints table to `stdout`.
 
     Raises:
-        ValueError:
-            Raised if `max_fac` < 0.
+        ValueError: Raised if `max_fac` < 0.
 
     Notes:
-        - Example 3 from [1].
-        - Complexity:
-            Time: O(n^2)
-            Space: O(1)
+        * Example 3 from [1].
+        * Complexity:
+            * n = max_fac
+            * Time: O(n^2)
+            * Space: O(1)
 
     References:
-        ..[1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
+        .. [1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 
     """
     # Check input
+    utils.check_arguments(
+        antns=print_mult_table.__annotations__,
+        lcls=locals())
     if max_fac < 0:
-        raise ValueError(("`max_fac` must be >= 0\n" +
-                          "max_fac = {max_fac}").format(max_fac=max_fac))
-    # Define custom print function for rows of multiplication table.
+        raise ValueError(
+            ("`max_fac` must be >= 0\n" +
+             "max_fac = {max_fac}").format(max_fac=max_fac))
+    # Define custom print function for factors and products (elements)
+    # of multiplication table,
     max_prod = max_fac*max_fac
-    max_digits = int(math.log10(max_prod)) + 1
+    max_digits = len(str(max_prod))
     fmt = "{elt:>" + str(max_digits) + "d}"
     print_elt = lambda elt: print(fmt.format(elt=elt), end=' ')
     # Print multiplication table.
@@ -125,30 +141,38 @@ def print_mult_table(max_fac=12):
     return None
 
 
-def sum_ints(fname):
-    """Sum the ints from a text file, one per line
+def sum_ints(path:str) -> int:
+    r"""Sum the integers from a text file, one integer per line.
 
     Args:
-        fname: string
-            Path to file. File contains one `int` per line.
+        path(str): Path to file. File contains one `int` per line.
 
     Returns:
-        total: int
-            Sum of all `int`s in file `fname`.
+        total(int): Total sum of all `int`s in the file.
 
     Notes:
-        * Example 4 from [1]
+        * Example 4 from [1]_.
         * Complexity:
-            Time: O(n), n is number of lines in `fname` file.
-            Space: O(1)
+            * n = number of lines in `path` file.
+            * Time: O(n)
+            * Space: O(1)
 
     References:
-        .. [1] https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
+        .. [1] https://sites.google.com/site/steveyegge2/
+               five-essential-phone-screen-questions
     
     """
-    # TODO: check input
+    # Check input.
+    utils.check_arguments(
+        antns=sum_ints.__annotations__,
+        lcls=locals())
+    if not os.path.exists(path):
+        raise ValueError(
+            ("`path` does not exist:\n" +
+             "path =\n{path}").format(path=path))
+    # Sum the lines in the file.
     total = 0
-    with open(fname, 'rb') as fobj:
+    with open(path, 'rt') as fobj:
         for line in fobj:
             total += int(line.strip())
     return total
