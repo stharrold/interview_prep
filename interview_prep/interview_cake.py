@@ -65,8 +65,8 @@ def q2_get_products_of_all_ints_except_at_index(
         * interviewcake.com question #2, "Product of All Other Numbers".
         * Complexity:
             * n = len(prices)
-            * Ideal: Time=O(n), Space=O(1)
-            * Realized: Time=O(n), Space=O(1)
+            * Ideal: Time=O(n), Space=O(n)
+            * Realized: Time=O(n), Space=O(n)
 
     References:
         ..[1] https://www.interviewcake.com/question/product-of-other-numbers
@@ -76,17 +76,19 @@ def q2_get_products_of_all_ints_except_at_index(
     utils.check_arguments(
         antns=q2_get_products_of_all_ints_except_at_index.__annotations__,
         lcls=locals())
-    # 
+    # Allocate a list of ones for `prods`. Multiply products at indexes by
+    # cumulative product then update cumulative product. Repeat iterating in
+    # opposite direction through `ints`.
     idxs = range(len(ints))
     prods = [1]*len(ints)
-    prod = 1
+    prod_cuml = 1
     for idx in idxs:
-        prods[idx] = prod
-        prod *= ints[idx]
-    prod = 1
+        prods[idx] = prod_cuml
+        prod_cuml *= ints[idx]
+    prod_cuml = 1
     for idx in reversed(idxs):
-        prods[idx] *= prod
-        prod *= ints[idx]
+        prods[idx] *= prod_cuml
+        prod_cuml *= ints[idx]
     return prods
 
 
