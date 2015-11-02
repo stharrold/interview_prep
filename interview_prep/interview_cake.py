@@ -188,6 +188,49 @@ def q3_calc_highest_product_of_3(ints:list) -> int:
     return prod
 
 
+def q4_condense_meeting_times(times:list) -> list:
+    """Condense meeting times into contiguous blocks.
+    
+    Args:
+        times (list): `list` of `tuple`s of `int`s as meeting times. `int`s are
+            number of 30-minute blocks since 9am. Does not need to be sorted.
+            Example: `times = [(0, 1), (3, 5), (2, 4)]`
+
+    Returns:
+        condensed (list): Sorted `list` of combined meeting times as tuples.
+            Example: `condensed = [(0, 1), (2, 5)]`
+
+    Notes:
+        * interviewcake.com question #4, "Merging Meeting Times".
+        * Complexity:
+            * n = len(times)
+            * Ideal: Time=O(n*log2(n)), Space=O(n)
+            * Realized: Time=O(n*log2(n)), Space=O(n)
+
+    References:
+        .. [1] https://www.interviewcake.com/question/merging-ranges
+
+    """
+    # Check arguments.
+    utils.check_arguments(
+        antns=q4_condense_meeting_times.__annotations__,
+        lcls=locals())
+    # Sort times first by meeting start then by meeting end
+    # to avoid needing to compare all meeting times to each other.
+    # Sorting eliminates need to test if meetings occur before each other
+    # or if they are nested.
+    times = sorted(times, key=lambda tup: (tup[0], tup[1]))
+    condensed = [times[0]]
+    for time in times:
+        cond = condensed[-1]
+        # If meetings are disjoint, append as new meeting.
+        if time[0] > cond[1]:
+            condensed.append(time)
+        # Else if meetings overlap, join.
+        elif cond[0] <= time[0] and time[0] <= cond[1] and cond[1] <= time[1]:
+            condensed[-1] = (cond[0], time[1]) # set item takes O(1)
+    return condensed
+
 def calc_intersection(rect1, rect2):
     """Calculate the intersection of two rectangles.
     
@@ -392,47 +435,6 @@ def calc_intersection_2(rect1, rect2):
                  'width': None,
                  'height': None}
     return recti
-
-
-def condense_meeting_times(times):
-    """Condense meeting times into contiguous blocks.
-    
-    Args:
-        times: list
-            List of meeting times as tuples.
-            List does not need to be sorted.
-            Example: [(0, 1), (3, 5), (2, 4)]
-
-    Returns:
-        condensed: list
-            Sorted list of combined meeting times as tuples.
-            Example: [(0, 1), (2, 5)]
-
-    Notes:
-        - Interviewcake.com problem #4
-        - Complexity: time: O(nlgn), space: O(n)
-    
-    References:
-        ..[1] https://www.interviewcake.com/question/merging-ranges
-        ..[2] https://wiki.python.org/moin/TimeComplexity
-        
-    """
-    # TODO: check input
-    # Sort times first by meeting start then by meeting end
-    # to avoid needing to compare all meeting times to each other.
-    # Sorting eliminates need to test if meetings occur before each other
-    # or if they are nested.
-    times = sorted(times, key=lambda tup: (tup[0], tup[1]))
-    condensed = [times[0]]
-    for time in times:
-        cond = condensed[-1]
-        # If meetings are disjoint, append as new meeting.
-        if time[0] > cond[1]:
-            condensed.append(time)
-        # Else if meetings overlap, join.
-        elif cond[0] <= time[0] and time[0] <= cond[1] and cond[1] <= time[1]:
-            condensed[-1] = (cond[0], time[1]) # set item takes O(1)
-    return condensed
 
 
 def gen_change_combinations(amount, denominations, init_combo=None):

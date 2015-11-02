@@ -67,7 +67,7 @@ def test_q2_get_products_of_all_ints_except_at_index_suppl() -> None:
 
 def test_q3_calc_highest_product_of_3(
     ints:list=[-10, -10, 1, 3, 2],
-    ref_prod=300) -> None:
+    ref_prod:int=300) -> None:
     r"""Pytest for q3_calc_highest_product_of_3.
 
     """
@@ -76,7 +76,7 @@ def test_q3_calc_highest_product_of_3(
     return None
 
 
-def test_q3_calc_highest_product_of_3_suppl():
+def test_q3_calc_highest_product_of_3_suppl() -> None:
     r"""Supplemental pytests for q3_calc_highest_product_of_3.
     
     """
@@ -87,6 +87,28 @@ def test_q3_calc_highest_product_of_3_suppl():
     test_q3_calc_highest_product_of_3(ints=[0, 0, 0], ref_prod=0)
     test_q3_calc_highest_product_of_3(ints=[0, 0, 0, 1], ref_prod=0)
     return None
+
+
+def test_q4_condense_meeting_times(
+    times:list=[(0, 1), (3, 5), (4, 8), (10, 12), (9, 10)],
+    ref_condensed:list=[(0, 1), (3, 8), (9, 12)]) -> None:
+    r"""Pytest for q4_condense_meeting_times.
+
+    """
+    test_condensed = ic.q4_condense_meeting_times(times=times)
+    assert ref_condensed == test_condensed
+    return None
+
+
+def test_q4_condense_meeting_times_suppl() -> None:
+    r"""Supplemental pytests for q4_condense_meeting_times.
+    
+    """
+    with pytest.raises(ValueError):
+        ic.q4_condense_meeting_times(times='[(1, 10), (2, 6)]')
+    test_q4_condense_meeting_times(
+        times=[(1, 10), (2, 6), (3, 5), (7, 9)],
+        ref_condensed=[(1, 10)])
     
 
 def test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
@@ -123,22 +145,6 @@ test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
 test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
                          rect2={'x':4.0, 'y':0.0, 'width':3.0, 'height':3.0},
                          recti={'x':None, 'y':None, 'width':None, 'height':None})
-
-
-def test_condense_meeting_times(times=[(0, 1), (3, 9), (4, 5), (8, 10), (2, 4)],
-                                condensed=[(0, 1), (2, 10)]):
-    """pytest style test for condense_meeting_times
-
-    Notes:
-        - interviewcake.com problem #4
-
-    """
-    assert ic.condense_meeting_times(times=times) == condensed
-    return None
-
-
-test_condense_meeting_times(times=[(1, 10), (2, 6), (3, 5), (7, 9)], condensed=[(1, 10)])
-
 
 
 def test_gen_change_combinations(amount=4, denominations=[1, 2, 3], init_combo=None,
