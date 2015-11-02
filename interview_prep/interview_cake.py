@@ -188,50 +188,6 @@ def q3_calc_highest_product_of_3(ints:list) -> int:
     return prod
 
 
-def get_highest_product_2(ints):
-    """Compute the highest product of 3 integers.
-    
-    Args:
-        ints: list
-            List of `int` with at least 3 items.
-    
-    Returns:
-        highest_product:
-            Greatest product from multiplying 3 ints.
-
-    Raises:
-        ValueError:
-            Raised if `len(ints) < 3`.
-
-    References:
-        ..[1] https://www.interviewcake.com/question/highest-product-of-3
-
-    """
-    # Check input.
-    if len(ints) < 3:
-        raise ValueError("`ints` must have at least 3 items.")
-    # Initialize variables to track.
-    # TODO: optimize by reducing loops. keep it programmatic.
-    highest_product = 1
-    for iint in ints[:3]:
-        highest_product *= iint
-    highest_product_top_2 = 1
-    highest_product_bot_2 = 1
-    for iint in ints[:2]:
-        highest_product_top_2 *= iint
-        highest_product_bot_2 *= iint
-    highest = ints[0]
-    lowest = ints[0]
-    # Iteratively update tracked variables.
-    for iint in ints:
-        highest_product = max(highest_product, iint*highest_product_top_2, iint*highest_product_bot_2)
-        highest_product_top_2 = max(highest_product_top_2, iint*highest)
-        highest_product_bot_2 = max(highest_product_bot_2, iint*lowest)
-        highest = max(highest, iint)
-        lowest = min(lowest, iint)
-    return highest_product
-
-
 def calc_intersection(rect1, rect2):
     """Calculate the intersection of two rectangles.
     
