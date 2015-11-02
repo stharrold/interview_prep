@@ -22,7 +22,8 @@ def test_q1_calc_max_profit(
     r"""Pytest for q1_calc_max_profit.
     
     """
-    assert ref_max_profit == ic.q1_calc_max_profit(prices)
+    test_max_profit = ic.q1_calc_max_profit(prices)
+    assert ref_max_profit == test_max_profit
     return None
 
 
@@ -30,6 +31,8 @@ def test_q1_calc_max_profit_suppl() -> None:
     r"""Supplemental pytests for q1_calc_max_profit.
     
     """
+    with pytest.raises(ValueError):
+        ic.q1_calc_max_profit(prices='123')
     test_q1_calc_max_profit(
         prices=[5.0, 4.0, 5.0, 3.0, 6.0, 5.0, 9.0, 8.0, 10.0, -20.0, 3.0],
         ref_max_profit=23.0)
@@ -43,9 +46,7 @@ def test_q2_get_products_of_all_ints_except_at_index(
     
     """
     test_prods = ic.q2_get_products_of_all_ints_except_at_index(ints)
-    assert len(ref_prods) == len(test_prods)
-    for (ref_prod, test_prod) in zip(ref_prods, test_prods):
-        assert ref_prod == test_prod
+    assert ref_prods == test_prods
     return None
 
 
@@ -53,6 +54,8 @@ def test_q2_get_products_of_all_ints_except_at_index_suppl() -> None:
     r"""Supplemental tests for q2_get_products_of_all_ints_except_at_index.
     
     """
+    with pytest.raises(ValueError):
+        ic.q2_get_products_of_all_ints_except_at_index(ints='123')
     test_q2_get_products_of_all_ints_except_at_index(
         ints=[0, 0, 0], ref_prods=[0, 0, 0])
     test_q2_get_products_of_all_ints_except_at_index(
@@ -62,13 +65,29 @@ def test_q2_get_products_of_all_ints_except_at_index_suppl() -> None:
     return None
 
 
-def test_get_highest_product(ints=[-10,-10,-20,1,3,2], highest_product=600):
-    """pytest style test for get_highest_product
+def test_q3_calc_highest_product_of_3(
+    ints:list=[-10, -10, 1, 3, 2],
+    ref_prod=300) -> None:
+    r"""Pytest for q3_calc_highest_product_of_3.
 
     """
-    assert ic.get_highest_product(ints=ints) == highest_product
+    test_prod = ic.q3_calc_highest_product_of_3(ints=ints)
+    assert ref_prod == test_prod
     return None
 
+
+def test_q3_calc_highest_product_of_3_suppl():
+    r"""Supplemental pytests for q3_calc_highest_product_of_3.
+    
+    """
+    with pytest.raises(ValueError):
+        ic.q3_calc_highest_product_of_3(ints=[1, 2])
+        ic.q3_calc_highest_product_of_3(ints='123')
+    test_q3_calc_highest_product_of_3(ints=[1, 10, -5, 1, -100], ref_prod=5000)
+    test_q3_calc_highest_product_of_3(ints=[0, 0, 0], ref_prod=0)
+    test_q3_calc_highest_product_of_3(ints=[0, 0, 0, 1], ref_prod=0)
+    return None
+    
 
 def test_get_highest_product_2(ints=[-10,-10,-20,1,3,2], highest_product=600):
     """pytest style test for get_highest_product_2

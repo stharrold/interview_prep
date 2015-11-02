@@ -8,6 +8,8 @@ r"""My answers to questions on interviewcake.com.
 # Import standard packages.
 import copy
 import collections
+import functools
+import itertools
 import operator
 import os
 import pdb
@@ -17,7 +19,7 @@ import sys
 import interview_prep.utils as utils
 
 
-def q1_calc_max_profit(prices: list) -> float:
+def q1_calc_max_profit(prices:list) -> float:
     r"""Compute maximum profit from stock prices.
     
     Args:
@@ -92,66 +94,98 @@ def q2_get_products_of_all_ints_except_at_index(
     return prods
 
 
-def get_highest_product(ints):
-    """Compute the product of the three largest ints in an array.
+def q3_calc_highest_product_of_3(ints:list) -> int:
+    """Calculate the highest product from integers.
     
     Args:
-        ints: list
-            List of `ints` with `len(ints) >= 3`
+        ints (list): List of `ints` with `len(ints) >= 3`
 
     Returns:
-        highest_product: int
-            Product of the 3 largest ints.
+        prod (int): Highest product from 3 `int`s.
 
     Raises:
-        ValueError:
-            Raised if `len(ints) < 3`.
+        ValueError: Raised if `len(ints) < 3`.
+    
+    Notes:
+        * interviewcake.com question #3, "Highest Product of 3".
+        * Complexity:
+            * n = len(ints)
+            * Ideal: Time=O(n), Space=O(1)
+            * Realized: Time=O(n), Space=O(1)
 
     References:
         ..[1] https://www.interviewcake.com/question/highest-product-of-3
     
     """
-    # Check input
+    # Check arguments.
+    utils.check_arguments(
+        antns=q3_calc_highest_product_of_3.__annotations__,
+        lcls=locals())
     if len(ints) < 3:
-        raise ValueError("`ints` must have at least 3 elements")
-    # Compute top three ints
-    # TODO: make top 3 a default arg
-    # TODO: use collections.deque?
-    tops_pos = []
-    tops_neg = []
-    for iint in ints:
-        if iint >= 0:
-            if len(tops_pos) < 3:
-                tops_pos.append(iint)
-                tops_pos = sorted(tops_pos) # TODO: optimize
-            else:
-                for (idx, top) in enumerate(tops_pos):
-                    if iint > top:
-                        tops_pos[idx] = iint
-                        break
-                    else:
-                        break
+        raise ValueError(
+            ("`ints` must have at least 3 items:\n" +
+             "ints =\n{ints}").format(ints=ints))
+    # #########################################
+    # # With collections, itertools; Python 3.5.
+    # max_3 = collections.deque(iterable=[1]*3, maxlen=3)
+    # min_2 = collections.deque(iterable=[1]*2, maxlen=2)
+    # for item in ints:
+    #     # Find the 3 most positive integers.
+    #     for idx in range(len(max_3)):
+    #         if item > max_3[idx]:
+    #             max_3.insert(item, index=idx)
+    #             break
+    #     # Find the 2 most negative integers.
+    #     for idx in range(len(min_2)):
+    #         if item < min_2[idx]:
+    #             min_2.insert(item, index=idx)
+    #             break
+    # prod_max_3 = functools.reduce(operator.mul, max_3, 1)
+    # prod_min_2 = functools.reduce(operator.mul, min_2, 1)
+    # prod_minmax_3 = prod_min_2 * max_3[0]
+    # prod = max(prod_max_3, prod_minmax_3)
+    # #########################################
+    # # With extreme integers ranked.
+    # (max_1st, max_2nd, max_3rd) = (1, 1, 1)
+    # (min_1st, min_2nd) = (1, 1)
+    # for item in ints:
+    #     # Find the 3 most positive integers.
+    #     if item > max_3rd:
+    #         if item > max_2nd:
+    #             if item > max_1st:
+    #                 max_3rd = max_2nd
+    #                 max_2nd = max_1st
+    #                 max_1st = item
+    #             else:
+    #                 max_3rd = max_2nd
+    #                 max_2nd = item
+    #         else:
+    #             max_3rd = item
+    #     # Find the 2 most negative integers.
+    #     if item < min_2nd:
+    #         if item < min_1st:
+    #             min_2nd = min_1st
+    #             min_1st = item
+    #         else:
+    #             min_2nd = item
+    # prod = max(max_1st*max_2nd*max_3rd, max_1st*min_1st*min_2nd)
+    #########################################
+    # With bottom-up approach.
+    (prod_1_pos, prod_2_pos, prod_3_pos) = (0, 0, 0)
+    (prod_1_neg, prod_2_neg) = (0, 0)
+    for item in ints:
+        # Find the 3 most positive integers.
+        if item >= 0:
+            prod_3_pos = max(item*prod_2_pos, prod_3_pos)
+            prod_2_pos = max(item*prod_1_pos, prod_2_pos)
+            prod_1_pos = max(item, prod_1_pos)
+        # Find the 2 most negative integers.
         else:
-            if len(tops_neg) < 2:
-                tops_neg.append(iint)
-                tops_neg = sorted(tops_neg, key=abs) # TODO; optimize
-            else:
-                for (idx, top) in enumerate(tops_neg):
-                    if abs(iint) > abs(top):
-                        tops_neg[idx] = iint
-                        break
-                    else:
-                        break
-    # Compute product
-    prod_pos = 1
-    for top in tops_pos:
-        prod_pos *= top
-    prod_neg = 1
-    for top in tops_neg:
-        prod_neg *= top
-    prod_pos_neg = prod_neg * max(tops_pos)
-    highest_product = max(prod_pos, prod_pos_neg)
-    return highest_product    
+            item *= -1
+            prod_2_neg = max(item*prod_1_neg, prod_2_neg)
+            prod_1_neg = max(item, prod_1_neg)
+    prod = max(prod_3_pos, prod_1_pos*prod_2_neg)
+    return prod
 
 
 def get_highest_product_2(ints):
