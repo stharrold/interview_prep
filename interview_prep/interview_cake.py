@@ -229,43 +229,45 @@ def q4_condense_meeting_times(times:list) -> list:
     #     # Else if meetings overlap, join.
     #     elif cond[0] <= time[0] and time[0] <= cond[1] and cond[1] <= time[1]:
     #         condensed[-1] = (cond[0], time[1]) # set item takes O(1)
+    # OLD
+    # for idx in range(len(times)):
+    #     for idx_cnd in range(len(times[idx:]
+    #     idx_cnd = 0
+    #     is_currently_disjoint = True
+    #     while idx_cnd < len(condensed):
+    #         if (start, stop) == condensed[idx_cnd]:
+    #             is_currently_disjoint = False
+    #             idx_cnd += 1
+    #         else:
+    #             (start_cnd, stop_cnd) = condensed[idx_cnd] 
+    #             # Order the times to evaluate disjoint/overlap.
+    #             if start < start_cnd:
+    #                 (start_1st, stop_1st) = (start, stop)
+    #                 (start_2nd, stop_2nd) = (start_cnd, stop_cnd)
+    #             else:
+    #                 (start_1st, stop_1st) = (start_cnd, stop_cnd)
+    #                 (start_2nd, stop_2nd) = (start, stop)
+    #             # If stop_1st < start_2nd, then disjoint with this time.
+    #             # Else, overlaps. Update and re-evaluate all `condensed` since
+    #             # `condensed` not sorted.
+    #             if (stop_1st < start_2nd):
+    #                 is_currently_disjoint = min(is_currently_disjoint, True)
+    #                 idx_cnd += 1
+    #             else:
+    #                 is_currently_disjoint = False
+    #                 (start, stop) = (start_1st, max(stop_1st, stop_2nd))
+    #                 condensed[idx_cnd] = (start, stop)
+    #                 idx_cnd = 0 # reset `idx_cnd` to re-evaluate all `condensed`
+    #     # Append only if time was disjoint with all condensed times.
+    #     if is_currently_disjoint:
+    #         condensed.append((start, stop))
+    # # Remove duplicates.
     # Without sorting: O(n**2)
     # Compare times forward and backward, keeping track of indexes of
     # merged times.
+    for idx in range(len(times)):
+        pass
     condensed = [times[0]]
-    for (start, stop) in times:
-        #pdb.set_trace()
-        idx_cnd = 0
-        is_currently_disjoint = True
-        while idx_cnd < len(condensed):
-            if (start, stop) == condensed[idx_cnd]:
-                is_currently_disjoint = False
-                idx_cnd += 1
-            else:
-                (start_cnd, stop_cnd) = condensed[idx_cnd] 
-                # Order the times to evaluate disjoint/overlap.
-                if start < start_cnd:
-                    (start_1st, stop_1st) = (start, stop)
-                    (start_2nd, stop_2nd) = (start_cnd, stop_cnd)
-                else:
-                    (start_1st, stop_1st) = (start_cnd, stop_cnd)
-                    (start_2nd, stop_2nd) = (start, stop)
-                # If stop_1st < start_2nd, then disjoint with this time.
-                # Else, overlaps. Update and re-evaluate all `condensed` since
-                # `condensed` not sorted.
-                if (stop_1st < start_2nd):
-                    is_currently_disjoint = min(is_currently_disjoint, True)
-                    idx_cnd += 1
-                else:
-                    is_currently_disjoint = False
-                    (start, stop) = (start_1st, max(stop_1st, stop_2nd))
-                    condensed[idx_cnd] = (start, stop)
-                    idx_cnd = 0 # reset `idx_cnd` to re-evaluate all `condensed`
-        # Append only if time was disjoint with all condensed times.
-        if is_currently_disjoint:
-            condensed.append((start, stop))
-    # Remove duplicates.
-    for (start, stop)
     return condensed
     
     
