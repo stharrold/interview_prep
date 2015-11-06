@@ -193,11 +193,11 @@ def q4_condense_meeting_times(times:list) -> list:
     
     Args:
         times (list): `list` of `tuple`s of `int`s as meeting times. `int`s are
-            number of 30-minute blocks since 9am. Does not need to be sorted.
+            number of 30-minute blocks since 9:00am. Does not need to be sorted.
             Example: `times = [(0, 1), (3, 5), (2, 4)]`
 
     Returns:
-        condensed (list): Sorted `list` of combined meeting times as tuples.
+        condensed (list): `list` of combined meeting times as `tuple`s.
             Example: `condensed = [(0, 1), (2, 5)]`
 
     Notes:
@@ -215,22 +215,60 @@ def q4_condense_meeting_times(times:list) -> list:
     utils.check_arguments(
         antns=q4_condense_meeting_times.__annotations__,
         lcls=locals())
-    # Sort times first by meeting start then by meeting end
-    # to avoid needing to compare all meeting times to each other.
-    # Sorting eliminates need to test if meetings occur before each other
-    # or if they are nested.
-    times = sorted(times, key=lambda tup: (tup[0], tup[1]))
+    # # Sort times first by meeting start then by meeting end
+    # # to avoid needing to compare all meeting times to each other.
+    # # Sorting eliminates need to test if meetings occur before each other
+    # # or if they are nested.
+    # times = sorted(times, key=lambda tup: (tup[0], tup[1]))
+    # condensed = [times[0]]
+    # for time in times:
+    #     cond = condensed[-1]
+    #     # If meetings are disjoint, append as new meeting.
+    #     if time[0] > cond[1]:
+    #         condensed.append(time)
+    #     # Else if meetings overlap, join.
+    #     elif cond[0] <= time[0] and time[0] <= cond[1] and cond[1] <= time[1]:
+    #         condensed[-1] = (cond[0], time[1]) # set item takes O(1)
+    # Without sorting: O(n**2)
+    # Compare times forward and backward, keeping track of indexes of
+    # merged times.
     condensed = [times[0]]
-    for time in times:
-        cond = condensed[-1]
-        # If meetings are disjoint, append as new meeting.
-        if time[0] > cond[1]:
-            condensed.append(time)
-        # Else if meetings overlap, join.
-        elif cond[0] <= time[0] and time[0] <= cond[1] and cond[1] <= time[1]:
-            condensed[-1] = (cond[0], time[1]) # set item takes O(1)
+    for (start, stop) in times:
+        #pdb.set_trace()
+        idx_cnd = 0
+        is_currently_disjoint = True
+        while idx_cnd < len(condensed):
+            if (start, stop) == condensed[idx_cnd]:
+                is_currently_disjoint = False
+                idx_cnd += 1
+            else:
+                (start_cnd, stop_cnd) = condensed[idx_cnd] 
+                # Order the times to evaluate disjoint/overlap.
+                if start < start_cnd:
+                    (start_1st, stop_1st) = (start, stop)
+                    (start_2nd, stop_2nd) = (start_cnd, stop_cnd)
+                else:
+                    (start_1st, stop_1st) = (start_cnd, stop_cnd)
+                    (start_2nd, stop_2nd) = (start, stop)
+                # If stop_1st < start_2nd, then disjoint with this time.
+                # Else, overlaps. Update and re-evaluate all `condensed` since
+                # `condensed` not sorted.
+                if (stop_1st < start_2nd):
+                    is_currently_disjoint = min(is_currently_disjoint, True)
+                    idx_cnd += 1
+                else:
+                    is_currently_disjoint = False
+                    (start, stop) = (start_1st, max(stop_1st, stop_2nd))
+                    condensed[idx_cnd] = (start, stop)
+                    idx_cnd = 0 # reset `idx_cnd` to re-evaluate all `condensed`
+        # Append only if time was disjoint with all condensed times.
+        if is_currently_disjoint:
+            condensed.append((start, stop))
+    # Remove duplicates.
+    for (start, stop)
     return condensed
-
+    
+    
 def calc_intersection(rect1, rect2):
     """Calculate the intersection of two rectangles.
     

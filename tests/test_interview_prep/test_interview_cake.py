@@ -109,7 +109,20 @@ def test_q4_condense_meeting_times_suppl() -> None:
     test_q4_condense_meeting_times(
         times=[(1, 10), (2, 6), (3, 5), (7, 9)],
         ref_condensed=[(1, 10)])
-    
+    test_q4_condense_meeting_times(
+        times=[(0, 1), (0, 1), (0, 1)],
+        ref_condensed=[(0, 1)])
+    test_q4_condense_meeting_times(
+        times=[(0, 1), (1, 2), (2, 3)],
+        ref_condensed=[(0, 3)])
+    test_q4_condense_meeting_times(
+        times=[(2, 3), (1, 2), (0, 1)],
+        ref_condensed=[(0, 3)])
+    test_q4_condense_meeting_times(
+        times=[(9, 11), (5, 7), (1, 3), (2, 10)],
+        ref_condensed=[(1, 11)])
+    return None
+
 
 def test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
                            rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0},
