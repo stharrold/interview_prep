@@ -262,12 +262,63 @@ def q4_condense_meeting_times(times:list) -> list:
     #     if is_currently_disjoint:
     #         condensed.append((start, stop))
     # # Remove duplicates.
-    # Without sorting: O(n**2)
-    # Compare times forward and backward, keeping track of indexes of
-    # merged times.
-    for idx in range(len(times)):
-        pass
-    condensed = [times[0]]
+    # Without sorting: Time: O(n**2); Space: O(n)
+    # Iterate backwards through `times` comparing current time to seen merged
+    # times in `condensed_bwd` and then to unseen unmerged times in `times`.
+    # Iterate forwards through `condensed_bwd` comparing current time to seen
+    # remerged times in `condensed_fwd` and then to unseen merged times in
+    # `condensed_bwd`. Backwards and forwards iteration necessary for unsorted
+    # `times`.
+    def are_disjoint(time1:tuple, time2:tuple) -> bool:
+        # Check arguments.
+        utils.check_arguments(
+            antns=are_disjoint.__annotations__,
+            lcls=locals())
+        # Disjoint if first stop time < second start time.
+        if time1[0] < time2[0]:
+            (time1st, time2nd) = (time1, time2)
+        else:
+            (time1st, time2nd) = (time2, time1)
+        if time1st[1] < time2nd[0]:
+            disjoint = True
+        else:
+            disjoint = False
+        return disjoint
+    # Merge iterating backwards through `times`.
+    condensed_bwd = list(times[-1])
+    for idx in reversed(range(len(times))):
+        time = times[idx]
+        (disjoint_now, disjoint_ever) = (True, True)
+        # Compare current time with seen merged times.
+        for idx_bwd in range(len(condensed_bwd)):
+            time_cnd = condensed_bwd[idx_bwd]
+            disjoint_now = are_disjoint(time1=time, time2=time_cnd)
+            disjoint_ever = min(disjoint_ever, disjoint_now)
+            if disjoint_now:
+                time = (min(time[0], time_cnd[0]), max(time[1], time_cnd[1]))
+                condensed_bwd[idx_bwd] = time
+        # Compare current time with unseen times.
+        for idx_cmp in reversed(range(len(times)-(idx+1))):
+            
+        if is_disjoint:
+            
+    condensed_bwd = list()
+    for idx_fwd in range(len(times)):
+        (start, stop) = times[idx]
+        for idx_fwd in range(len(condensed_fwd)):
+            (start_cnd, stop_cnd) = condensed_fwd[idx_fwd]
+            if start < start_cnd:
+                (start1, stop1) = (start, stop)
+                (start2, stop2) = (start_cnd, stop_cnd)
+            else:
+                (start1, stop1) = (start_cnd, stop_cnd)
+                (start2, stop2) = (start, stop)
+            if stop1 < start2:
+                pass
+            else:
+                (start, stop) = (start1, max(stop1, stop2))
+                condensed_fwd[idx_fwd] = (start, stop)
+    condensed = reversed(
     return condensed
     
     
