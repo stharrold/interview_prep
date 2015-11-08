@@ -6,9 +6,9 @@ r"""My iterations of sorting algorithms.
 
 
 # Import standard packages.
+import copy
 # Import installed packages.
 # Import local packages.
-import copy
 
 
 def _median_pivot(vals):

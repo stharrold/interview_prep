@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
-r"""Utilities for computing Fibonacci sequence.
+r"""Experiments with complexity in the Fibonacci sequence.
 
 """
 
@@ -88,7 +88,6 @@ def fib_lookup(idx):
                 print(("RuntimeError: {err}\n" +
                        "F{idx} is set to {fn}").format(err=err, idx=idx, fn=fn),
                       file=sys.stderr)
-
         else:
             raise AssertionError(("Program error. `fibs` must be initialized with [0,1]:\n" +
                                   "fibs = {fibs}").format(fibs=fibs))
