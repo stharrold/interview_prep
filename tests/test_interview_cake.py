@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-r"""Tests for interview_prep/interview_cake/interview_cake.py
+r"""Pytests for interview_prep/interview_prep/interview_cake.py
 
 """
 
