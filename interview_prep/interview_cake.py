@@ -386,7 +386,7 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
     utils.check_arguments(
         antns=q6_calc_intersection.__annotations__,
         lcls=locals())
-    keys = set('x', 'y', 'width', 'height')
+    keys = set(['x', 'y', 'width', 'height'])
     if not keys.issubset(set(rect1.keys())):
         raise ValueError(
             ("`rect1` is missing required keys:\n" +
@@ -424,30 +424,50 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
     #########################################
     # Define a method to compute the intersection of two segments.
     def calc_segi(seg1:tuple, seg2:tuple) -> tuple:
+        r"""Calculate the intersection of a line segment.
+        
+        Args:
+            seg1 (tuple):
+            seg2 (tuple):
+                Segments are `tuple`s with ('x', 'width') for x-axis or
+                ('y', 'height') for y-axis.
+        
+        Returns:
+            segi (tuple):
+                Segment intersection as `tuple`. Same format as `seg1`, `seg2`.
+                All values are `None` if segments are disjoint.
+        
+        """
         # Check arguments.
         utils.check_arguments(
             antns=calc_segi.__annotations__,
             lcls=locals())
         # Order segments by coordinates of leading edge.
         # Intersect if first trailing edge >= second trailing edge.
-        # Coordinates of intersection are coordinates of overlap.
         if seg1[0] < seg2[0]:
             (seg1st, seg2nd) = (seg1, seg2)
         else:
             (seg1st, seg2nd) = (seg2, seg1)
-        if seg1st[1] < seg2nd[0]:
+        if seg1st[0]+seg1st[1] < seg2nd[0]:
             segi = (None, None)
         else:
-            segi = (seg1st[0], min(seg1st[1], seg2nd[1]))
+            segi = (
+                seg2nd[0],
+                min(seg1st[0]+seg1st[1], seg2nd[0]+seg2nd[1]) - seg2nd[0])
         return segi
     # Calculate the rectangle intersections for x-axes and y-axes.
-    (x0, x1) = calc_segi(
-        seg1=(rect1['x'], rect1['x']+rect1['width']),
-        seg2=(rect2['x'], rect2['x']+rect2['width']))
-    (y0, y1) = calc_segi(
-        seg1=(rect1['y'], rect1['y']+rect1['height']),
-        seg2=(rect2['y'], rect2['y']+rect2['height']))
-    recti = {'x': x0, 'y': y0, 'width':x1-x0, 'height':y1-y0}
+    # If any axes are `None`, then all are `None`.
+    recti = dict()
+    (recti['x'], recti['width']) = calc_segi(
+        seg1=(rect1['x'], rect1['width']),
+        seg2=(rect2['x'], rect2['width']))
+    (recti['y'], recti['height']) = calc_segi(
+        seg1=(rect1['y'], rect1['height']),
+        seg2=(rect2['y'], rect2['height']))
+    for val in recti.values():
+        if val is None:
+            recti = {'x': None, 'y': None, 'width': None, 'height': None}
+            break
     # ##########
     # # Strictly order the rectangles in a well-defined way: left-to-right, up-to-down
     # # Assigning by references, so no extra mem usage.
