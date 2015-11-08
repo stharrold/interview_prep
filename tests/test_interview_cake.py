@@ -157,43 +157,6 @@ def test_q5_count_combinations_suppl() -> None:
     return None
 
 
-def test_gen_change_combinations(amount=4, denominations=[1, 2, 3], init_combo=None,
-                                 combinations=[[1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2]]):
-    """pytest style test for gen_change_denominations
-
-    """
-    assert list(ic.gen_change_combinations(
-        amount=amount, denominations=denominations, init_combo=init_combo)) == combinations
-    return None
-
-
-def test_count_change_combinations(amount=4, denominations=[1, 2, 3], num=4):
-    """pytest style test for count_change_denominations
-    
-    """
-    assert ic.count_change_combinations(
-        amount=amount, denominations=denominations) == num
-    return None
-
-
-def test_count_change_combinations_2(amount=4, denominations=[1, 2, 3], num=4):
-    """pytest style test for count_change_denominations_2
-    
-    """
-    assert ic.count_change_combinations_2(
-        amount=amount, denominations=denominations) == num
-    return None
-
-
-def test_count_change_combinations_3(amount=4, denominations=[1, 2, 3], num=4):
-    """pytest style test for count_change_denominations_3
-
-    """
-    assert ic.count_change_combinations_3(
-        amount=amount, denominations=denominations) == num
-    return None
-
-
 def test_q6_calc_intersection(
     rect1:dict={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
     rect2:dict={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0},
