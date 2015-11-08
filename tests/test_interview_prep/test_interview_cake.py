@@ -107,6 +107,12 @@ def test_q4_condense_meeting_times_suppl() -> None:
     with pytest.raises(ValueError):
         ic.q4_condense_meeting_times(times='[(1, 10), (2, 6)]')
     test_q4_condense_meeting_times(
+        times=[(1, 2), (2, 3)],
+        ref_condensed=[(1, 3)])
+    test_q4_condense_meeting_times(
+        times=[(1, 5), (2, 3)],
+        ref_condensed=[(1, 5)])
+    test_q4_condense_meeting_times(
         times=[(1, 10), (2, 6), (3, 5), (7, 9)],
         ref_condensed=[(1, 10)])
     test_q4_condense_meeting_times(
