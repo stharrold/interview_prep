@@ -14,7 +14,7 @@ import tempfile
 import pytest
 # Import local packages.
 sys.path.insert(0, os.path.curdir)
-import interview_prep.phone_screen.phone_screen as ps
+import interview_prep.phone_screen as ps
 
 
 def test_reverse_string(
