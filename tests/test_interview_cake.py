@@ -158,9 +158,9 @@ def test_q5_count_combinations_suppl() -> None:
 
 
 def test_q6_calc_intersection(
-    rect1:dict={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-    rect2:dict={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0},
-    ref_recti:dict={'x':1.0, 'y':1.0, 'width':2.0, 'height':2.0}) -> None:
+    rect1:dict={'x':0, 'y':0, 'width':3, 'height':3},
+    rect2:dict={'x':1, 'y':1, 'width':3, 'height':3},
+    ref_recti:dict={'x':1, 'y':1, 'width':2, 'height':2}) -> None:
     r"""Pytest for q6_calc_intersection.
 
     """
@@ -175,18 +175,36 @@ def test_q6_calc_intersection_suppl() -> None:
     """
     with pytest.raises(ValueError):
         ic.q6_calc_intersection(
-            rect1="{'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0}",
-            rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0})
+            rect1="{'x':0, 'y':0, 'width':3, 'height':3}",
+            rect2={'x':1, 'y':1, 'width':3, 'height':3})
         ic.q6_calc_intersection(
-            rect1=[0.0, 0.0, 3.0, 3.0],
-            rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0})
+            rect1={'x':0, 'y':0, 'width':3, 'height':3},
+            rect2=[1, 1, 3, 3])
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'h': 3},
+            rect2={'x':3, 'y':3, 'width':3, 'height':3})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height': 3},
+            rect2={'x':3, 'y':3, 'width':3, 'h':3})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height':3.0},
+            rect2={'x':3, 'y':3, 'width':3, 'height':3})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height':3},
+            rect2={'x':3, 'y':3, 'width':3, 'height':3.0})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height':-3},
+            rect2={'x':3, 'y':3, 'width':3, 'height':3})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height':3},
+            rect2={'x':3, 'y':3, 'width':3, 'height':-3})
     test_q6_calc_intersection(
-        rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-        rect2={'x':3.0, 'y':3.0, 'width':3.0, 'height':3.0},
-        ref_recti={'x':3.0, 'y':3.0, 'width':0.0, 'height':0.0})
+        rect1={'x':0, 'y':0, 'width':3, 'height':3},
+        rect2={'x':3, 'y':3, 'width':3, 'height':3},
+        ref_recti={'x':3, 'y':3, 'width':0, 'height':0})
     test_q6_calc_intersection(
-        rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-        rect2={'x':4.0, 'y':0.0, 'width':3.0, 'height':3.0},
+        rect1={'x':0, 'y':0, 'width':3, 'height':3},
+        rect2={'x':4, 'y':0, 'width':3, 'height':3},
         ref_recti={'x':None, 'y':None, 'width':None, 'height':None})
     return None
 
