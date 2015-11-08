@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-r"""Pytests for interview_prep/phone_screen/phone_screen.py
+r"""Pytests for interview_prep/interview_prep/phone_screen.py
 
 """
 
