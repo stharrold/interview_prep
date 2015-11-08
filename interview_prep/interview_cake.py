@@ -204,8 +204,8 @@ def q4_condense_meeting_times(times:list) -> list:
         * interviewcake.com question #4, "Merging Meeting Times".
         * Complexity:
             * n = len(times)
-            * Ideal: Time=O(n*log2(n)), Space=O(n)
-            * Realized: Time=O(n*log2(n)), Space=O(n)
+            * Ideal: Time=O(n*lg(n)), Space=O(n)
+            * Realized: Time=O(n*lg(n)), Space=O(n)
 
     References:
         .. [1] https://www.interviewcake.com/question/merging-ranges
@@ -215,111 +215,79 @@ def q4_condense_meeting_times(times:list) -> list:
     utils.check_arguments(
         antns=q4_condense_meeting_times.__annotations__,
         lcls=locals())
-    # # Sort times first by meeting start then by meeting end
-    # # to avoid needing to compare all meeting times to each other.
-    # # Sorting eliminates need to test if meetings occur before each other
-    # # or if they are nested.
-    # times = sorted(times, key=lambda tup: (tup[0], tup[1]))
+    # #########################################
+    # # Without sorting: Time: O(n**2); Space: O(n)
+    # # Iterate through `times` comparing current time to:
+    # # * condensed times in `condensed`, iterating forwards
+    # # * uncondensed times in `times`, iterating forwards
+    # # * uncondensed times in `times`, iterating backwards
+    # # * condensed times in `condensed`, iterating backwards
+    # # Backwards and forwards iteration is necessary for unsorted `times`.
+    # def do_overlap(time1:tuple, time2:tuple) -> bool:
+    #     # Check arguments.
+    #     utils.check_arguments(
+    #         antns=do_overlap.__annotations__,
+    #         lcls=locals())
+    #     # Order meeting times by start time.
+    #     # Overlap if first stop time >= second start time.
+    #     if time1[0] < time2[0]:
+    #         (time1st, time2nd) = (time1, time2)
+    #     else:
+    #         (time1st, time2nd) = (time2, time1)
+    #     if time1st[1] >= time2nd[0]:
+    #         overlap = True
+    #     else:
+    #         overlap = False
+    #     return overlap
+    # # Compare current time to seen condensed times.
     # condensed = [times[0]]
-    # for time in times:
-    #     cond = condensed[-1]
-    #     # If meetings are disjoint, append as new meeting.
-    #     if time[0] > cond[1]:
+    # for (idx, time) in enumerate(times):
+    #     idx_olap = None
+    #     # Compare current time with condensed times, forward.
+    #     for idx_cmp in range(len(condensed)):
+    #         time_cmp = condensed[idx_cmp]
+    #         overlap = do_overlap(time1=time, time2=time_cmp)
+    #         if overlap:
+    #             time = (min(time[0], time_cmp[0]), max(time[1], time_cmp[1]))
+    #             if idx_olap is None:
+    #                 idx_olap = idx_cmp
+    #     # Compare current time with uncondensed times, forward and backward.
+    #     for idx_cmp in itertools.chain(
+    #         range(idx+1, len(times)), reversed(range(idx+1, len(times)-1))):
+    #         time_cmp = times[idx_cmp]
+    #         overlap = do_overlap(time1=time, time2=time_cmp)
+    #         if overlap:
+    #             time = (min(time[0], time_cmp[0]), max(time[1], time_cmp[1]))
+    #     # Compare current time with condensed times, backward.
+    #     for idx_cmp in reversed(range(len(condensed))):
+    #         time_cmp = condensed[idx_cmp]
+    #         overlap = do_overlap(time1=time, time2=time_cmp)
+    #         if overlap:
+    #             time = (min(time[0], time_cmp[0]), max(time[1], time_cmp[1]))
+    #             if idx_olap is None:
+    #                 idx_olap = idx_cmp
+    #     # Update condensed times if overlap, else append.
+    #     if idx_olap is not None:
+    #         condensed[idx_olap] = time
+    #     else:
     #         condensed.append(time)
-    #     # Else if meetings overlap, join.
-    #     elif cond[0] <= time[0] and time[0] <= cond[1] and cond[1] <= time[1]:
-    #         condensed[-1] = (cond[0], time[1]) # set item takes O(1)
-    # OLD
-    # for idx in range(len(times)):
-    #     for idx_cnd in range(len(times[idx:]
-    #     idx_cnd = 0
-    #     is_currently_disjoint = True
-    #     while idx_cnd < len(condensed):
-    #         if (start, stop) == condensed[idx_cnd]:
-    #             is_currently_disjoint = False
-    #             idx_cnd += 1
-    #         else:
-    #             (start_cnd, stop_cnd) = condensed[idx_cnd] 
-    #             # Order the times to evaluate disjoint/overlap.
-    #             if start < start_cnd:
-    #                 (start_1st, stop_1st) = (start, stop)
-    #                 (start_2nd, stop_2nd) = (start_cnd, stop_cnd)
-    #             else:
-    #                 (start_1st, stop_1st) = (start_cnd, stop_cnd)
-    #                 (start_2nd, stop_2nd) = (start, stop)
-    #             # If stop_1st < start_2nd, then disjoint with this time.
-    #             # Else, overlaps. Update and re-evaluate all `condensed` since
-    #             # `condensed` not sorted.
-    #             if (stop_1st < start_2nd):
-    #                 is_currently_disjoint = min(is_currently_disjoint, True)
-    #                 idx_cnd += 1
-    #             else:
-    #                 is_currently_disjoint = False
-    #                 (start, stop) = (start_1st, max(stop_1st, stop_2nd))
-    #                 condensed[idx_cnd] = (start, stop)
-    #                 idx_cnd = 0 # reset `idx_cnd` to re-evaluate all `condensed`
-    #     # Append only if time was disjoint with all condensed times.
-    #     if is_currently_disjoint:
-    #         condensed.append((start, stop))
-    # # Remove duplicates.
-    # Without sorting: Time: O(n**2); Space: O(n)
-    # Iterate through `times` comparing current time to:
-    # * condensed times in `condensed`, iterating forwards
-    # * uncondensed times in `times`, iterating forwards
-    # * uncondensed times in `times`, iterating backwards
-    # * condensed times in `condensed`, iterating backwards
-    # Backwards and forwards iteration is necessary for unsorted `times`.
-    def do_overlap(time1:tuple, time2:tuple) -> bool:
-        # Check arguments.
-        utils.check_arguments(
-            antns=do_overlap.__annotations__,
-            lcls=locals())
-        # Order meeting times by start time.
-        # Overlap if first stop time >= second start time.
-        if time1[0] < time2[0]:
-            (time1st, time2nd) = (time1, time2)
-        else:
-            (time1st, time2nd) = (time2, time1)
-        if time1st[1] >= time2nd[0]:
-            overlap = True
-        else:
-            overlap = False
-        return overlap
-    # Compare current time to seen condensed times.
+    ########################################
+    # With sorting: Time: O(n*lg(n)); Space: O(n)
+    # Sort times first by meeting start then by meeting end
+    # to avoid needing to compare all meeting times to each other.
+    times = sorted(times, key=operator.itemgetter(0, 1))
     condensed = [times[0]]
-    for (idx, time) in enumerate(times):
-        idx_olap = None
-        # Compare current time with condensed times, forward.
-        for idx_cmp in range(len(condensed)):
-            time_cmp = condensed[idx_cmp]
-            overlap = do_overlap(time1=time, time2=time_cmp)
-            if overlap:
-                time = (min(time[0], time_cmp[0]), max(time[1], time_cmp[1]))
-                if idx_olap is None:
-                    idx_olap = idx_cmp
-        # Compare current time with uncondensed times, forward and backward.
-        for idx_cmp in itertools.chain(
-            range(idx+1, len(times)), reversed(range(idx+1, len(times)-1))):
-            time_cmp = times[idx_cmp]
-            overlap = do_overlap(time1=time, time2=time_cmp)
-            if overlap:
-                time = (min(time[0], time_cmp[0]), max(time[1], time_cmp[1]))
-        # Compare current time with condensed times, backward.
-        for idx_cmp in reversed(range(len(condensed))):
-            time_cmp = condensed[idx_cmp]
-            overlap = do_overlap(time1=time, time2=time_cmp)
-            if overlap:
-                time = (min(time[0], time_cmp[0]), max(time[1], time_cmp[1]))
-                if idx_olap is None:
-                    idx_olap = idx_cmp
-        # Update condensed times if overlap, else append.
-        if idx_olap is not None:
-            condensed[idx_olap] = time
-        else:
+    for time in times:
+        cond = condensed[-1]
+        # If time is disjoint, append as new meeting.
+        # Else change condensed meeting time.
+        if cond[1] < time[0]:
             condensed.append(time)
+        else:
+            condensed[-1] = (cond[0], max(cond[1], time[1]))
     return condensed
-    
-    
+
+
 def calc_intersection(rect1, rect2):
     """Calculate the intersection of two rectangles.
     
@@ -987,8 +955,8 @@ def _get_next_path(current_path):
     Notes:
         - Assumes that binary tree is full. Calling scope must check that path is valid.
         - Complexity:
-            Time: O(len_path) ~ O(log2(num_nodes_of_bin_tree))
-            Space: O(len_path) ~ O(log2(num_nodes_of_bin_tree))
+            Time: O(len_path) ~ O(lg(num_nodes_of_bin_tree))
+            Space: O(len_path) ~ O(lg(num_nodes_of_bin_tree))
 
     """
     # Find a cousin node at the same depth otherwise descend to next depth of binary tree.
@@ -1037,8 +1005,8 @@ def _get_next_node_path_values(bin_tree, current_path):
 
     Notes:
         - Complexity:
-            Time: O(num_nodes*log2(num_nodes)^2)
-            Space: O(log2(num_nodes_of_bin_tree))
+            Time: O(num_nodes*lg(num_nodes)^2)
+            Space: O(lg(num_nodes_of_bin_tree))
 
     """
     # TODO: memoize which nodes we’ve seen to reduce time
@@ -1091,10 +1059,10 @@ def is_valid_bin_search_tree(bin_tree):
         - Complexity:
             Ideal:
                 Time: O(num_nodes)
-                Space: O(log2(num_nodes))
+                Space: O(lg(num_nodes))
             Realized:
-                Time: O(num_nodes*log2(num_nodes)^2)
-                Space: O(log2(num_nodes))
+                Time: O(num_nodes*lg(num_nodes)^2)
+                Space: O(lg(num_nodes))
 
     TODO:
         - Redo with depth-first search
@@ -1157,10 +1125,10 @@ def q13_find_rotation_index(lst: list) -> int:
         * interviewcake.com question #13, "Find Rotation Point".
         * Complexity:
             * Ideal:
-                * Time: log2(len(lst))
+                * Time: lg(len(lst))
                 * Space: O(1)
             * Realized:
-                * Time: log2(len(lst))
+                * Time: lg(len(lst))
                 * Space: O(1)
     
     References:
@@ -1185,7 +1153,7 @@ def q13_find_rotation_index(lst: list) -> int:
     else:
         # Deterministic stopping criteria to avoid infinite loops.
         # No recursion to avoid building call stack.
-        # log2 x bounded by x.
+        # lg x bounded by x.
         for inum in range(len(lst)):
             if idx_floor == idx_ceil - 1:
                 idx_rot = idx_ceil
@@ -1279,7 +1247,7 @@ def q15_fib(idx: int) -> int:
         * fib(n) = fib(n-1) + fib(n-2), fib(0) = 0, fib(1) = 1.
         * Complexity:
             * Ideal:
-                * Time: O(log2(n))
+                * Time: O(lg(n))
                 * Space: O(1)
             * Realized:
                 * Time: O(n)
