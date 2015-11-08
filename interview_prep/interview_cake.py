@@ -376,7 +376,7 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
         * interviewcake.com question #6, "Rectangular Love".
         * Complexity:
             * Ideal: Time: O(1); Space: O(1)
-            * Realized: Time: ; Space: 
+            * Realized: Time: O(1); Space: O(1)
     
     References:
         .. [1] https://www.interviewcake.com/question/rectangular-love
@@ -421,7 +421,6 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
                 ("'width' and 'height' values must be >= 0:\n" +
                  "type(rect2[{key}]) = {tp}").format(
                      key=key, tp=type(rect2[key])))
-    #########################################
     # Define a method to compute the intersection of two segments.
     def calc_segi(seg1:tuple, seg2:tuple) -> tuple:
         r"""Calculate the intersection of a line segment.
@@ -443,7 +442,7 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
             antns=calc_segi.__annotations__,
             lcls=locals())
         # Order segments by coordinates of leading edge.
-        # Intersect if first trailing edge >= second trailing edge.
+        # Disjoint if first trailing edge < second leading edge.
         if seg1[0] < seg2[0]:
             (seg1st, seg2nd) = (seg1, seg2)
         else:
@@ -456,7 +455,7 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
                 min(seg1st[0]+seg1st[1], seg2nd[0]+seg2nd[1]) - seg2nd[0])
         return segi
     # Calculate the rectangle intersections for x-axes and y-axes.
-    # If any axes are `None`, then all are `None`.
+    # If any axes are disjoint, then all axes are disjoint (`None` values).
     recti = dict()
     (recti['x'], recti['width']) = calc_segi(
         seg1=(rect1['x'], rect1['width']),
@@ -468,180 +467,6 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
         if val is None:
             recti = {'x': None, 'y': None, 'width': None, 'height': None}
             break
-    # ##########
-    # # Strictly order the rectangles in a well-defined way: left-to-right, up-to-down
-    # # Assigning by references, so no extra mem usage.
-    # (rect_lhs, rect_rhs) = (rect1, rect2) if rect1['x'] <= rect2['x'] else (rect2, rect1)
-    # (rect_lwr, rect_upr) = (rect1, rect2) if rect1['y'] <= rect2['y'] else (rect2, rect1)
-    # assert rect_lhs != rect_rhs
-    # assert rect_lwr != rect_upr
-    # ##########
-    # # Cases:
-    # # Overlapping case:
-    # # |
-    # # |           xr,yu+hu------------------------xr+wr,yu+hu
-    # # |             |                                 |
-    # # | xl,yl+hl----|------xl+wl,yl+hl                |
-    # # |   |         |        |                        |
-    # # |   |       xr,yu------|--------------------xr+wr,yu
-    # # |   |                  |
-    # # | xl,yl--------------xl+wl,yl
-    # # |
-    # # 0,0 ------------------------------------------------
-    # # xl+wl - xl = (xr - xl) + (xl+wl - xr) ==> wi = xl+wl - xr; xi = xl + (xr - xl) = xr
-    # # yl+hl - yl = (yu - yl) + (yl+hl - yu) ==> hi = yl+hl - yu; yi = yl + (yu - yl) = yu
-    # #
-    # # Overlapping case:
-    # # |
-    # # |  xl,yu+hu-----------xl+wl,yu+hu
-    # # |   |                    |
-    # # |   |       xr,yl+hl-----|------------------xr+wr,yl+hl
-    # # |   |         |          |                      |
-    # # |  xl,yu------|-------xl+wl,yu                  |
-    # # |             |                                 |
-    # # |          xr,yl----------------------------xr+wr,yl
-    # # |
-    # # 0,0 ------------------------------------------------
-    # # xl+wl - xl = (xr - xl) + (xl+wl - xr) ==> wi = xl+wl - xr; xi = xl + (xr - xl) = xr
-    # # yl+hl - yl = (yu - yl) + (yl+hl - yu) ==> hi = yl+hl - yu; yi = yl + (yu - yl) = yu
-    # #
-    # # Nested case:
-    # # |
-    # # |  xl,yl+hl-----------------------------------------xl+wl,yl+hl
-    # # |     |                                               |
-    # # |     |       xr,yu+hu--------------xr+wr,yu+hu       |
-    # # |     |          |                      |             |
-    # # |     |       xr,yu-----------------xr+wr,yu          |
-    # # |     |                                               |
-    # # |   xl,yl-------------------------------------------xl+wl,yl
-    # # |
-    # # 0,0 ------------------------------------------------
-    # # xl+wl - xl = (xr - xl) + (xr+wr - xr) + (xl+wl - xr+wr) ==> wi = xr+wr - xr = wr; xi = xl + (xr - xl) = xr
-    # # yl+hl - yl = (yu - yl) + (yu+hu - yu) + (yl+hl - yu+hu) ==> hi = yu+hu - yu = hu; yi = yl + (yu - yl) = yu
-    # widths_nested = True if rect_lhs['x'] + rect_lhs['width'] > rect_rhs['x'] + rect_rhs['width'] else False
-    # heights_nested = True if rect_lwr['y'] + rect_lwr['height'] > rect_upr['y'] + rect_upr['height'] else False
-    # #
-    # # Disjoint case:
-    # # |
-    # # |  xl,yl+hl----xl+xw,yl+hl      
-    # # |     |          |              xr,yu+hu---------------xr+wr,yu+hu
-    # # |     |          |                |                         |
-    # # |     |          |                |                         |
-    # # |     |          |              xr,yu------------------xr+wr,yu   
-    # # |     |          |     
-    # # |   xl,yl------xl+xw,yl
-    # # |
-    # # 0,0 ------------------------------------------------
-    # # wi = None, xi = None
-    # # hi = None, yi = None
-    # if (rect_lhs['x'] + rect_lhs['width'] < rect_rhs['x'] or
-    #     rect_lwr['y'] + rect_lwr['height'] < rect_upr['y']):
-    #     disjoint = True
-    # else:
-    #     disjoint = False
-    # ##########
-    # # Calculate and return rectangle intersection
-    # if disjoint:
-    #     recti = \
-    #         {'x': None,
-    #          'y': None,
-    #          'width': None,
-    #          'height': None}
-    # else:
-    #     recti = \
-    #         {'x': rect_rhs['x'],
-    #          'y': rect_upr['y'],
-    #          'width': rect_rhs['width'] if widths_nested else rect_lhs['x'] + rect_lhs['width'] - rect_rhs['x'],
-    #          'height': rech_upr['height'] if heights_nested else rect_lwr['y'] + rect_lwr['height'] - rect_upr['y']}
-    return recti
-
-
-def calc_overlap(pt1, len1, pt2, len2):
-    """Calculate the overlap of two line segments.
-
-    Args:
-        pt1: float
-            Min coordinate of line segment 1.
-        len1: float
-            Length of line segment 1.
-        pt2: float
-            Min coordinate of line segment 2.
-        len2: float
-            Length of line segment 2.
-
-    Return:
-        pti: float
-            Min coordiante of intersecting line segment.
-        leni: float
-            Length of intersecting line coordinate.
-
-    TODO:
-       Rename calc_overlap, calc_intersection_2 to reflect dimensions.
-    """
-    # TODO: Check input
-    # Order coordinates.
-    if pt1 <= pt2:
-        ((pt_lhs, len_lhs), (pt_rhs, len_rhs)) = ((pt1, len1), (pt2, len2))
-    else:
-        ((pt_lhs, len_lhs), (pt_rhs, len_rhs)) = ((pt2, len2), (pt1, len1))
-    # If segments are nested...
-    if pt_lhs + len_lhs > pt_rhs + len_rhs:
-        (pti, leni) = (pt_rhs, len_rhs)
-    else:
-        leni = pt_lhs + len_lhs - pt_rhs
-        if leni >= 0:
-            # If segments overlap...
-            pti = pt_rhs - pt_lhs
-        else:
-            # ...otherwise segments are disjoint.
-            (pti, leni) = (None, None)
-    return (pti, leni)
-
-
-def calc_intersection_2(rect1, rect2):
-    """Calculate the intersection of two rectangles but with the
-    dementionsality of the problem reduced.
-
-    Args:
-        rect1: dict
-        rect2: dict
-            Rectangles are `dicts` with keys `x`, `y`, `width`, `height`.
-            `x`, `y` are the coordinates of the bottom-left corner.
-    
-    Returns:
-        recti: dict
-            Rectangle of intersection as `dict`. Same format at `rect1`, `rect2`.
-    
-    Raises:
-        ValueError:
-            TODO: raise if wrong type or missing keys.
-    
-    References:
-        ..[1] https://www.interviewcake.com/question/rectangular-love
-
-    """
-    ##########
-    # Check input
-    if not (isinstance(rect1, dict) and isinstance(rect2, dict)):
-        raise ValueError("`rect1` and `rect2` must both be type `dict`")
-    for rect in [rect1, rect2]:
-        for key in ['x', 'y', 'width', 'height']:
-            if not key in rect:
-                raise ValueError("All `rect`s must have the key {key}".format(key=key))
-    ##########
-    # Compute overlap.
-    recti = {}
-    (recti['x'], recti['width']) = calc_overlap(pt1=rect1['x'], len1=rect1['width'],
-                                                pt2=rect2['x'], len2=rect2['width'])
-    (recti['y'], recti['height']) = calc_overlap(pt1=rect1['y'], len1=rect1['height'],
-                                                 pt2=rect2['y'], len2=rect2['height'])
-    # Check if rectangles are disjoint.
-    if (recti['width'] is None or
-        recti['height'] is None):
-        recti = {'x': None,
-                 'y': None,
-                 'width': None,
-                 'height': None}
     return recti
 
 
