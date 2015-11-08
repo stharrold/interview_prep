@@ -13,68 +13,120 @@ import sys
 import pytest
 # Import local packages.
 sys.path.insert(0, os.path.curdir)
-import interview_prep.interview_cake.interview_cake as ic
+import interview_prep.interview_cake as ic
 
 
-def test_check_arguments() -> None:
-    r"""Pytest for check_arguments.
+def test_q1_calc_max_profit(
+    prices:list=[5.0, 4.0, 5.0, 3.0, 6.0, 5.0, 9.0, 8.0, 10.0, 2.0, 3.0],
+    ref_max_profit:float=7.0) -> None:
+    r"""Pytest for q1_calc_max_profit.
     
     """
-    # TODO: replace with interview_prep.test_utils.test_check_arguments()
-    def myfunc(arg0: int, arg1: str) -> float:
-        ic.check_arguments(
-            antns=myfunc.__annotations__,
-            lcls=locals())
-        return 1.0
-    # Nothing should be raised.
-    myfunc(arg0=1, arg1='mystring')
-    # Raise ValueError.
+    test_max_profit = ic.q1_calc_max_profit(prices)
+    assert ref_max_profit == test_max_profit
+    return None
+
+
+def test_q1_calc_max_profit_suppl() -> None:
+    r"""Supplemental pytests for q1_calc_max_profit.
+    
+    """
     with pytest.raises(ValueError):
-        myfunc(arg0=1.0, arg1='mystring')
+        ic.q1_calc_max_profit(prices='123')
+    test_q1_calc_max_profit(
+        prices=[5.0, 4.0, 5.0, 3.0, 6.0, 5.0, 9.0, 8.0, 10.0, -20.0, 3.0],
+        ref_max_profit=23.0)
     return None
 
 
-def test_calc_max_profit(prices=[5.,4.,5.,3.,6.,5.,9.,8.,10.,2.,3.], max_profit=7.0):
-    """pytest style test for calc_max_profit
+def test_q2_get_products_of_all_ints_except_at_index(
+    ints:list=[1, 7, 3, 4],
+    ref_prods:list=[7*3*4, 1*3*4, 1*7*4, 1*7*3]) -> None:
+    """Pytest for q2_get_products_of_all_ints_except_at_index.
     
     """
-    assert ic.calc_max_profit(prices) == max_profit
+    test_prods = ic.q2_get_products_of_all_ints_except_at_index(ints)
+    assert ref_prods == test_prods
     return None
 
 
-test_calc_max_profit(prices=[5.0, 4.0, 5.0, 3.0, 6.0, 5.0, 9.0, 8.0, 10.0, -20.0, 3.0], max_profit=23.)
-
-
-def test_get_products_of_all_ints_except_at_index(ints=[1,7,3,4], prods=[7*3*4, 1*3*4, 1*7*4, 1*7*3]):
-    """pytest style test
+def test_q2_get_products_of_all_ints_except_at_index_suppl() -> None:
+    r"""Supplemental tests for q2_get_products_of_all_ints_except_at_index.
     
     """
-    prod_pairs = list(filter(
-        lambda tup: tup[0] == tup[1],
-        zip(ic.get_products_of_all_ints_except_at_index(ints), prods)))
-    assert len(prod_pairs) == len(ints)
+    with pytest.raises(ValueError):
+        ic.q2_get_products_of_all_ints_except_at_index(ints='123')
+    test_q2_get_products_of_all_ints_except_at_index(
+        ints=[0, 0, 0], ref_prods=[0, 0, 0])
+    test_q2_get_products_of_all_ints_except_at_index(
+        ints=[5], ref_prods=[1])
+    test_q2_get_products_of_all_ints_except_at_index(
+        ints=[], ref_prods=[])
     return None
 
 
-test_get_products_of_all_ints_except_at_index()
-test_get_products_of_all_ints_except_at_index(ints=[0,0,0], prods=[0,0,0])
-test_get_products_of_all_ints_except_at_index(ints=[5], prods=[1])
-test_get_products_of_all_ints_except_at_index(ints=[], prods=[])
-
-
-def test_get_highest_product(ints=[-10,-10,-20,1,3,2], highest_product=600):
-    """pytest style test for get_highest_product
+def test_q3_calc_highest_product_of_3(
+    ints:list=[-10, -10, 1, 3, 2],
+    ref_prod:int=300) -> None:
+    r"""Pytest for q3_calc_highest_product_of_3.
 
     """
-    assert ic.get_highest_product(ints=ints) == highest_product
+    test_prod = ic.q3_calc_highest_product_of_3(ints=ints)
+    assert ref_prod == test_prod
     return None
 
 
-def test_get_highest_product_2(ints=[-10,-10,-20,1,3,2], highest_product=600):
-    """pytest style test for get_highest_product_2
+def test_q3_calc_highest_product_of_3_suppl() -> None:
+    r"""Supplemental pytests for q3_calc_highest_product_of_3.
+    
+    """
+    with pytest.raises(ValueError):
+        ic.q3_calc_highest_product_of_3(ints=[1, 2])
+        ic.q3_calc_highest_product_of_3(ints='123')
+    test_q3_calc_highest_product_of_3(ints=[1, 10, -5, 1, -100], ref_prod=5000)
+    test_q3_calc_highest_product_of_3(ints=[0, 0, 0], ref_prod=0)
+    test_q3_calc_highest_product_of_3(ints=[0, 0, 0, 1], ref_prod=0)
+    return None
+
+
+def test_q4_condense_meeting_times(
+    times:list=[(0, 1), (3, 5), (4, 8), (10, 12), (9, 10)],
+    ref_condensed:list=[(0, 1), (3, 8), (9, 12)]) -> None:
+    r"""Pytest for q4_condense_meeting_times.
 
     """
-    assert ic.get_highest_product_2(ints=ints) == highest_product
+    test_condensed = ic.q4_condense_meeting_times(times=times)
+    assert ref_condensed == test_condensed
+    return None
+
+
+def test_q4_condense_meeting_times_suppl() -> None:
+    r"""Supplemental pytests for q4_condense_meeting_times.
+    
+    """
+    with pytest.raises(ValueError):
+        ic.q4_condense_meeting_times(times='[(1, 10), (2, 6)]')
+    test_q4_condense_meeting_times(
+        times=[(1, 2), (2, 3)],
+        ref_condensed=[(1, 3)])
+    test_q4_condense_meeting_times(
+        times=[(1, 5), (2, 3)],
+        ref_condensed=[(1, 5)])
+    test_q4_condense_meeting_times(
+        times=[(1, 10), (2, 6), (3, 5), (7, 9)],
+        ref_condensed=[(1, 10)])
+    test_q4_condense_meeting_times(
+        times=[(0, 1), (0, 1), (0, 1)],
+        ref_condensed=[(0, 1)])
+    test_q4_condense_meeting_times(
+        times=[(0, 1), (1, 2), (2, 3)],
+        ref_condensed=[(0, 3)])
+    test_q4_condense_meeting_times(
+        times=[(2, 3), (1, 2), (0, 1)],
+        ref_condensed=[(0, 3)])
+    test_q4_condense_meeting_times(
+        times=[(9, 11), (5, 7), (1, 3), (2, 10)],
+        ref_condensed=[(1, 11)])
     return None
 
 
@@ -112,22 +164,6 @@ test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
 test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
                          rect2={'x':4.0, 'y':0.0, 'width':3.0, 'height':3.0},
                          recti={'x':None, 'y':None, 'width':None, 'height':None})
-
-
-def test_condense_meeting_times(times=[(0, 1), (3, 9), (4, 5), (8, 10), (2, 4)],
-                                condensed=[(0, 1), (2, 10)]):
-    """pytest style test for condense_meeting_times
-
-    Notes:
-        - interviewcake.com problem #4
-
-    """
-    assert ic.condense_meeting_times(times=times) == condensed
-    return None
-
-
-test_condense_meeting_times(times=[(1, 10), (2, 6), (3, 5), (7, 9)], condensed=[(1, 10)])
-
 
 
 def test_gen_change_combinations(amount=4, denominations=[1, 2, 3], init_combo=None,

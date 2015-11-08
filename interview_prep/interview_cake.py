@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-r"""My answers to questions on iterviewcake.com.
+r"""My answers to questions on interviewcake.com.
 
 """
 
@@ -8,62 +8,44 @@ r"""My answers to questions on iterviewcake.com.
 # Import standard packages.
 import copy
 import collections
+import functools
+import itertools
 import operator
+import os
 import pdb
 import sys
 # Import installed packages.
 # Import local packages.
+import interview_prep.utils as utils
 
 
-def check_arguments(antns, lcls) -> None:
-    r"""Check types of a function's input arguments.
-    Call from within the function.
+def q1_calc_max_profit(prices:list) -> float:
+    r"""Compute maximum profit from stock prices.
     
     Args:
-        antns: Annotations of enclosing function.
-        lcls: Local variables.
+        prices (list): List of prices as `float`. Index is number of minutes
+            since beginning of trading day.
     
     Returns:
-        None
-        
-    Raises:
-        ValueError: Raised if arguments do not match annotated arguments.
+        max_profit (float): Maximum profit possible from buying then selling.
     
     Notes:
-        * Example usage:
-            ```
-            def myfunc(arg0: int, arg1: str) -> float:
-               check_arguments(antns=myfunc.__annotations__, lcls=locals())
-            ```
+        * interviewcake.com question #1, "Apple Stocks".
+        * Complexity:
+            * n = len(prices)
+            * Ideal: Time=O(n), Space=O(1)
+            * Realized: Time=O(n), Space=O(1)
     
-    """
-    # TODO: replace with interview_prep.utils.check_arguments()
-    for (arg, cls) in antns.items():
-        if arg != 'return':
-            if not isinstance(lcls[arg], cls):
-                raise ValueError(
-                    ("type({arg}) must be {cls}\n" +
-                     "type({arg}) = {typ}").format(
-                        arg=arg, cls=cls, typ=type(lcls[arg])))
-    return None
-
-
-def calc_max_profit(prices):
-    """Compute maximum profit.
-    
-    Args:
-        prices: array_like
-            Iterable with prices. Index is number of minutes since beginning of trading day.
-    
-    Returns:
-        max_profit: float
-            Maximum profit possible from buying then selling during `prices`.
-            
     References:
         .. [1] https://www.interviewcake.com/question/stock-price
     
     """
-    # TODO: use indices as internal check that program is working.
+    # Check arguments.
+    utils.check_arguments(
+        antns=q1_calc_max_profit.__annotations__,
+        lcls=locals())
+    # Calculate max_profit sequentially with min_price since the fund must be
+    # bought before being sold.
     (min_price, max_profit) = (prices[0], 0.0)
     for price in prices:
         min_price = min(min_price, price)
@@ -71,138 +53,239 @@ def calc_max_profit(prices):
     return max_profit
 
 
-def get_products_of_all_ints_except_at_index(ints):
-    """Get product of all ints save one for each idx.
+def q2_get_products_of_all_ints_except_at_index(
+    ints:list) -> list:
+    r"""Calculate the products of all integers except for the one each index.
 
     Args:
-        ints: list of int
-        List of `int` factors.
+        ints (list): `list` of `int` factors.
 
     Returns:
-        prods: list of int
-        List of `int` products.
+        prods (list): `list` of `int` products
+    
+    Notes:
+        * interviewcake.com question #2, "Product of All Other Numbers".
+        * Complexity:
+            * n = len(prices)
+            * Ideal: Time=O(n), Space=O(n)
+            * Realized: Time=O(n), Space=O(n)
 
     References:
         ..[1] https://www.interviewcake.com/question/product-of-other-numbers
     
     """
+    # Check arguments.
+    utils.check_arguments(
+        antns=q2_get_products_of_all_ints_except_at_index.__annotations__,
+        lcls=locals())
+    # Allocate a list of ones for `prods`. Multiply products at indexes by
+    # cumulative product then update cumulative product. Repeat iterating in
+    # opposite direction through `ints`.
     idxs = range(len(ints))
     prods = [1]*len(ints)
-    prod = 1
+    prod_cuml = 1
     for idx in idxs:
-        prods[idx] = prod
-        prod *= ints[idx]
-    prod = 1
+        prods[idx] = prod_cuml
+        prod_cuml *= ints[idx]
+    prod_cuml = 1
     for idx in reversed(idxs):
-        prods[idx] *= prod
-        prod *= ints[idx]
+        prods[idx] *= prod_cuml
+        prod_cuml *= ints[idx]
     return prods
 
 
-def get_highest_product(ints):
-    """Compute the product of the three largest ints in an array.
+def q3_calc_highest_product_of_3(ints:list) -> int:
+    """Calculate the highest product from integers.
     
     Args:
-        ints: list
-            List of `ints` with `len(ints) >= 3`
+        ints (list): List of `ints` with `len(ints) >= 3`
 
     Returns:
-        highest_product: int
-            Product of the 3 largest ints.
+        prod (int): Highest product from 3 `int`s.
 
     Raises:
-        ValueError:
-            Raised if `len(ints) < 3`.
+        ValueError: Raised if `len(ints) < 3`.
+    
+    Notes:
+        * interviewcake.com question #3, "Highest Product of 3".
+        * Complexity:
+            * n = len(ints)
+            * Ideal: Time=O(n), Space=O(1)
+            * Realized: Time=O(n), Space=O(1)
 
     References:
         ..[1] https://www.interviewcake.com/question/highest-product-of-3
     
     """
-    # Check input
+    # Check arguments.
+    utils.check_arguments(
+        antns=q3_calc_highest_product_of_3.__annotations__,
+        lcls=locals())
     if len(ints) < 3:
-        raise ValueError("`ints` must have at least 3 elements")
-    # Compute top three ints
-    # TODO: make top 3 a default arg
-    # TODO: use collections.deque?
-    tops_pos = []
-    tops_neg = []
-    for iint in ints:
-        if iint >= 0:
-            if len(tops_pos) < 3:
-                tops_pos.append(iint)
-                tops_pos = sorted(tops_pos) # TODO: optimize
-            else:
-                for (idx, top) in enumerate(tops_pos):
-                    if iint > top:
-                        tops_pos[idx] = iint
-                        break
-                    else:
-                        break
+        raise ValueError(
+            ("`ints` must have at least 3 items:\n" +
+             "ints =\n{ints}").format(ints=ints))
+    # #########################################
+    # # With collections, itertools; Python 3.5.
+    # max_3 = collections.deque(iterable=[1]*3, maxlen=3)
+    # min_2 = collections.deque(iterable=[1]*2, maxlen=2)
+    # for item in ints:
+    #     # Find the 3 most positive integers.
+    #     for idx in range(len(max_3)):
+    #         if item > max_3[idx]:
+    #             max_3.insert(item, index=idx)
+    #             break
+    #     # Find the 2 most negative integers.
+    #     for idx in range(len(min_2)):
+    #         if item < min_2[idx]:
+    #             min_2.insert(item, index=idx)
+    #             break
+    # prod_max_3 = functools.reduce(operator.mul, max_3, 1)
+    # prod_min_2 = functools.reduce(operator.mul, min_2, 1)
+    # prod_minmax_3 = prod_min_2 * max_3[0]
+    # prod = max(prod_max_3, prod_minmax_3)
+    # #########################################
+    # # With extreme integers ranked.
+    # (max_1st, max_2nd, max_3rd) = (1, 1, 1)
+    # (min_1st, min_2nd) = (1, 1)
+    # for item in ints:
+    #     # Find the 3 most positive integers.
+    #     if item > max_3rd:
+    #         if item > max_2nd:
+    #             if item > max_1st:
+    #                 max_3rd = max_2nd
+    #                 max_2nd = max_1st
+    #                 max_1st = item
+    #             else:
+    #                 max_3rd = max_2nd
+    #                 max_2nd = item
+    #         else:
+    #             max_3rd = item
+    #     # Find the 2 most negative integers.
+    #     if item < min_2nd:
+    #         if item < min_1st:
+    #             min_2nd = min_1st
+    #             min_1st = item
+    #         else:
+    #             min_2nd = item
+    # prod = max(max_1st*max_2nd*max_3rd, max_1st*min_1st*min_2nd)
+    #########################################
+    # With bottom-up approach.
+    (prod_1_pos, prod_2_pos, prod_3_pos) = (0, 0, 0)
+    (prod_1_neg, prod_2_neg) = (0, 0)
+    for item in ints:
+        # Find the 3 most positive integers.
+        if item >= 0:
+            prod_3_pos = max(item*prod_2_pos, prod_3_pos)
+            prod_2_pos = max(item*prod_1_pos, prod_2_pos)
+            prod_1_pos = max(item, prod_1_pos)
+        # Find the 2 most negative integers.
         else:
-            if len(tops_neg) < 2:
-                tops_neg.append(iint)
-                tops_neg = sorted(tops_neg, key=abs) # TODO; optimize
-            else:
-                for (idx, top) in enumerate(tops_neg):
-                    if abs(iint) > abs(top):
-                        tops_neg[idx] = iint
-                        break
-                    else:
-                        break
-    # Compute product
-    prod_pos = 1
-    for top in tops_pos:
-        prod_pos *= top
-    prod_neg = 1
-    for top in tops_neg:
-        prod_neg *= top
-    prod_pos_neg = prod_neg * max(tops_pos)
-    highest_product = max(prod_pos, prod_pos_neg)
-    return highest_product    
+            item *= -1
+            prod_2_neg = max(item*prod_1_neg, prod_2_neg)
+            prod_1_neg = max(item, prod_1_neg)
+    prod = max(prod_3_pos, prod_1_pos*prod_2_neg)
+    return prod
 
 
-def get_highest_product_2(ints):
-    """Compute the highest product of 3 integers.
+def q4_condense_meeting_times(times:list) -> list:
+    """Condense meeting times into contiguous blocks.
     
     Args:
-        ints: list
-            List of `int` with at least 3 items.
-    
-    Returns:
-        highest_product:
-            Greatest product from multiplying 3 ints.
+        times (list): `list` of `tuple`s of `int`s as meeting times. `int`s are
+            number of 30-minute blocks since 9:00am. Does not need to be sorted.
+            Example: `times = [(0, 1), (3, 5), (2, 4)]`
 
-    Raises:
-        ValueError:
-            Raised if `len(ints) < 3`.
+    Returns:
+        condensed (list): `list` of combined meeting times as `tuple`s.
+            Example: `condensed = [(0, 1), (2, 5)]`
+
+    Notes:
+        * interviewcake.com question #4, "Merging Meeting Times".
+        * Complexity:
+            * n = len(times)
+            * Ideal: Time=O(n*lg(n)), Space=O(n)
+            * Realized: Time=O(n*lg(n)), Space=O(n)
 
     References:
-        ..[1] https://www.interviewcake.com/question/highest-product-of-3
+        .. [1] https://www.interviewcake.com/question/merging-ranges
 
     """
-    # Check input.
-    if len(ints) < 3:
-        raise ValueError("`ints` must have at least 3 items.")
-    # Initialize variables to track.
-    # TODO: optimize by reducing loops. keep it programmatic.
-    highest_product = 1
-    for iint in ints[:3]:
-        highest_product *= iint
-    highest_product_top_2 = 1
-    highest_product_bot_2 = 1
-    for iint in ints[:2]:
-        highest_product_top_2 *= iint
-        highest_product_bot_2 *= iint
-    highest = ints[0]
-    lowest = ints[0]
-    # Iteratively update tracked variables.
-    for iint in ints:
-        highest_product = max(highest_product, iint*highest_product_top_2, iint*highest_product_bot_2)
-        highest_product_top_2 = max(highest_product_top_2, iint*highest)
-        highest_product_bot_2 = max(highest_product_bot_2, iint*lowest)
-        highest = max(highest, iint)
-        lowest = min(lowest, iint)
-    return highest_product
+    # Check arguments.
+    utils.check_arguments(
+        antns=q4_condense_meeting_times.__annotations__,
+        lcls=locals())
+    # #########################################
+    # # Without sorting: Time: O(n**2); Space: O(n)
+    # # Iterate through `times` comparing current time to:
+    # # * condensed times in `condensed`, iterating forwards
+    # # * uncondensed times in `times`, iterating forwards
+    # # * uncondensed times in `times`, iterating backwards
+    # # * condensed times in `condensed`, iterating backwards
+    # # Backwards and forwards iteration is necessary for unsorted `times`.
+    # def do_overlap(time1:tuple, time2:tuple) -> bool:
+    #     # Check arguments.
+    #     utils.check_arguments(
+    #         antns=do_overlap.__annotations__,
+    #         lcls=locals())
+    #     # Order meeting times by start time.
+    #     # Overlap if first stop time >= second start time.
+    #     if time1[0] < time2[0]:
+    #         (time1st, time2nd) = (time1, time2)
+    #     else:
+    #         (time1st, time2nd) = (time2, time1)
+    #     if time1st[1] >= time2nd[0]:
+    #         overlap = True
+    #     else:
+    #         overlap = False
+    #     return overlap
+    # # Compare current time to seen condensed times.
+    # condensed = [times[0]]
+    # for (idx, time) in enumerate(times):
+    #     idx_olap = None
+    #     # Compare current time with condensed times, forward.
+    #     for idx_cmp in range(len(condensed)):
+    #         time_cmp = condensed[idx_cmp]
+    #         overlap = do_overlap(time1=time, time2=time_cmp)
+    #         if overlap:
+    #             time = (min(time[0], time_cmp[0]), max(time[1], time_cmp[1]))
+    #             if idx_olap is None:
+    #                 idx_olap = idx_cmp
+    #     # Compare current time with uncondensed times, forward and backward.
+    #     for idx_cmp in itertools.chain(
+    #         range(idx+1, len(times)), reversed(range(idx+1, len(times)-1))):
+    #         time_cmp = times[idx_cmp]
+    #         overlap = do_overlap(time1=time, time2=time_cmp)
+    #         if overlap:
+    #             time = (min(time[0], time_cmp[0]), max(time[1], time_cmp[1]))
+    #     # Compare current time with condensed times, backward.
+    #     for idx_cmp in reversed(range(len(condensed))):
+    #         time_cmp = condensed[idx_cmp]
+    #         overlap = do_overlap(time1=time, time2=time_cmp)
+    #         if overlap:
+    #             time = (min(time[0], time_cmp[0]), max(time[1], time_cmp[1]))
+    #             if idx_olap is None:
+    #                 idx_olap = idx_cmp
+    #     # Update condensed times if overlap, else append.
+    #     if idx_olap is not None:
+    #         condensed[idx_olap] = time
+    #     else:
+    #         condensed.append(time)
+    ########################################
+    # With sorting: Time: O(n*lg(n)); Space: O(n)
+    # Sort times first by meeting start then by meeting end
+    # to avoid needing to compare all meeting times to each other.
+    times = sorted(times, key=operator.itemgetter(0, 1))
+    condensed = [times[0]]
+    for time in times:
+        cond = condensed[-1]
+        # If time is disjoint, append as new meeting.
+        # Else change condensed meeting time.
+        if cond[1] < time[0]:
+            condensed.append(time)
+        else:
+            condensed[-1] = (cond[0], max(cond[1], time[1]))
+    return condensed
 
 
 def calc_intersection(rect1, rect2):
@@ -409,47 +492,6 @@ def calc_intersection_2(rect1, rect2):
                  'width': None,
                  'height': None}
     return recti
-
-
-def condense_meeting_times(times):
-    """Condense meeting times into contiguous blocks.
-    
-    Args:
-        times: list
-            List of meeting times as tuples.
-            List does not need to be sorted.
-            Example: [(0, 1), (3, 5), (2, 4)]
-
-    Returns:
-        condensed: list
-            Sorted list of combined meeting times as tuples.
-            Example: [(0, 1), (2, 5)]
-
-    Notes:
-        - Interviewcake.com problem #4
-        - Complexity: time: O(nlgn), space: O(n)
-    
-    References:
-        ..[1] https://www.interviewcake.com/question/merging-ranges
-        ..[2] https://wiki.python.org/moin/TimeComplexity
-        
-    """
-    # TODO: check input
-    # Sort times first by meeting start then by meeting end
-    # to avoid needing to compare all meeting times to each other.
-    # Sorting eliminates need to test if meetings occur before each other
-    # or if they are nested.
-    times = sorted(times, key=lambda tup: (tup[0], tup[1]))
-    condensed = [times[0]]
-    for time in times:
-        cond = condensed[-1]
-        # If meetings are disjoint, append as new meeting.
-        if time[0] > cond[1]:
-            condensed.append(time)
-        # Else if meetings overlap, join.
-        elif cond[0] <= time[0] and time[0] <= cond[1] and cond[1] <= time[1]:
-            condensed[-1] = (cond[0], time[1]) # set item takes O(1)
-    return condensed
 
 
 def gen_change_combinations(amount, denominations, init_combo=None):
@@ -913,8 +955,8 @@ def _get_next_path(current_path):
     Notes:
         - Assumes that binary tree is full. Calling scope must check that path is valid.
         - Complexity:
-            Time: O(len_path) ~ O(log2(num_nodes_of_bin_tree))
-            Space: O(len_path) ~ O(log2(num_nodes_of_bin_tree))
+            Time: O(len_path) ~ O(lg(num_nodes_of_bin_tree))
+            Space: O(len_path) ~ O(lg(num_nodes_of_bin_tree))
 
     """
     # Find a cousin node at the same depth otherwise descend to next depth of binary tree.
@@ -963,8 +1005,8 @@ def _get_next_node_path_values(bin_tree, current_path):
 
     Notes:
         - Complexity:
-            Time: O(num_nodes*log2(num_nodes)^2)
-            Space: O(log2(num_nodes_of_bin_tree))
+            Time: O(num_nodes*lg(num_nodes)^2)
+            Space: O(lg(num_nodes_of_bin_tree))
 
     """
     # TODO: memoize which nodes we’ve seen to reduce time
@@ -1017,10 +1059,10 @@ def is_valid_bin_search_tree(bin_tree):
         - Complexity:
             Ideal:
                 Time: O(num_nodes)
-                Space: O(log2(num_nodes))
+                Space: O(lg(num_nodes))
             Realized:
-                Time: O(num_nodes*log2(num_nodes)^2)
-                Space: O(log2(num_nodes))
+                Time: O(num_nodes*lg(num_nodes)^2)
+                Space: O(lg(num_nodes))
 
     TODO:
         - Redo with depth-first search
@@ -1083,10 +1125,10 @@ def q13_find_rotation_index(lst: list) -> int:
         * interviewcake.com question #13, "Find Rotation Point".
         * Complexity:
             * Ideal:
-                * Time: log2(len(lst))
+                * Time: lg(len(lst))
                 * Space: O(1)
             * Realized:
-                * Time: log2(len(lst))
+                * Time: lg(len(lst))
                 * Space: O(1)
     
     References:
@@ -1111,7 +1153,7 @@ def q13_find_rotation_index(lst: list) -> int:
     else:
         # Deterministic stopping criteria to avoid infinite loops.
         # No recursion to avoid building call stack.
-        # log2 x bounded by x.
+        # lg x bounded by x.
         for inum in range(len(lst)):
             if idx_floor == idx_ceil - 1:
                 idx_rot = idx_ceil
@@ -1157,7 +1199,8 @@ def q14_movies_match_flight(flight_length: int, movie_lengths: list) -> bool:
             inflight-entertainment
     
     """
-    check_arguments(
+    # Check arguments.
+    utils.check_arguments(
         antns=q14_movies_match_flight.__annotations__,
         lcls=locals())
     # Memoize movie lengths seen.
@@ -1201,11 +1244,10 @@ def q15_fib(idx: int) -> int:
     
     Notes:
         * interviewcake.com question #15, "Compute Nth Fibonacci Number" [1]_.
-        * fib(n) = fib(n-1) + fib(n-2)
-            where fib(0) = 0, fib(1) = 1.
+        * fib(n) = fib(n-1) + fib(n-2), fib(0) = 0, fib(1) = 1.
         * Complexity:
             * Ideal:
-                * Time: O(log2(n))
+                * Time: O(lg(n))
                 * Space: O(1)
             * Realized:
                 * Time: O(n)
@@ -1216,7 +1258,7 @@ def q15_fib(idx: int) -> int:
 
     """
     # Check arguments.
-    check_arguments(
+    utils.check_arguments(
         antns=q15_fib.__annotations__,
         lcls=locals())
     if idx < 0:
@@ -1265,7 +1307,8 @@ def q16_max_duffel_bag_value(cake_tuples:list, bag_capacity:int) -> int:
         .. [1] https://www.interviewcake.com/question/python/cake-thief
     
     """
-    check_arguments(
+    # Check arguments.
+    utils.check_arguments(
         antns=q16_max_duffel_bag_value.__annotations__,
         lcls=locals())
     for tup in cake_tuples:
