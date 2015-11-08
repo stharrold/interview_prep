@@ -447,7 +447,7 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
     (y0, y1) = calc_segi(
         seg1=(rect1['y'], rect1['y']+rect1['height']),
         seg2=(rect2['y'], rect2['y']+rect2['height']))
-    recti = {'x': x0, 'y': y0, 'width':x0+x1, 'height':y0+y1}
+    recti = {'x': x0, 'y': y0, 'width':x1-x0, 'height':y1-y0}
     # ##########
     # # Strictly order the rectangles in a well-defined way: left-to-right, up-to-down
     # # Assigning by references, so no extra mem usage.
