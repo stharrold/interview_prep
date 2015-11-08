@@ -53,8 +53,7 @@ def q1_calc_max_profit(prices:list) -> float:
     return max_profit
 
 
-def q2_get_products_of_all_ints_except_at_index(
-    ints:list) -> list:
+def q2_get_products_of_all_ints_except_at_index(ints:list) -> list:
     r"""Calculate the products of all integers except for the one each index.
 
     Args:
@@ -95,7 +94,7 @@ def q2_get_products_of_all_ints_except_at_index(
 
 
 def q3_calc_highest_product_of_3(ints:list) -> int:
-    """Calculate the highest product from integers.
+    r"""Calculate the highest product from integers.
     
     Args:
         ints (list): List of `ints` with `len(ints) >= 3`
@@ -189,7 +188,7 @@ def q3_calc_highest_product_of_3(ints:list) -> int:
 
 
 def q4_condense_meeting_times(times:list) -> list:
-    """Condense meeting times into contiguous blocks.
+    r"""Condense meeting times into contiguous blocks.
     
     Args:
         times (list): `list` of `tuple`s of `int`s as meeting times. `int`s are
@@ -288,27 +287,100 @@ def q4_condense_meeting_times(times:list) -> list:
     return condensed
 
 
-def calc_intersection(rect1, rect2):
-    """Calculate the intersection of two rectangles.
+def q5_count_combinations(amount:int, denoms:list) -> int:
+    r"""Count the number of combinations of `denomiations` that sum to `amount`.
     
     Args:
-        rect1: dict
-        rect2: dict
+        amount (int): Amount of money to partition.
+        denoms (list): `list` of demoninations to partition `amount`
+    
+    Returns:
+        ncombos (int): Number of combinations.
+    
+    Raises:
+        ValueError:
+            * Raised if not amount >= 1.
+            * Raised if not len(denoms) >= 1.
+            * Raised if any denoms are not `int`.
+            * Raised if any denoms are not >= 1.
+        
+    Notes:
+        * interviewcake.com question #5, "Making Change".
+        * Complexity:
+            * n = amount; k = len(denoms)
+            * Complexity:
+                * Ideal: Time: O(n*k); Space: O(n)
+                * Realized:
+    
+    References:
+        .. [1] https://www.interviewcake.com/question/python/coin
+    
+    """
+    # Check arguments.
+    utils.check_arguments(
+        antns=q5_count_combinations.__annotations__,
+        lcls=locals())
+    if not amount >= 1:
+        raise ValueError(
+            ("`amount` must be >= 1\n" +
+             "amount = {amt}").format(amt=amount))
+    if not len(denoms) >= 1:
+        raise ValueError(
+            ("`len(denoms)` must be >= 1\n" +
+             "len(denoms) = {nden}").format(nden=len(denoms)))
+    for denom in denoms:
+        if not isinstance(denom, int):
+            raise ValueError(
+                ("All `denoms` must be type `int`\n" +
+                 "denom = {den}\n" +
+                 "type(denom) = {tden}").format(den=denom, tden=type(denom)))
+        if not denom >= 1:
+            raise ValueError(
+                ("All `denoms` must be >= 1\n" +
+                 "denom = {den}").format(den=denom))
+    # For each denomination, iterate through the amounts to find the number of
+    # combinations per amount.
+    # Note: For each amount, iterating through denominations will instead find
+    # the number of permutations per amount.
+    amt_ncombos = [0]*(amount+1)
+    amt_ncombos[0] = 1
+    for den in denoms:
+        for amt in range(den, amount+1):
+            amt_ncombos[amt] += amt_ncombos[amt-den]
+    ncombos = amt_ncombos[amount]
+    return ncombos
+
+
+def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
+    r"""Calculate the intersection of two rectangles.
+    
+    Args:
+        rect1 (dict):
+        rect2 (dict):
             Rectangles are `dicts` with keys `x`, `y`, `width`, `height`.
             `x`, `y` are the coordinates of the bottom-left corner.
     
     Returns:
-        recti: dict
-            Rectangle of intersection as `dict`. Same format at `rect1`, `rect2`.
+        recti (dict):
+            Rectangle intersection as `dict`. Same format at `rect1`, `rect2`.
     
     Raises:
-        ValueError:
-            TODO: raise if wrong type or missing keys.
+        ValueError: Raised if missing keys.
+
+    Notes:
+        * interviewcake.com question #6, "Rectangular Love".
+        * Complexity:
+            * TODO
     
     References:
-        ..[1] https://www.interviewcake.com/question/rectangular-love
+        .. [1] https://www.interviewcake.com/question/rectangular-love
 
     """
+    # Check arguments.
+    utils.check_arguments(
+        antns=q6_calc_intersection.__annotations__,
+        lcls=locals())
+    # TODO: resume here 20151107
     ##########
     # Check input
     if not (isinstance(rect1, dict) and isinstance(rect2, dict)):
@@ -492,185 +564,6 @@ def calc_intersection_2(rect1, rect2):
                  'width': None,
                  'height': None}
     return recti
-
-
-def gen_change_combinations(amount, denominations, init_combo=None):
-    """Create a combination of coins that sum to amount.
-    
-    Args:
-        amount: int
-            Value of change to partition into denominations.
-            Example: 4
-        denominations: list
-            Sorted list of unique denominations into which `amount` of change is partitioned.
-            Example: [1, 2, 3]
-        init_combo: {None}, list, optional
-            Initialize a portion of combination. If `None` (default), then builds
-            combination of `denominations` without prior values.
-            Example: None
-    
-    Yields:
-        combo: list
-            Generates a combination of `denominations` that sum to `amount`.
-            Example: ([1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2])
-    
-    See Also:
-        count_change_combinations
-
-    Notes:
-        - Because recursive, can cause large call stack.
-    
-    """
-    # TODO: check input
-    if init_combo is None:
-        combo = [denominations[0]]
-    else:
-        combo = copy.deepcopy(init_combo)
-        combo.append(denominations[0])
-    for (idx, denom) in enumerate(denominations):
-        combo[-1] = denom
-        remainder = amount - sum(combo)
-        if remainder > 0:
-            for gen_combo in gen_change_combinations(amount=amount,
-                                                 denominations=denominations[idx:],
-                                                 init_combo=combo):
-                yield gen_combo
-        elif remainder == 0:
-            yield combo
-            break
-        else:
-            break
-
-
-def count_change_combinations(amount, denominations):
-    """Count the number of possible combinations for a given amount of change
-    from the given denominations.
-    
-    Args:
-        amount: int
-            Value of change to partition into denominations.
-            Example: 4
-        denominations: list
-            List of denominations into which `amount` of change is partitioned.
-            Example: [1, 2, 3]
-
-    Returns:
-        num: int
-            Number of possible combinations of denominations to total `amount` of change.
-            Example: 4
-
-    See Also:
-        gen_change_combinations
-    
-    Notes:
-        - interviewcake.com question #5.
-        - Because uses a recursive helper function, can cause a large call stack.
-        - Complexity:
-            time: O(amount*len(denominations))
-            space: O(amount*len(denominations)) in call stack
-
-    References:
-        ..[1] https://www.interviewcake.com/question/coin
-
-    """
-    # TODO: check input
-    num = 0
-    denominations = sorted(set(denominations))
-    for _ in gen_change_combinations(amount=amount, denominations=denominations, init_combo=None):
-           num += 1
-    return num
-
-
-def count_change_combinations_2(amount, denominations):
-    """Count the number of possible combinations for a given amount of change
-    from the given denominations.
-
-    Args:
-        amount: int
-            Value of change to partition into denominations.
-            Example: 4
-        denominations: list
-            List of denominations into which `amount` of change is partitioned.
-            Example: [1, 2, 3]
-
-    Returns:
-        num: int
-            Number of possible combinations of denominations to total `amount` of change.
-            Example: 4
-
-    Notes:
-        - interviewcake.com question #5.
-        - Non-recursive, but iterates through denominations for each amount and
-            requires saving combinations in order to avoid double-counting unique solutions.
-        - Complexity:
-            time: O(amount*len(denominations))
-            space: O(amount*len(denominations))
-
-    References:
-        ..[1] https://www.interviewcake.com/question/coin
-    
-    """
-    # TODO: check input
-    combos = {}
-    # Build all possible combinations of denominations by memorizing.
-    for amt in range(1, amount+1):
-        combos[amt] = []
-        if amt in denominations:
-            combos[amt].append(tuple([amt]))
-        # Collect combinations from amounts and their complements.
-        amts_gt = [key for key in combos.keys() if key >= round(max(combos)/2)]
-        for amt_gt in amts_gt:
-            amt_lt = amt - amt_gt
-            if amt_lt in combos:
-                for comb_gt in combos[amt_gt]:
-                    for comb_lt in combos[amt_lt]:
-                        comb = []
-                        comb.extend(list(comb_gt))
-                        comb.extend(list(comb_lt))
-                        combos[amt].append(tuple(sorted(comb)))
-        # Remove duplicates.
-        combos[amt] = set(combos[amt])
-    return len(combos[amount]) if amount in combos else 0
-
-        
-def count_change_combinations_3(amount, denominations):
-    """Count the number of possible combinations for a given amount of change
-    from the given denominations.
-
-    Args:
-        amount: int
-            Value of change to partition into denominations.
-            Example: 4
-        denominations: list
-            List of denominations into which `amount` of change is partitioned.
-            Example: [1, 2, 3]
-
-    Returns:
-        num: int
-            Number of possible combinations of denominations to total `amount` of change.
-            Example: 4
-
-    Notes:
-        - interviewcake.com question #5.
-        - Non-recursive and iterates through amounts for each denomination to eliminate
-            saving combinations in order to avoid double-counting unique solutions.
-        - Complexity:
-            time: O(amount*len(denominations))
-            space: O(amount)
-
-    References:
-        ..[1] https://www.interviewcake.com/question/coin
-    
-    """
-    # TODO: check input
-    num_combos = collections.Counter()
-    # Iterate through amount for each denomination to avoid double-counting.
-    # TODO: make self-referencing dict comprehension for 2x speedup
-    for denom in denominations:
-        num_combos[denom] += 1
-        for amt in range(denom+1, amount+1):
-            num_combos[amt] += num_combos[amt-denom]
-    return num_combos[amount]
 
 
 class TempTracker(object):

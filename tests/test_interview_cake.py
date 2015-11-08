@@ -130,22 +130,65 @@ def test_q4_condense_meeting_times_suppl() -> None:
     return None
 
 
-def test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                           rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0},
-                           recti={'x':1.0, 'y':1.0, 'width':2.0, 'height':2.0}):
-    """pytest style test for calc_intersection
-
+def test_q5_count_combinations(
+    amount:int=4,
+    denoms:list=[1, 2, 3],
+    ref_ncombos:int=4) -> None:
+    r"""Pytest for q5_count_combinations.
+    
     """
-    assert ic.calc_intersection(rect1=rect1, rect2=rect2) == recti
+    test_ncombos = ic.q5_count_combinations(amount=amount, denoms=denoms)
+    assert ref_ncombos == test_ncombos
     return None
 
 
-test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                       rect2={'x':3.0, 'y':3.0, 'width':3.0, 'height':3.0},
-                       recti={'x':3.0, 'y':3.0, 'width':0.0, 'height':0.0})
-test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                       rect2={'x':4.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                       recti={'x':None, 'y':None, 'width':None, 'height':None})
+def test_q5_count_combinations_suppl() -> None:
+    r"""Supplemental pytests for q5_count_combinations.
+    
+    """
+    with pytest.raises(ValueError):
+        ic.q5_count_combinations(amount=4.0, denoms=[1, 2, 3])
+        ic.q5_count_combinations(amount=4.0, denoms='[1, 2, 3]')
+        ic.q5_count_combinations(amount=0, denoms=[1, 2, 3])
+        ic.q5_count_combinations(amount=4, denoms=[])
+        ic.q5_count_combinations(amount=0, denoms=[1, 2.0, 3])
+        ic.q5_count_combinations(amount=0, denoms=[1, 0, 3])
+    test_q5_count_combinations(amount=5, denoms=[1, 3, 5], ref_ncombos=3)
+    return None
+
+
+def test_q6_calc_intersection(
+    rect1:dict={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
+    rect2:dict={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0},
+    ref_recti:dict={'x':1.0, 'y':1.0, 'width':2.0, 'height':2.0}) -> None:
+    r"""Pytest for q6_calc_intersection.
+
+    """
+    test_recti = ic.q6_calc_intersection(rect1=rect1, rect2=rect2)
+    assert ref_recti == test_recti
+    return None
+
+
+def test_q6_calc_intersection_suppl() -> None:
+    r"""Supplemental pytests for q6_test_calc_intersection.
+    
+    """
+    with pytest.raises(ValueError):
+        ic.q6_calc_intersection(
+            rect1="{'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0}",
+            rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0})
+        ic.q6_calc_intersection(
+            rect1=[0.0, 0.0, 3.0, 3.0],
+            rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0})
+    test_q6_calc_intersection(
+        rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
+        rect2={'x':3.0, 'y':3.0, 'width':3.0, 'height':3.0},
+        ref_recti={'x':3.0, 'y':3.0, 'width':0.0, 'height':0.0})
+    test_q6_calc_intersection(
+        rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
+        rect2={'x':4.0, 'y':0.0, 'width':3.0, 'height':3.0},
+        ref_recti={'x':None, 'y':None, 'width':None, 'height':None})
+    return None
 
 
 def test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
@@ -164,43 +207,6 @@ test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
 test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
                          rect2={'x':4.0, 'y':0.0, 'width':3.0, 'height':3.0},
                          recti={'x':None, 'y':None, 'width':None, 'height':None})
-
-
-def test_gen_change_combinations(amount=4, denominations=[1, 2, 3], init_combo=None,
-                                 combinations=[[1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2]]):
-    """pytest style test for gen_change_denominations
-
-    """
-    assert list(ic.gen_change_combinations(
-        amount=amount, denominations=denominations, init_combo=init_combo)) == combinations
-    return None
-
-
-def test_count_change_combinations(amount=4, denominations=[1, 2, 3], num=4):
-    """pytest style test for count_change_denominations
-    
-    """
-    assert ic.count_change_combinations(
-        amount=amount, denominations=denominations) == num
-    return None
-
-
-def test_count_change_combinations_2(amount=4, denominations=[1, 2, 3], num=4):
-    """pytest style test for count_change_denominations_2
-    
-    """
-    assert ic.count_change_combinations_2(
-        amount=amount, denominations=denominations) == num
-    return None
-
-
-def test_count_change_combinations_3(amount=4, denominations=[1, 2, 3], num=4):
-    """pytest style test for count_change_denominations_3
-
-    """
-    assert ic.count_change_combinations_3(
-        amount=amount, denominations=denominations) == num
-    return None
 
 
 def test_TempTracker(temps=[1, 2, 3, 3], temps2=4, ctr=collections.Counter([1, 2, 3, 3])):
