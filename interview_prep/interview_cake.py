@@ -95,7 +95,7 @@ def q2_get_products_of_all_ints_except_at_index(
 
 
 def q3_calc_highest_product_of_3(ints:list) -> int:
-    """Calculate the highest product from integers.
+    r"""Calculate the highest product from integers.
     
     Args:
         ints (list): List of `ints` with `len(ints) >= 3`
@@ -189,7 +189,7 @@ def q3_calc_highest_product_of_3(ints:list) -> int:
 
 
 def q4_condense_meeting_times(times:list) -> list:
-    """Condense meeting times into contiguous blocks.
+    r"""Condense meeting times into contiguous blocks.
     
     Args:
         times (list): `list` of `tuple`s of `int`s as meeting times. `int`s are
@@ -288,27 +288,27 @@ def q4_condense_meeting_times(times:list) -> list:
     return condensed
 
 
-def calc_intersection(rect1, rect2):
-    """Calculate the intersection of two rectangles.
+def q5_calc_intersection(rect1:dict, rect2:dict) -> dict:
+    r"""Calculate the intersection of two rectangles.
     
     Args:
-        rect1: dict
-        rect2: dict
+        rect1 (dict):
+        rect2 (dict):
             Rectangles are `dicts` with keys `x`, `y`, `width`, `height`.
             `x`, `y` are the coordinates of the bottom-left corner.
     
     Returns:
-        recti: dict
-            Rectangle of intersection as `dict`. Same format at `rect1`, `rect2`.
+        recti (dict):
+            Rectangle intersection as `dict`. Same format at `rect1`, `rect2`.
     
     Raises:
-        ValueError:
-            TODO: raise if wrong type or missing keys.
+        ValueError: Raised if missing keys.
     
     References:
-        ..[1] https://www.interviewcake.com/question/rectangular-love
+        .. [1] https://www.interviewcake.com/question/rectangular-love
 
     """
+    # TODO: resume here 20151107
     ##########
     # Check input
     if not (isinstance(rect1, dict) and isinstance(rect2, dict)):

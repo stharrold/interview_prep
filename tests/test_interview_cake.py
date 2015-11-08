@@ -130,10 +130,11 @@ def test_q4_condense_meeting_times_suppl() -> None:
     return None
 
 
-def test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                           rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0},
-                           recti={'x':1.0, 'y':1.0, 'width':2.0, 'height':2.0}):
-    """pytest style test for calc_intersection
+def q5_test_calc_intersection(
+    rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
+    rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0},
+    recti={'x':1.0, 'y':1.0, 'width':2.0, 'height':2.0}):
+    """Pytest for q5_calc_intersection.
 
     """
     assert ic.calc_intersection(rect1=rect1, rect2=rect2) == recti
