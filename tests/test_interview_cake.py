@@ -213,6 +213,26 @@ def test_q6_calc_intersection_suppl() -> None:
     return None
 
 
+def test_q7_TempTracker(
+    temps:list=[1, 2, 3, 3, 4],
+    ref_min:int=1, ref_max:int=4,
+    ref_mean:float=2.6, ref_mode:int=3) -> None:
+    r"""Pytest for q7_TempTracker.
+    
+    """
+    temptracker = ic.q7_TempTracker()
+    for temp in temps:
+        temptracker.insert(temp=temp)
+    test_min = temptracker.get_min()
+    assert ref_min == test_min
+    test_max = temptracker.get_max()
+    assert ref_max == test_max
+    test_mean = temptracker.get_mean()
+    assert np.isclose(ref_mean, test_mean)
+    test_mode = temptracker.get_mode()
+    assert ref_mode == test_mode
+    return None
+
 
 def test_TempTracker(temps=[1, 2, 3, 3], temps2=4, ctr=collections.Counter([1, 2, 3, 3])):
     """pytest style test for class TempTracker

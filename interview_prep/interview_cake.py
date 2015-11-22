@@ -470,6 +470,167 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
     return recti
 
 
+class q7_TempTracker(object):
+    r"""Temperature tracker.
+    
+    Attrs:
+        None (pseudo-private)
+
+    Notes:
+        * Temperatures must be between 0 <= temp <= 111.
+            Units are degrees Fahrenheit.
+        * interviewcake.com question #7, "Temperature Tracker".
+
+    References:
+        .. [1] https://www.interviewcake.com/question/python/temperature-tracker
+
+    """
+    
+    
+    def __init__(self) -> None:
+        r"""Initialize pseudo-private variables for TempTracker.
+        
+        Args:
+            self (implicit)
+
+        Returns:
+            None
+    
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(1); Space: O(1)
+                * Realized: Time: O(1); Space: O(1)
+        
+        """
+        self._min = None
+        self._max = None
+        self._mean = None
+        self._num = 0
+        self._counts = [0]*111
+        self._count_max = 0
+        self._mode = None
+        return None
+    
+    
+    def insert(self, temp:int) -> None:
+        r"""Insert a temperature in TempTracker.
+        
+        Args:
+            self (implicit)
+            temp (int): A single temperature measurement.
+                Unit is degrees Fahrenheit.
+            
+        Returns:
+            None
+        
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(n); Space: O(1)
+                * Realized: Time: O(n); Space: O(1)
+    
+        """
+        if self._min is None:
+            self._min = temp
+        else:
+            self._min = min(self._min, temp)
+        if self._max is None:
+            self._max = temp
+        else:
+            self._max = max(self._max, temp)
+        if self._mean is None:
+            self._mean = temp
+            self._num = 1
+        else:
+            self._mean = (self._mean*self._num + temp)/(self._num + 1)
+            self._num += 1
+        self._counts[temp] += 1
+        if self._mode is None:
+            self._count_max = 1
+            self._mode = temp
+        else:
+            for (temp, count) in enumerate(self._counts):
+                if count >= self._count_max:
+                    self._count_max = count
+                    self._mode = temp
+        return None
+        
+    
+        def get_min(self) -> int:
+            r"""Get the minimum temperature.
+            
+            Args:
+                self (implicit)
+                None
+            
+            Returns:
+                self._min (int)
+
+            Notes:
+                * Complexity:
+                    * Ideal: Time: O(1); Space: O(1)
+                    * Realized: Time: O(1); Space: O(1)
+            
+            """
+            return self._min
+
+
+        def get_max(self) -> int:
+            r"""Get the maximum temperature.
+            
+            Args:
+                self (implicit)
+                None
+            
+            Returns:
+                self._max (int)
+
+            Notes:
+                * Complexity:
+                    * Ideal: Time: O(1); Space: O(1)
+                    * Realized: Time: O(1); Space: O(1)
+            
+            """
+            return self._max
+
+
+        def get_mean(self) -> int:
+            r"""Get the mean temperature.
+            
+            Args:
+                self (implicit)
+                None
+            
+            Returns:
+                self._mean (int)
+
+            Notes:
+                * Complexity:
+                    * Ideal: Time: O(1); Space: O(1)
+                    * Realized: Time: O(1); Space: O(1)
+            
+            """
+            return self._mean
+
+
+        def get_mode(self) -> int:
+            r"""Get the mode temperature.
+            
+            Args:
+                self (implicit)
+                None
+            
+            Returns:
+                self._mode (int)
+
+            Notes:
+                * Complexity:
+                    * Ideal: Time: O(1); Space: O(1)
+                    * Realized: Time: O(1); Space: O(1)
+            
+            """
+            return self._mode
+
+
 class TempTracker(object):
     """Manage temperatures to check consistency with guarantee.
     Units are degrees Fahrenheit. Assumes 0 deg F <= temp <= 110 deg F.
