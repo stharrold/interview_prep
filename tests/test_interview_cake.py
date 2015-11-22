@@ -10,6 +10,7 @@ import collections
 import os
 import sys
 # Import installed packages.
+import numpy as np
 import pytest
 # Import local packages.
 sys.path.insert(0, os.path.curdir)

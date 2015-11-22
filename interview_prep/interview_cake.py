@@ -555,80 +555,80 @@ class q7_TempTracker(object):
         return None
         
     
-        def get_min(self) -> int:
-            r"""Get the minimum temperature.
+    def get_min(self) -> int:
+        r"""Get the minimum temperature.
+        
+        Args:
+            self (implicit)
+            None
+        
+        Returns:
+            self._min (int)
+        
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(1); Space: O(1)
+                * Realized: Time: O(1); Space: O(1)
             
-            Args:
-                self (implicit)
-                None
-            
-            Returns:
-                self._min (int)
-
-            Notes:
-                * Complexity:
-                    * Ideal: Time: O(1); Space: O(1)
-                    * Realized: Time: O(1); Space: O(1)
-            
-            """
-            return self._min
-
-
-        def get_max(self) -> int:
-            r"""Get the maximum temperature.
-            
-            Args:
-                self (implicit)
-                None
-            
-            Returns:
-                self._max (int)
-
-            Notes:
-                * Complexity:
-                    * Ideal: Time: O(1); Space: O(1)
-                    * Realized: Time: O(1); Space: O(1)
-            
-            """
-            return self._max
+        """
+        return self._min
 
 
-        def get_mean(self) -> int:
-            r"""Get the mean temperature.
-            
-            Args:
-                self (implicit)
-                None
-            
-            Returns:
-                self._mean (int)
+    def get_max(self) -> int:
+        r"""Get the maximum temperature.
+        
+        Args:
+            self (implicit)
+            None
+        
+        Returns:
+            self._max (int)
 
-            Notes:
-                * Complexity:
-                    * Ideal: Time: O(1); Space: O(1)
-                    * Realized: Time: O(1); Space: O(1)
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(1); Space: O(1)
+                * Realized: Time: O(1); Space: O(1)
             
-            """
-            return self._mean
+        """
+        return self._max
 
 
-        def get_mode(self) -> int:
-            r"""Get the mode temperature.
-            
-            Args:
-                self (implicit)
-                None
-            
-            Returns:
-                self._mode (int)
+    def get_mean(self) -> int:
+        r"""Get the mean temperature.
+        
+        Args:
+            self (implicit)
+            None
+        
+        Returns:
+            self._mean (int)
 
-            Notes:
-                * Complexity:
-                    * Ideal: Time: O(1); Space: O(1)
-                    * Realized: Time: O(1); Space: O(1)
-            
-            """
-            return self._mode
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(1); Space: O(1)
+                * Realized: Time: O(1); Space: O(1)
+        
+        """
+        return self._mean
+
+
+    def get_mode(self) -> int:
+        r"""Get the mode temperature.
+        
+        Args:
+            self (implicit)
+            None
+        
+        Returns:
+            self._mode (int)
+
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(1); Space: O(1)
+                * Realized: Time: O(1); Space: O(1)
+        
+        """
+        return self._mode
 
 
 class TempTracker(object):
