@@ -22,7 +22,7 @@ import interview_prep.utils as utils
 def q1(
     pr_a:float=0.28, pr_b:float=0.29, pr_c:float=0.19,
     pr_aib:float=0.14, pr_aic:float=0.12, pr_bic:float=0.10,
-    pr_aibic:float=0.08) -> None:
+    pr_aibic:float=0.08) -> float:
     r"""Calculate P(not(A union B union C)).
     
     Args:
