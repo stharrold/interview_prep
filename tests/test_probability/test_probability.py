@@ -28,3 +28,14 @@ def test_q1(
         pr_aibic=pr_aibic)
     assert np.isclose(ref_pr_naubuc, test_pr_naubuc)
     return None
+
+
+def test_q2(
+    pr_a:float=0.30, pr_b:float=0.40,
+    pr_naub:float=0.35, ref_pr_aib:float=0.05) -> None:
+    r"""Pytest for q2.
+    
+    """
+    test_pr_aib = pr.q2(pr_a=pr_a, pr_b=pr_b, pr_naub=pr_naub)
+    assert np.isclose(ref_pr_aib, test_pr_aib)
+    return None
