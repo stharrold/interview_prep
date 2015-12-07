@@ -40,9 +40,30 @@ def q1(
 
     """
     # Check arguments.
-    utils.check_arguments(
-        antns=q1.__annotations__,
-        lcls=locals())
-    # Calculate union complement.
+    utils.check_arguments(antns=q1.__annotations__, lcls=locals())
+    # Calculate probability of union complement.
     pr_naubuc = 1.0 - (pr_a + pr_b + pr_c - pr_aib - pr_aic - pr_bic + pr_aibic)
     return pr_naubuc
+
+
+def q2(pr_a:float=0.30, pr_b:float=0.40, pr_naub:float=0.35) -> float:
+    r"""Calculate P(A intr B).
+    
+    Args:
+        pr_[a,b] (float): [P(A), P(B)]
+        pr_naub (float): P(not(A union B))
+    
+    Returns:
+        pr_aib (float): P(A intr B)
+    
+    Notes:
+        * P(A union B) = P(A) + P(B) - P(A intr B)  
+          P(A union B) = 1 - P(not(A union B))  
+          => P(A intr B) = P(A) + P(B) - (1 - P(not(A union B)))
+    
+    """
+    # Check arguments.
+    utils.check_arguments(antns=q2.__annotations__, lcls=locals())
+    # Calculate probability of intersection.
+    pr_aib = pr_a + pr_b - (1.0 - pr_naub)
+    return pr_aib
