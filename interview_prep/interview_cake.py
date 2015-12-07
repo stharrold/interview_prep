@@ -470,11 +470,11 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
     return recti
 
 
-class q7_TempTracker(object):
+class q7_TempTracker:
     r"""Temperature tracker.
     
     Attrs:
-        None (pseudo-private)
+        None
 
     Notes:
         * Temperatures must be between 0 <= temp <= 111.
@@ -491,7 +491,7 @@ class q7_TempTracker(object):
         r"""Initialize pseudo-private variables for TempTracker.
         
         Args:
-            self (implicit)
+            None
 
         Returns:
             None
@@ -516,7 +516,6 @@ class q7_TempTracker(object):
         r"""Insert a temperature in TempTracker.
         
         Args:
-            self (implicit)
             temp (int): A single temperature measurement.
                 Unit is degrees Fahrenheit.
             
@@ -525,6 +524,7 @@ class q7_TempTracker(object):
         
         Notes:
             * Complexity:
+                * n = len(temps)
                 * Ideal: Time: O(n); Space: O(1)
                 * Realized: Time: O(n); Space: O(1)
     
@@ -559,7 +559,6 @@ class q7_TempTracker(object):
         r"""Get the minimum temperature.
         
         Args:
-            self (implicit)
             None
         
         Returns:
@@ -578,7 +577,6 @@ class q7_TempTracker(object):
         r"""Get the maximum temperature.
         
         Args:
-            self (implicit)
             None
         
         Returns:
@@ -597,7 +595,6 @@ class q7_TempTracker(object):
         r"""Get the mean temperature.
         
         Args:
-            self (implicit)
             None
         
         Returns:
@@ -616,7 +613,6 @@ class q7_TempTracker(object):
         r"""Get the mode temperature.
         
         Args:
-            self (implicit)
             None
         
         Returns:
@@ -631,116 +627,7 @@ class q7_TempTracker(object):
         return self._mode
 
 
-class TempTracker(object):
-    """Manage temperatures to check consistency with guarantee.
-    Units are degrees Fahrenheit. Assumes 0 deg F <= temp <= 110 deg F.
 
-    Attrs:
-        ctr: collections.Counter
-            Number of temperatures grouped by temperature.
-
-    Notes:
-        - interviewcake.com question #6
-        - Complexity:
-            time for get methods: O(1)
-            time for insert: O(number_of_temperatures)
-            space: O(number_of_unique_temperatures) ~ O(1)
-
-    References:
-        ..[1] https://www.interviewcake.com/question/temperature-tracker
-    
-    """
-
-
-    def insert(self, temps):
-        """Insert a new temperature into the record.
-        
-        Args:
-            temps: {list, int}
-            List of `int` temperatures or a single `int` temperature.
-
-        Returns:
-            None
-        
-        """
-        # TODO: check temp value 0-110
-        # Cast to type `list` in case `temps` is only an `int`
-        if temps is None:
-            temps = []
-        elif not isinstance(temps, collections.Iterable):
-            temps = [temps]
-        if not hasattr(self, 'ctr'):
-            self.ctr = collections.Counter(temps)
-        else:
-            self.ctr.update(temps)
-        self._max = max(self.ctr)
-        self._min = min(self.ctr)
-        self._total = sum(self.ctr.elements())
-        self._num = sum(self.ctr.values())
-        self._mean = self._total / self._num
-        self._mode = self.ctr.most_common(1)
-        return None
-
-
-    def __init__(self, temps=None):
-        """Initialize TempTracker.
-        
-        Args:
-            temps: {None}, {list, int}, optional
-                List of `int` temperatures or a single `int` temperature.
-                If `None` (default), initialized to empty `list`.
-
-        Returns:
-            None
-        
-        """
-        # TODO: check temp value 0-110
-        self.insert(temps)
-        return None
-
-
-    def get_max(self):
-        """Compute the maximum temperature.
-
-       Returns:
-           temp: int
-               Maximum temperature.
-        
-        """
-        return self._max
-
-
-    def get_min(self):
-        """Compute the minimum temperature.
-        
-        Returns:
-            temp: int
-                Minimum temperature.
-
-        """
-        return self._min
-
-
-    def get_mean(self):
-        """Compute the mean temperature.
-        
-        Returns:
-            temp: float
-                Mean temperature.
-
-        """
-        return self._mean
-
-
-    def get_mode(self):
-        """Compute the temperature mode.
-        
-        Returns:
-            temp: int
-                Temperature mode.
-        
-        """
-        return self._mode
 
 
 def is_leaf_node(node):

@@ -235,22 +235,6 @@ def test_q7_TempTracker(
     return None
 
 
-def test_TempTracker(temps=[1, 2, 3, 3], temps2=4, ctr=collections.Counter([1, 2, 3, 3])):
-    """pytest style test for class TempTracker
-
-    """
-    temptracker = ic.TempTracker(temps=temps)
-    assert temptracker.ctr == ctr
-    temptracker.insert(temps=temps2)
-    ctr.update([temps2])
-    assert temptracker.ctr == ctr
-    assert temptracker.get_max() == max(ctr)
-    assert temptracker.get_min() == min(ctr)
-    assert temptracker.get_mean() == sum(ctr.elements()) / sum(ctr.values())
-    assert temptracker.get_mode() == ctr.most_common(1)
-    return None
-
-
 def test_is_leaf_node(node=['a'], is_leaf=True):
     """pytest style test for is_leaf
 
