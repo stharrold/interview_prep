@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-r"""Tests for interview_prep/interview_cake/interview_cake.py
+r"""Pytests for interview_prep/interview_prep/interview_cake.py
 
 """
 
@@ -10,6 +10,7 @@ import collections
 import os
 import sys
 # Import installed packages.
+import numpy as np
 import pytest
 # Import local packages.
 sys.path.insert(0, os.path.curdir)
@@ -130,92 +131,107 @@ def test_q4_condense_meeting_times_suppl() -> None:
     return None
 
 
-def test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                           rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0},
-                           recti={'x':1.0, 'y':1.0, 'width':2.0, 'height':2.0}):
-    """pytest style test for calc_intersection
-
-    """
-    assert ic.calc_intersection(rect1=rect1, rect2=rect2) == recti
-    return None
-
-
-test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                       rect2={'x':3.0, 'y':3.0, 'width':3.0, 'height':3.0},
-                       recti={'x':3.0, 'y':3.0, 'width':0.0, 'height':0.0})
-test_calc_intersection(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                       rect2={'x':4.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                       recti={'x':None, 'y':None, 'width':None, 'height':None})
-
-
-def test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                             rect2={'x':1.0, 'y':1.0, 'width':3.0, 'height':3.0},
-                             recti={'x':1.0, 'y':1.0, 'width':2.0, 'height':2.0}):
-    """pytest style test for calc_intersection_2
-
-    """
-    assert ic.calc_intersection_2(rect1=rect1, rect2=rect2) == recti
-    return None
-
-
-test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                         rect2={'x':3.0, 'y':3.0, 'width':3.0, 'height':3.0},
-                         recti={'x':3.0, 'y':3.0, 'width':0.0, 'height':0.0})
-test_calc_intersection_2(rect1={'x':0.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                         rect2={'x':4.0, 'y':0.0, 'width':3.0, 'height':3.0},
-                         recti={'x':None, 'y':None, 'width':None, 'height':None})
-
-
-def test_gen_change_combinations(amount=4, denominations=[1, 2, 3], init_combo=None,
-                                 combinations=[[1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2]]):
-    """pytest style test for gen_change_denominations
-
-    """
-    assert list(ic.gen_change_combinations(
-        amount=amount, denominations=denominations, init_combo=init_combo)) == combinations
-    return None
-
-
-def test_count_change_combinations(amount=4, denominations=[1, 2, 3], num=4):
-    """pytest style test for count_change_denominations
+def test_q5_count_combinations(
+    amount:int=4,
+    denoms:list=[1, 2, 3],
+    ref_ncombos:int=4) -> None:
+    r"""Pytest for q5_count_combinations.
     
     """
-    assert ic.count_change_combinations(
-        amount=amount, denominations=denominations) == num
+    test_ncombos = ic.q5_count_combinations(amount=amount, denoms=denoms)
+    assert ref_ncombos == test_ncombos
     return None
 
 
-def test_count_change_combinations_2(amount=4, denominations=[1, 2, 3], num=4):
-    """pytest style test for count_change_denominations_2
+def test_q5_count_combinations_suppl() -> None:
+    r"""Supplemental pytests for q5_count_combinations.
     
     """
-    assert ic.count_change_combinations_2(
-        amount=amount, denominations=denominations) == num
+    with pytest.raises(ValueError):
+        ic.q5_count_combinations(amount=4.0, denoms=[1, 2, 3])
+        ic.q5_count_combinations(amount=4.0, denoms='[1, 2, 3]')
+        ic.q5_count_combinations(amount=0, denoms=[1, 2, 3])
+        ic.q5_count_combinations(amount=4, denoms=[])
+        ic.q5_count_combinations(amount=0, denoms=[1, 2.0, 3])
+        ic.q5_count_combinations(amount=0, denoms=[1, 0, 3])
+    test_q5_count_combinations(amount=5, denoms=[1, 3, 5], ref_ncombos=3)
     return None
 
 
-def test_count_change_combinations_3(amount=4, denominations=[1, 2, 3], num=4):
-    """pytest style test for count_change_denominations_3
+def test_q6_calc_intersection(
+    rect1:dict={'x':0, 'y':0, 'width':3, 'height':3},
+    rect2:dict={'x':1, 'y':1, 'width':3, 'height':3},
+    ref_recti:dict={'x':1, 'y':1, 'width':2, 'height':2}) -> None:
+    r"""Pytest for q6_calc_intersection.
 
     """
-    assert ic.count_change_combinations_3(
-        amount=amount, denominations=denominations) == num
+    test_recti = ic.q6_calc_intersection(rect1=rect1, rect2=rect2)
+    assert ref_recti == test_recti
     return None
 
 
-def test_TempTracker(temps=[1, 2, 3, 3], temps2=4, ctr=collections.Counter([1, 2, 3, 3])):
-    """pytest style test for class TempTracker
-
+def test_q6_calc_intersection_suppl() -> None:
+    r"""Supplemental pytests for q6_test_calc_intersection.
+    
     """
-    temptracker = ic.TempTracker(temps=temps)
-    assert temptracker.ctr == ctr
-    temptracker.insert(temps=temps2)
-    ctr.update([temps2])
-    assert temptracker.ctr == ctr
-    assert temptracker.get_max() == max(ctr)
-    assert temptracker.get_min() == min(ctr)
-    assert temptracker.get_mean() == sum(ctr.elements()) / sum(ctr.values())
-    assert temptracker.get_mode() == ctr.most_common(1)
+    with pytest.raises(ValueError):
+        ic.q6_calc_intersection(
+            rect1="{'x':0, 'y':0, 'width':3, 'height':3}",
+            rect2={'x':1, 'y':1, 'width':3, 'height':3})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height':3},
+            rect2=[1, 1, 3, 3])
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'h': 3},
+            rect2={'x':3, 'y':3, 'width':3, 'height':3})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height': 3},
+            rect2={'x':3, 'y':3, 'width':3, 'h':3})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height':3.0},
+            rect2={'x':3, 'y':3, 'width':3, 'height':3})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height':3},
+            rect2={'x':3, 'y':3, 'width':3, 'height':3.0})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height':-3},
+            rect2={'x':3, 'y':3, 'width':3, 'height':3})
+        ic.q6_calc_intersection(
+            rect1={'x':0, 'y':0, 'width':3, 'height':3},
+            rect2={'x':3, 'y':3, 'width':3, 'height':-3})
+    test_q6_calc_intersection(
+        rect1={'x':0, 'y':0, 'width':3, 'height':3},
+        rect2={'x':4, 'y':0, 'width':3, 'height':3},
+        ref_recti={'x':None, 'y':None, 'width':None, 'height':None})
+    test_q6_calc_intersection(
+        rect1={'x':0, 'y':0, 'width':3, 'height':3},
+        rect2={'x':3, 'y':3, 'width':3, 'height':3},
+        ref_recti={'x':3, 'y':3, 'width':0, 'height':0})
+    test_q6_calc_intersection(
+        rect1={'x':0, 'y':0, 'width':3, 'height':3},
+        rect2={'x':0, 'y':3, 'width':3, 'height':3},
+        ref_recti={'x':0, 'y':3, 'width':3, 'height':0})
+    return None
+
+
+def test_q7_TempTracker(
+    temps:list=[1, 2, 3, 3, 4],
+    ref_min:int=1, ref_max:int=4,
+    ref_mean:float=2.6, ref_mode:int=3) -> None:
+    r"""Pytest for q7_TempTracker.
+    
+    """
+    temptracker = ic.q7_TempTracker()
+    for temp in temps:
+        temptracker.insert(temp=temp)
+    test_min = temptracker.get_min()
+    assert ref_min == test_min
+    test_max = temptracker.get_max()
+    assert ref_max == test_max
+    test_mean = temptracker.get_mean()
+    assert np.isclose(ref_mean, test_mean)
+    test_mode = temptracker.get_mode()
+    assert ref_mode == test_mode
     return None
 
 

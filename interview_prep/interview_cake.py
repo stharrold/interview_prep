@@ -53,8 +53,7 @@ def q1_calc_max_profit(prices:list) -> float:
     return max_profit
 
 
-def q2_get_products_of_all_ints_except_at_index(
-    ints:list) -> list:
+def q2_get_products_of_all_ints_except_at_index(ints:list) -> list:
     r"""Calculate the products of all integers except for the one each index.
 
     Args:
@@ -95,7 +94,7 @@ def q2_get_products_of_all_ints_except_at_index(
 
 
 def q3_calc_highest_product_of_3(ints:list) -> int:
-    """Calculate the highest product from integers.
+    r"""Calculate the highest product from integers.
     
     Args:
         ints (list): List of `ints` with `len(ints) >= 3`
@@ -189,7 +188,7 @@ def q3_calc_highest_product_of_3(ints:list) -> int:
 
 
 def q4_condense_meeting_times(times:list) -> list:
-    """Condense meeting times into contiguous blocks.
+    r"""Condense meeting times into contiguous blocks.
     
     Args:
         times (list): `list` of `tuple`s of `int`s as meeting times. `int`s are
@@ -288,501 +287,347 @@ def q4_condense_meeting_times(times:list) -> list:
     return condensed
 
 
-def calc_intersection(rect1, rect2):
-    """Calculate the intersection of two rectangles.
+def q5_count_combinations(amount:int, denoms:list) -> int:
+    r"""Count the number of combinations of `denomiations` that sum to `amount`.
     
     Args:
-        rect1: dict
-        rect2: dict
-            Rectangles are `dicts` with keys `x`, `y`, `width`, `height`.
-            `x`, `y` are the coordinates of the bottom-left corner.
+        amount (int): Amount of money to partition.
+        denoms (list): `list` of demoninations to partition `amount`
     
     Returns:
-        recti: dict
-            Rectangle of intersection as `dict`. Same format at `rect1`, `rect2`.
+        ncombos (int): Number of combinations.
     
     Raises:
         ValueError:
-            TODO: raise if wrong type or missing keys.
-    
-    References:
-        ..[1] https://www.interviewcake.com/question/rectangular-love
-
-    """
-    ##########
-    # Check input
-    if not (isinstance(rect1, dict) and isinstance(rect2, dict)):
-        raise ValueError("`rect1` and `rect2` must both be type `dict`")
-    for rect in [rect1, rect2]:
-        for key in ['x', 'y', 'width', 'height']:
-            if not key in rect:
-                raise ValueError("All `rect`s must have the key {key}".format(key=key))
-    ##########
-    # Strictly order the rectangles in a well-defined way: left-to-right, up-to-down
-    # Assigning by references, so no extra mem usage.
-    (rect_lhs, rect_rhs) = (rect1, rect2) if rect1['x'] <= rect2['x'] else (rect2, rect1)
-    (rect_lwr, rect_upr) = (rect1, rect2) if rect1['y'] <= rect2['y'] else (rect2, rect1)
-    assert rect_lhs != rect_rhs
-    assert rect_lwr != rect_upr
-    ##########
-    # Cases:
-    # Overlapping case:
-    # |
-    # |           xr,yu+hu------------------------xr+wr,yu+hu
-    # |             |                                 |
-    # | xl,yl+hl----|------xl+wl,yl+hl                |
-    # |   |         |        |                        |
-    # |   |       xr,yu------|--------------------xr+wr,yu
-    # |   |                  |
-    # | xl,yl--------------xl+wl,yl
-    # |
-    # 0,0 ------------------------------------------------
-    # xl+wl - xl = (xr - xl) + (xl+wl - xr) ==> wi = xl+wl - xr; xi = xl + (xr - xl) = xr
-    # yl+hl - yl = (yu - yl) + (yl+hl - yu) ==> hi = yl+hl - yu; yi = yl + (yu - yl) = yu
-    #
-    # Overlapping case:
-    # |
-    # |  xl,yu+hu-----------xl+wl,yu+hu
-    # |   |                    |
-    # |   |       xr,yl+hl-----|------------------xr+wr,yl+hl
-    # |   |         |          |                      |
-    # |  xl,yu------|-------xl+wl,yu                  |
-    # |             |                                 |
-    # |          xr,yl----------------------------xr+wr,yl
-    # |
-    # 0,0 ------------------------------------------------
-    # xl+wl - xl = (xr - xl) + (xl+wl - xr) ==> wi = xl+wl - xr; xi = xl + (xr - xl) = xr
-    # yl+hl - yl = (yu - yl) + (yl+hl - yu) ==> hi = yl+hl - yu; yi = yl + (yu - yl) = yu
-    #
-    # Nested case:
-    # |
-    # |  xl,yl+hl-----------------------------------------xl+wl,yl+hl
-    # |     |                                               |
-    # |     |       xr,yu+hu--------------xr+wr,yu+hu       |
-    # |     |          |                      |             |
-    # |     |       xr,yu-----------------xr+wr,yu          |
-    # |     |                                               |
-    # |   xl,yl-------------------------------------------xl+wl,yl
-    # |
-    # 0,0 ------------------------------------------------
-    # xl+wl - xl = (xr - xl) + (xr+wr - xr) + (xl+wl - xr+wr) ==> wi = xr+wr - xr = wr; xi = xl + (xr - xl) = xr
-    # yl+hl - yl = (yu - yl) + (yu+hu - yu) + (yl+hl - yu+hu) ==> hi = yu+hu - yu = hu; yi = yl + (yu - yl) = yu
-    widths_nested = True if rect_lhs['x'] + rect_lhs['width'] > rect_rhs['x'] + rect_rhs['width'] else False
-    heights_nested = True if rect_lwr['y'] + rect_lwr['height'] > rect_upr['y'] + rect_upr['height'] else False
-    #
-    # Disjoint case:
-    # |
-    # |  xl,yl+hl----xl+xw,yl+hl      
-    # |     |          |              xr,yu+hu---------------xr+wr,yu+hu
-    # |     |          |                |                         |
-    # |     |          |                |                         |
-    # |     |          |              xr,yu------------------xr+wr,yu   
-    # |     |          |     
-    # |   xl,yl------xl+xw,yl
-    # |
-    # 0,0 ------------------------------------------------
-    # wi = None, xi = None
-    # hi = None, yi = None
-    if (rect_lhs['x'] + rect_lhs['width'] < rect_rhs['x'] or
-        rect_lwr['y'] + rect_lwr['height'] < rect_upr['y']):
-        disjoint = True
-    else:
-        disjoint = False
-    ##########
-    # Calculate and return rectangle intersection
-    if disjoint:
-        recti = \
-            {'x': None,
-             'y': None,
-             'width': None,
-             'height': None}
-    else:
-        recti = \
-            {'x': rect_rhs['x'],
-             'y': rect_upr['y'],
-             'width': rect_rhs['width'] if widths_nested else rect_lhs['x'] + rect_lhs['width'] - rect_rhs['x'],
-             'height': rech_upr['height'] if heights_nested else rect_lwr['y'] + rect_lwr['height'] - rect_upr['y']}
-    return recti
-
-
-def calc_overlap(pt1, len1, pt2, len2):
-    """Calculate the overlap of two line segments.
-
-    Args:
-        pt1: float
-            Min coordinate of line segment 1.
-        len1: float
-            Length of line segment 1.
-        pt2: float
-            Min coordinate of line segment 2.
-        len2: float
-            Length of line segment 2.
-
-    Return:
-        pti: float
-            Min coordiante of intersecting line segment.
-        leni: float
-            Length of intersecting line coordinate.
-
-    TODO:
-       Rename calc_overlap, calc_intersection_2 to reflect dimensions.
-    """
-    # TODO: Check input
-    # Order coordinates.
-    if pt1 <= pt2:
-        ((pt_lhs, len_lhs), (pt_rhs, len_rhs)) = ((pt1, len1), (pt2, len2))
-    else:
-        ((pt_lhs, len_lhs), (pt_rhs, len_rhs)) = ((pt2, len2), (pt1, len1))
-    # If segments are nested...
-    if pt_lhs + len_lhs > pt_rhs + len_rhs:
-        (pti, leni) = (pt_rhs, len_rhs)
-    else:
-        leni = pt_lhs + len_lhs - pt_rhs
-        if leni >= 0:
-            # If segments overlap...
-            pti = pt_rhs - pt_lhs
-        else:
-            # ...otherwise segments are disjoint.
-            (pti, leni) = (None, None)
-    return (pti, leni)
-
-
-def calc_intersection_2(rect1, rect2):
-    """Calculate the intersection of two rectangles but with the
-    dementionsality of the problem reduced.
-
-    Args:
-        rect1: dict
-        rect2: dict
-            Rectangles are `dicts` with keys `x`, `y`, `width`, `height`.
-            `x`, `y` are the coordinates of the bottom-left corner.
-    
-    Returns:
-        recti: dict
-            Rectangle of intersection as `dict`. Same format at `rect1`, `rect2`.
-    
-    Raises:
-        ValueError:
-            TODO: raise if wrong type or missing keys.
-    
-    References:
-        ..[1] https://www.interviewcake.com/question/rectangular-love
-
-    """
-    ##########
-    # Check input
-    if not (isinstance(rect1, dict) and isinstance(rect2, dict)):
-        raise ValueError("`rect1` and `rect2` must both be type `dict`")
-    for rect in [rect1, rect2]:
-        for key in ['x', 'y', 'width', 'height']:
-            if not key in rect:
-                raise ValueError("All `rect`s must have the key {key}".format(key=key))
-    ##########
-    # Compute overlap.
-    recti = {}
-    (recti['x'], recti['width']) = calc_overlap(pt1=rect1['x'], len1=rect1['width'],
-                                                pt2=rect2['x'], len2=rect2['width'])
-    (recti['y'], recti['height']) = calc_overlap(pt1=rect1['y'], len1=rect1['height'],
-                                                 pt2=rect2['y'], len2=rect2['height'])
-    # Check if rectangles are disjoint.
-    if (recti['width'] is None or
-        recti['height'] is None):
-        recti = {'x': None,
-                 'y': None,
-                 'width': None,
-                 'height': None}
-    return recti
-
-
-def gen_change_combinations(amount, denominations, init_combo=None):
-    """Create a combination of coins that sum to amount.
-    
-    Args:
-        amount: int
-            Value of change to partition into denominations.
-            Example: 4
-        denominations: list
-            Sorted list of unique denominations into which `amount` of change is partitioned.
-            Example: [1, 2, 3]
-        init_combo: {None}, list, optional
-            Initialize a portion of combination. If `None` (default), then builds
-            combination of `denominations` without prior values.
-            Example: None
-    
-    Yields:
-        combo: list
-            Generates a combination of `denominations` that sum to `amount`.
-            Example: ([1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2])
-    
-    See Also:
-        count_change_combinations
-
-    Notes:
-        - Because recursive, can cause large call stack.
-    
-    """
-    # TODO: check input
-    if init_combo is None:
-        combo = [denominations[0]]
-    else:
-        combo = copy.deepcopy(init_combo)
-        combo.append(denominations[0])
-    for (idx, denom) in enumerate(denominations):
-        combo[-1] = denom
-        remainder = amount - sum(combo)
-        if remainder > 0:
-            for gen_combo in gen_change_combinations(amount=amount,
-                                                 denominations=denominations[idx:],
-                                                 init_combo=combo):
-                yield gen_combo
-        elif remainder == 0:
-            yield combo
-            break
-        else:
-            break
-
-
-def count_change_combinations(amount, denominations):
-    """Count the number of possible combinations for a given amount of change
-    from the given denominations.
-    
-    Args:
-        amount: int
-            Value of change to partition into denominations.
-            Example: 4
-        denominations: list
-            List of denominations into which `amount` of change is partitioned.
-            Example: [1, 2, 3]
-
-    Returns:
-        num: int
-            Number of possible combinations of denominations to total `amount` of change.
-            Example: 4
-
-    See Also:
-        gen_change_combinations
-    
-    Notes:
-        - interviewcake.com question #5.
-        - Because uses a recursive helper function, can cause a large call stack.
-        - Complexity:
-            time: O(amount*len(denominations))
-            space: O(amount*len(denominations)) in call stack
-
-    References:
-        ..[1] https://www.interviewcake.com/question/coin
-
-    """
-    # TODO: check input
-    num = 0
-    denominations = sorted(set(denominations))
-    for _ in gen_change_combinations(amount=amount, denominations=denominations, init_combo=None):
-           num += 1
-    return num
-
-
-def count_change_combinations_2(amount, denominations):
-    """Count the number of possible combinations for a given amount of change
-    from the given denominations.
-
-    Args:
-        amount: int
-            Value of change to partition into denominations.
-            Example: 4
-        denominations: list
-            List of denominations into which `amount` of change is partitioned.
-            Example: [1, 2, 3]
-
-    Returns:
-        num: int
-            Number of possible combinations of denominations to total `amount` of change.
-            Example: 4
-
-    Notes:
-        - interviewcake.com question #5.
-        - Non-recursive, but iterates through denominations for each amount and
-            requires saving combinations in order to avoid double-counting unique solutions.
-        - Complexity:
-            time: O(amount*len(denominations))
-            space: O(amount*len(denominations))
-
-    References:
-        ..[1] https://www.interviewcake.com/question/coin
-    
-    """
-    # TODO: check input
-    combos = {}
-    # Build all possible combinations of denominations by memorizing.
-    for amt in range(1, amount+1):
-        combos[amt] = []
-        if amt in denominations:
-            combos[amt].append(tuple([amt]))
-        # Collect combinations from amounts and their complements.
-        amts_gt = [key for key in combos.keys() if key >= round(max(combos)/2)]
-        for amt_gt in amts_gt:
-            amt_lt = amt - amt_gt
-            if amt_lt in combos:
-                for comb_gt in combos[amt_gt]:
-                    for comb_lt in combos[amt_lt]:
-                        comb = []
-                        comb.extend(list(comb_gt))
-                        comb.extend(list(comb_lt))
-                        combos[amt].append(tuple(sorted(comb)))
-        # Remove duplicates.
-        combos[amt] = set(combos[amt])
-    return len(combos[amount]) if amount in combos else 0
-
+            * Raised if not amount >= 1.
+            * Raised if not len(denoms) >= 1.
+            * Raised if any denoms are not `int`.
+            * Raised if any denoms are not >= 1.
         
-def count_change_combinations_3(amount, denominations):
-    """Count the number of possible combinations for a given amount of change
-    from the given denominations.
-
-    Args:
-        amount: int
-            Value of change to partition into denominations.
-            Example: 4
-        denominations: list
-            List of denominations into which `amount` of change is partitioned.
-            Example: [1, 2, 3]
-
-    Returns:
-        num: int
-            Number of possible combinations of denominations to total `amount` of change.
-            Example: 4
-
     Notes:
-        - interviewcake.com question #5.
-        - Non-recursive and iterates through amounts for each denomination to eliminate
-            saving combinations in order to avoid double-counting unique solutions.
-        - Complexity:
-            time: O(amount*len(denominations))
-            space: O(amount)
-
+        * interviewcake.com question #5, "Making Change".
+        * Complexity:
+            * n = amount; k = len(denoms)
+            * Complexity:
+                * Ideal: Time: O(n*k); Space: O(n)
+                * Realized: Time: O(n*k); Space: O(n)
+    
     References:
-        ..[1] https://www.interviewcake.com/question/coin
+        .. [1] https://www.interviewcake.com/question/python/coin
     
     """
-    # TODO: check input
-    num_combos = collections.Counter()
-    # Iterate through amount for each denomination to avoid double-counting.
-    # TODO: make self-referencing dict comprehension for 2x speedup
-    for denom in denominations:
-        num_combos[denom] += 1
-        for amt in range(denom+1, amount+1):
-            num_combos[amt] += num_combos[amt-denom]
-    return num_combos[amount]
+    # Check arguments.
+    utils.check_arguments(
+        antns=q5_count_combinations.__annotations__,
+        lcls=locals())
+    if not amount >= 1:
+        raise ValueError(
+            ("`amount` must be >= 1\n" +
+             "amount = {amt}").format(amt=amount))
+    if not len(denoms) >= 1:
+        raise ValueError(
+            ("`len(denoms)` must be >= 1\n" +
+             "len(denoms) = {nden}").format(nden=len(denoms)))
+    for denom in denoms:
+        if not isinstance(denom, int):
+            raise ValueError(
+                ("All `denoms` must be type `int`\n" +
+                 "denom = {den}\n" +
+                 "type(denom) = {tden}").format(den=denom, tden=type(denom)))
+        if not denom >= 1:
+            raise ValueError(
+                ("All `denoms` must be >= 1\n" +
+                 "denom = {den}").format(den=denom))
+    # For each denomination, iterate through the amounts to find the number of
+    # combinations per amount.
+    # Note: For each amount, iterating through denominations will instead find
+    # the number of permutations per amount.
+    amt_ncombos = [0]*(amount+1)
+    amt_ncombos[0] = 1
+    for den in denoms:
+        for amt in range(den, amount+1):
+            amt_ncombos[amt] += amt_ncombos[amt-den]
+    ncombos = amt_ncombos[amount]
+    return ncombos
 
 
-class TempTracker(object):
-    """Manage temperatures to check consistency with guarantee.
-    Units are degrees Fahrenheit. Assumes 0 deg F <= temp <= 110 deg F.
+def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
+    r"""Calculate the intersection of two rectangles.
+    
+    Args:
+        rect1 (dict):
+        rect2 (dict):
+            Rectangles are `dicts` with keys `x`, `y`, `width`, `height`.
+            `x`, `y` are the coordinates of the bottom-left corner.
+            Values are `int`.
+    
+    Returns:
+        recti (dict):
+            Rectangle intersection as `dict`. Same format at `rect1`, `rect2`.
+            All values are `None` if rectangles are disjoint.
+    
+    Raises:
+        ValueError:
+            * Raised if missing required keys.
+            * Raised if values are not `int`.
+            * Raised if width or height < 0
 
+    Notes:
+        * interviewcake.com question #6, "Rectangular Love".
+        * Complexity:
+            * Ideal: Time: O(1); Space: O(1)
+            * Realized: Time: O(1); Space: O(1)
+    
+    References:
+        .. [1] https://www.interviewcake.com/question/rectangular-love
+
+    """
+    # Check arguments.
+    utils.check_arguments(
+        antns=q6_calc_intersection.__annotations__,
+        lcls=locals())
+    keys = set(['x', 'y', 'width', 'height'])
+    if not keys.issubset(set(rect1.keys())):
+        raise ValueError(
+            ("`rect1` is missing required keys:\n" +
+             "required_keys = {keys}\n" +
+             "rect1.keys() = {r1keys}").format(
+                 keys=keys, r1keys=set(rect1.keys())))
+    if not keys.issubset(set(rect2.keys())):
+        raise ValueError(
+            ("`rect2` is missing required keys:\n" +
+             "required_keys = {keys}\n" +
+             "rect2.keys() = {r2keys}").format(
+                 keys=keys, r2keys=set(rect2.keys())))
+    for key in keys:
+        if not isinstance(rect1[key], int):
+            raise ValueError(
+                ("All values must be `int`:\n" +
+                 "type(rect1[{key}]) = {tp}").format(
+                     key=key, tp=type(rect1[key])))
+        if not isinstance(rect2[key], int):
+            raise ValueError(
+                ("All values must be `int`:\n" +
+                 "type(rect2[{key}]) = {tp}").format(
+                     key=key, tp=type(rect2[key])))
+    for key in ['width', 'height']:
+        if not rect1[key] >= 0:
+            raise ValueError(
+                ("'width' and 'height' values must be >= 0:\n" +
+                 "type(rect1[{key}]) = {tp}").format(
+                     key=key, tp=type(rect1[key])))
+        if not rect2[key] >= 0:
+            raise ValueError(
+                ("'width' and 'height' values must be >= 0:\n" +
+                 "type(rect2[{key}]) = {tp}").format(
+                     key=key, tp=type(rect2[key])))
+    # Define a method to compute the intersection of two segments.
+    def calc_segi(seg1:tuple, seg2:tuple) -> tuple:
+        r"""Calculate the intersection of a line segment.
+        
+        Args:
+            seg1 (tuple):
+            seg2 (tuple):
+                Segments are `tuple`s with ('x', 'width') for x-axis or
+                ('y', 'height') for y-axis.
+        
+        Returns:
+            segi (tuple):
+                Segment intersection as `tuple`. Same format as `seg1`, `seg2`.
+                All values are `None` if segments are disjoint.
+        
+        """
+        # Check arguments.
+        utils.check_arguments(
+            antns=calc_segi.__annotations__,
+            lcls=locals())
+        # Order segments by coordinates of leading edge.
+        # Disjoint if first trailing edge < second leading edge.
+        if seg1[0] < seg2[0]:
+            (seg1st, seg2nd) = (seg1, seg2)
+        else:
+            (seg1st, seg2nd) = (seg2, seg1)
+        if seg1st[0]+seg1st[1] < seg2nd[0]:
+            segi = (None, None)
+        else:
+            segi = (
+                seg2nd[0],
+                min(seg1st[0]+seg1st[1], seg2nd[0]+seg2nd[1]) - seg2nd[0])
+        return segi
+    # Calculate the rectangle intersections for x-axes and y-axes.
+    # If any axes are disjoint, then all axes are disjoint (`None` values).
+    recti = dict()
+    (recti['x'], recti['width']) = calc_segi(
+        seg1=(rect1['x'], rect1['width']),
+        seg2=(rect2['x'], rect2['width']))
+    (recti['y'], recti['height']) = calc_segi(
+        seg1=(rect1['y'], rect1['height']),
+        seg2=(rect2['y'], rect2['height']))
+    for val in recti.values():
+        if val is None:
+            recti = {'x': None, 'y': None, 'width': None, 'height': None}
+            break
+    return recti
+
+
+class q7_TempTracker:
+    r"""Temperature tracker.
+    
     Attrs:
-        ctr: collections.Counter
-            Number of temperatures grouped by temperature.
+        None
 
     Notes:
-        - interviewcake.com question #6
-        - Complexity:
-            time for get methods: O(1)
-            time for insert: O(number_of_temperatures)
-            space: O(number_of_unique_temperatures) ~ O(1)
+        * Temperatures must be between 0 <= temp <= 111.
+            Units are degrees Fahrenheit.
+        * interviewcake.com question #7, "Temperature Tracker".
 
     References:
-        ..[1] https://www.interviewcake.com/question/temperature-tracker
-    
+        .. [1] https://www.interviewcake.com/question/python/temperature-tracker
+
     """
-
-
-    def insert(self, temps):
-        """Insert a new temperature into the record.
+    
+    
+    def __init__(self) -> None:
+        r"""Initialize pseudo-private variables for TempTracker.
         
         Args:
-            temps: {list, int}
-            List of `int` temperatures or a single `int` temperature.
+            None
 
         Returns:
             None
+    
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(1); Space: O(1)
+                * Realized: Time: O(1); Space: O(1)
         
         """
-        # TODO: check temp value 0-110
-        # Cast to type `list` in case `temps` is only an `int`
-        if temps is None:
-            temps = []
-        elif not isinstance(temps, collections.Iterable):
-            temps = [temps]
-        if not hasattr(self, 'ctr'):
-            self.ctr = collections.Counter(temps)
+        self._min = None
+        self._max = None
+        self._mean = None
+        self._num = 0
+        self._counts = [0]*111
+        self._count_max = 0
+        self._mode = None
+        return None
+    
+    
+    def insert(self, temp:int) -> None:
+        r"""Insert a temperature in TempTracker.
+        
+        Args:
+            temp (int): A single temperature measurement.
+                Unit is degrees Fahrenheit.
+            
+        Returns:
+            None
+        
+        Notes:
+            * Complexity:
+                * n = len(temps)
+                * Ideal: Time: O(n); Space: O(1)
+                * Realized: Time: O(n); Space: O(1)
+    
+        """
+        if self._min is None:
+            self._min = temp
         else:
-            self.ctr.update(temps)
-        self._max = max(self.ctr)
-        self._min = min(self.ctr)
-        self._total = sum(self.ctr.elements())
-        self._num = sum(self.ctr.values())
-        self._mean = self._total / self._num
-        self._mode = self.ctr.most_common(1)
+            self._min = min(self._min, temp)
+        if self._max is None:
+            self._max = temp
+        else:
+            self._max = max(self._max, temp)
+        if self._mean is None:
+            self._mean = temp
+            self._num = 1
+        else:
+            self._mean = (self._mean*self._num + temp)/(self._num + 1)
+            self._num += 1
+        self._counts[temp] += 1
+        if self._mode is None:
+            self._count_max = 1
+            self._mode = temp
+        else:
+            for (temp, count) in enumerate(self._counts):
+                if count >= self._count_max:
+                    self._count_max = count
+                    self._mode = temp
         return None
-
-
-    def __init__(self, temps=None):
-        """Initialize TempTracker.
+        
+    
+    def get_min(self) -> int:
+        r"""Get the minimum temperature.
         
         Args:
-            temps: {None}, {list, int}, optional
-                List of `int` temperatures or a single `int` temperature.
-                If `None` (default), initialized to empty `list`.
-
-        Returns:
             None
         
-        """
-        # TODO: check temp value 0-110
-        self.insert(temps)
-        return None
-
-
-    def get_max(self):
-        """Compute the maximum temperature.
-
-       Returns:
-           temp: int
-               Maximum temperature.
-        
-        """
-        return self._max
-
-
-    def get_min(self):
-        """Compute the minimum temperature.
-        
         Returns:
-            temp: int
-                Minimum temperature.
-
+            self._min (int)
+        
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(1); Space: O(1)
+                * Realized: Time: O(1); Space: O(1)
+            
         """
         return self._min
 
 
-    def get_mean(self):
-        """Compute the mean temperature.
+    def get_max(self) -> int:
+        r"""Get the maximum temperature.
+        
+        Args:
+            None
         
         Returns:
-            temp: float
-                Mean temperature.
+            self._max (int)
 
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(1); Space: O(1)
+                * Realized: Time: O(1); Space: O(1)
+            
+        """
+        return self._max
+
+
+    def get_mean(self) -> int:
+        r"""Get the mean temperature.
+        
+        Args:
+            None
+        
+        Returns:
+            self._mean (int)
+
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(1); Space: O(1)
+                * Realized: Time: O(1); Space: O(1)
+        
         """
         return self._mean
 
 
-    def get_mode(self):
-        """Compute the temperature mode.
+    def get_mode(self) -> int:
+        r"""Get the mode temperature.
+        
+        Args:
+            None
         
         Returns:
-            temp: int
-                Temperature mode.
+            self._mode (int)
+
+        Notes:
+            * Complexity:
+                * Ideal: Time: O(1); Space: O(1)
+                * Realized: Time: O(1); Space: O(1)
         
         """
         return self._mode
+
+
+
 
 
 def is_leaf_node(node):

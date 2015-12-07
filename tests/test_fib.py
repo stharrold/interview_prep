@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
-r"""Tests for interview_prep/fibonacci/fib.py
+r"""Pytests for interview_prep/interview_prep/fib.py
 
 """
 
 
 # Import standard packages.
+import os
 import sys
-sys.path.insert(0, '.')
 # Import installed packages.
 # Import local packages.
-import interview_prep.fibonacci.fib as fib
+sys.path.insert(0, os.path.curdir)
+import interview_prep.fib as fib
 
 
 def test__init_fibs(fibs=[0, 1]):
