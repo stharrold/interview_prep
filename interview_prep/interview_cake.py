@@ -654,7 +654,7 @@ def is_leaf_node(node):
             Space: O(1)
 
     References:
-        ..[1] https://www.interviewcake.com/question/balanced-binary-tree
+        .. [1] https://www.interviewcake.com/question/balanced-binary-tree
     
     """
     return len(node) == 1
