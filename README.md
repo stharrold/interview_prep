@@ -14,7 +14,7 @@ $ git clone https://github.com/stharrold/interview_prep.git
 $ python 
 >>> import interview_prep.interview_prep as interview_prep
 ```
-See section "Examples" above for usage.Examples
+See section "Examples" above for usage.
 
 ## Testing
 
