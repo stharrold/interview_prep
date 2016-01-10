@@ -30,14 +30,14 @@ def q1_calc_max_profit(prices:list) -> float:
         max_profit (float): Maximum profit possible from buying then selling.
     
     Notes:
-        * interviewcake.com question #1, "Apple Stocks".
+        * interviewcake.com question #1, "Apple Stocks".[^q1]
         * Complexity:
             * n = len(prices)
             * Ideal: Time=O(n), Space=O(1)
             * Realized: Time=O(n), Space=O(1)
     
     References:
-        .. [1] https://www.interviewcake.com/question/stock-price
+        [^q1]: https://www.interviewcake.com/question/stock-price
     
     """
     # Check arguments.
@@ -63,14 +63,14 @@ def q2_get_products_of_all_ints_except_at_index(ints:list) -> list:
         prods (list): `list` of `int` products
     
     Notes:
-        * interviewcake.com question #2, "Product of All Other Numbers".
+        * interviewcake.com question #2, "Product of All Other Numbers".[^q2]
         * Complexity:
             * n = len(prices)
             * Ideal: Time=O(n), Space=O(n)
             * Realized: Time=O(n), Space=O(n)
 
     References:
-        ..[1] https://www.interviewcake.com/question/product-of-other-numbers
+        [^q2]: https://www.interviewcake.com/question/product-of-other-numbers
     
     """
     # Check arguments.
@@ -106,14 +106,14 @@ def q3_calc_highest_product_of_3(ints:list) -> int:
         ValueError: Raised if `len(ints) < 3`.
     
     Notes:
-        * interviewcake.com question #3, "Highest Product of 3".
+        * interviewcake.com question #3, "Highest Product of 3".[^q3]
         * Complexity:
             * n = len(ints)
             * Ideal: Time=O(n), Space=O(1)
             * Realized: Time=O(n), Space=O(1)
 
     References:
-        ..[1] https://www.interviewcake.com/question/highest-product-of-3
+        [^q3]: https://www.interviewcake.com/question/highest-product-of-3
     
     """
     # Check arguments.
@@ -200,14 +200,14 @@ def q4_condense_meeting_times(times:list) -> list:
             Example: `condensed = [(0, 1), (2, 5)]`
 
     Notes:
-        * interviewcake.com question #4, "Merging Meeting Times".
+        * interviewcake.com question #4, "Merging Meeting Times".[^q4]
         * Complexity:
             * n = len(times)
             * Ideal: Time=O(n*lg(n)), Space=O(n)
             * Realized: Time=O(n*lg(n)), Space=O(n)
 
     References:
-        .. [1] https://www.interviewcake.com/question/merging-ranges
+        [^q4]: https://www.interviewcake.com/question/merging-ranges
 
     """
     # Check arguments.
@@ -305,7 +305,7 @@ def q5_count_combinations(amount:int, denoms:list) -> int:
             * Raised if any denoms are not >= 1.
         
     Notes:
-        * interviewcake.com question #5, "Making Change".
+        * interviewcake.com question #5, "Making Change".[^q5]
         * Complexity:
             * n = amount; k = len(denoms)
             * Complexity:
@@ -313,7 +313,7 @@ def q5_count_combinations(amount:int, denoms:list) -> int:
                 * Realized: Time: O(n*k); Space: O(n)
     
     References:
-        .. [1] https://www.interviewcake.com/question/python/coin
+        [^q5]: https://www.interviewcake.com/question/python/coin
     
     """
     # Check arguments.
@@ -373,13 +373,13 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
             * Raised if width or height < 0
 
     Notes:
-        * interviewcake.com question #6, "Rectangular Love".
+        * interviewcake.com question #6, "Rectangular Love".[^q6]
         * Complexity:
             * Ideal: Time: O(1); Space: O(1)
             * Realized: Time: O(1); Space: O(1)
     
     References:
-        .. [1] https://www.interviewcake.com/question/rectangular-love
+        [^q6]: https://www.interviewcake.com/question/rectangular-love
 
     """
     # Check arguments.
@@ -479,10 +479,10 @@ class q7_TempTracker:
     Notes:
         * Temperatures must be between 0 <= temp <= 111.
             Units are degrees Fahrenheit.
-        * interviewcake.com question #7, "Temperature Tracker".
+        * interviewcake.com question #7, "Temperature Tracker".[^q7]
 
     References:
-        .. [1] https://www.interviewcake.com/question/python/temperature-tracker
+        [^q7] https://www.interviewcake.com/question/python/temperature-tracker
 
     """
     
@@ -627,7 +627,7 @@ class q7_TempTracker:
         return self._mode
 
 
-
+# TODO: resume here
 
 
 def is_leaf_node(node):
