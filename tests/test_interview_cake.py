@@ -235,6 +235,33 @@ def test_q7_TempTracker(
     return None
 
 
+def test_q8_BinaryTreeNode(
+    values:list=list(range((2**3)-1)),
+    ref_value:int=6, ref_right_path:list=[False]*3) -> None:
+    r"""Pytest for q8_BinaryTreeNode.
+    
+    Args:
+        values (list, optional, [0,1,...,6]): Values of the tree nodes.
+        ref_value (int, optional, 6): Value of the tree node to test.
+        ref_right_path (list, optional, [False,False,False]):
+            List of `bool` identifing the path of right-child nodes to the
+            tree node to test. The first `bool` is always `False` since the
+            root node is not a right-child.
+    
+    """
+    # for (idx, value) in enumerate(values):
+    #     if idx == 0:
+    #         binarytree = ic.q8_BinaryTreeNode(value=value)
+    #     if idx % 2 == 0:
+            
+
+    #     if value % 2 == 1:
+    #     binary
+    return None
+
+# TODO: REDO BELOW HERE
+
+
 def test_is_leaf_node(node=['a'], is_leaf=True):
     """pytest style test for is_leaf
 

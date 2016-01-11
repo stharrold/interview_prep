@@ -30,7 +30,7 @@ def q1_calc_max_profit(prices:list) -> float:
         max_profit (float): Maximum profit possible from buying then selling.
     
     Notes:
-        * interviewcake.com question #1, "Apple Stocks".[^q1]
+        * interviewcake.com, question #1, "Apple Stocks".[^q1]
         * Complexity:
             * n = len(prices)
             * Ideal: Time=O(n), Space=O(1)
@@ -63,7 +63,7 @@ def q2_get_products_of_all_ints_except_at_index(ints:list) -> list:
         prods (list): `list` of `int` products
     
     Notes:
-        * interviewcake.com question #2, "Product of All Other Numbers".[^q2]
+        * interviewcake.com, question #2, "Product of All Other Numbers".[^q2]
         * Complexity:
             * n = len(prices)
             * Ideal: Time=O(n), Space=O(n)
@@ -106,7 +106,7 @@ def q3_calc_highest_product_of_3(ints:list) -> int:
         ValueError: Raised if `len(ints) < 3`.
     
     Notes:
-        * interviewcake.com question #3, "Highest Product of 3".[^q3]
+        * interviewcake.com, question #3, "Highest Product of 3".[^q3]
         * Complexity:
             * n = len(ints)
             * Ideal: Time=O(n), Space=O(1)
@@ -200,7 +200,7 @@ def q4_condense_meeting_times(times:list) -> list:
             Example: `condensed = [(0, 1), (2, 5)]`
 
     Notes:
-        * interviewcake.com question #4, "Merging Meeting Times".[^q4]
+        * interviewcake.com, question #4, "Merging Meeting Times".[^q4]
         * Complexity:
             * n = len(times)
             * Ideal: Time=O(n*lg(n)), Space=O(n)
@@ -305,7 +305,7 @@ def q5_count_combinations(amount:int, denoms:list) -> int:
             * Raised if any denoms are not >= 1.
         
     Notes:
-        * interviewcake.com question #5, "Making Change".[^q5]
+        * interviewcake.com, question #5, "Making Change".[^q5]
         * Complexity:
             * n = amount; k = len(denoms)
             * Complexity:
@@ -373,7 +373,7 @@ def q6_calc_intersection(rect1:dict, rect2:dict) -> dict:
             * Raised if width or height < 0
 
     Notes:
-        * interviewcake.com question #6, "Rectangular Love".[^q6]
+        * interviewcake.com, question #6, "Rectangular Love".[^q6]
         * Complexity:
             * Ideal: Time: O(1); Space: O(1)
             * Realized: Time: O(1); Space: O(1)
@@ -474,21 +474,21 @@ class q7_TempTracker:
     r"""Temperature tracker.
     
     Attrs:
-        None
+        None (all [pseudo-]private)
 
     Notes:
         * Temperatures must be between 0 <= temp <= 111.
             Units are degrees Fahrenheit.
-        * interviewcake.com question #7, "Temperature Tracker".[^q7]
+        * interviewcake.com, question #7, "Temperature Tracker".[^q7]
 
     References:
-        [^q7] https://www.interviewcake.com/question/python/temperature-tracker
+        [^q7]: https://www.interviewcake.com/question/python/temperature-tracker
 
     """
     
     
     def __init__(self) -> None:
-        r"""Initialize pseudo-private variables for TempTracker.
+        r"""Initialize attributes.
         
         Args:
             None
@@ -513,7 +513,7 @@ class q7_TempTracker:
     
     
     def insert(self, temp:int) -> None:
-        r"""Insert a temperature in TempTracker.
+        r"""Insert a temperature.
         
         Args:
             temp (int): A single temperature measurement.
@@ -627,7 +627,72 @@ class q7_TempTracker:
         return self._mode
 
 
-# TODO: resume here
+class q8_BinaryTreeNode:
+    r"""Binary tree node.
+    
+    Attrs:
+        value (int, optional, None): Value of the node. Default is `None`.
+        right (q8_BinaryTreeNode, optional, None):
+        left  (q8_BinaryTreeNode, optional, None):
+            Child [right,left] nodes. Default is `None`.
+    
+    Notes:
+        * interviewcake.com, question #8, "Balanced Binary Tree".[^q8]
+        
+    References:
+        [^q8]: https://www.interviewcake.com/question/python/balanced-binary-tree
+    
+    """
+    
+    def __init__(self, value:int=None) -> None:
+        r"""Initialize attributes.
+        
+        Args:
+            value (int, optional, None): Value of the node. Default is `None`.
+        
+        Returns:
+            None
+        
+        """
+        self.value = value
+        self.right = None
+        self.left  = None
+        return None
+    
+    
+    def insert_left(self, value:int=None) -> None:
+        r"""Insert left child node.
+        
+        Args:
+            value (int, optional, None): Value of the left child node.
+                Default is `None`.
+        
+        Returns:
+            None
+
+        """
+        self.left = q8_BinaryTreeNode(value=value)
+        return None
+
+
+    def insert_right(self, value:int=None) -> None:
+        r"""Insert right child node.
+        
+        Args:
+            value (int, optional, None): Value of the right child node.
+                Default is `None`.
+        
+        Returns:
+            None
+
+        """
+        self.right = q8_BinaryTreeNode(value=value)
+        return None
+
+
+def q8_():
+    pass
+# TODO: REDO BELOW HERE
 
 
 def is_leaf_node(node):
@@ -648,7 +713,7 @@ def is_leaf_node(node):
         is_super_balanced
 
     Notes:
-        - interviewcake.com question #8
+        - interviewcake.com, question #8
         - Complexity:
             Time: O(1)
             Space: O(1)
@@ -691,7 +756,7 @@ def get_younger_sibling_or_parent(tree, path):
         is_super_balanced
 
     Notes:
-        - interviewcake.com question #8
+        - interviewcake.com, question #8
         - Complexity:
             Time: O(max_depth) ~ O(logk(num_nodes))
             Space: O(1)
@@ -740,7 +805,7 @@ def is_super_balanced(tree):
             Example (from Args:`tree` example): True
 
     Notes:
-        - interviewcake.com question #8
+        - interviewcake.com, question #8
         - Complexity:
             Time: O(num_nodes*logk(num_nodes))
             Space: O(max_depth) ~ O(logk(num_nodes))
@@ -900,7 +965,7 @@ def is_valid_bin_search_tree(bin_tree):
         _get_next_node_path_values
   
     Notes:
-        - interviewcake.com question #9
+        - interviewcake.com, question #9
         - Complexity:
             Ideal:
                 Time: O(num_nodes)
@@ -967,7 +1032,7 @@ def q13_find_rotation_index(lst: list) -> int:
     	idx_rot (int): Rotation index.
     
     Notes:
-        * interviewcake.com question #13, "Find Rotation Point".
+        * interviewcake.com, question #13, "Find Rotation Point".
         * Complexity:
             * Ideal:
                 * Time: lg(len(lst))
@@ -1030,7 +1095,7 @@ def q14_movies_match_flight(flight_length: int, movie_lengths: list) -> bool:
             False: There are not two movies...
         
     Notes:
-        * interviewcake.com question #14, "Inflight Entertainment" [1]_.
+        * interviewcake.com, question #14, "Inflight Entertainment" [1]_.
         * Complexity:
             * Ideal:
                 * Time: O(n)
@@ -1088,7 +1153,7 @@ def q15_fib(idx: int) -> int:
         ValueError: Raised if `idx` < 0 or is not `int`.
     
     Notes:
-        * interviewcake.com question #15, "Compute Nth Fibonacci Number" [1]_.
+        * interviewcake.com, question #15, "Compute Nth Fibonacci Number" [1]_.
         * fib(n) = fib(n-1) + fib(n-2), fib(0) = 0, fib(1) = 1.
         * Complexity:
             * Ideal:
@@ -1138,7 +1203,7 @@ def q16_max_duffel_bag_value(cake_tuples:list, bag_capacity:int) -> int:
             Returns `numpy.inf` if there is a cake with weight = 0.
         
     Notes:
-        * interviewcake.com question #16, "The Cake Thief"
+        * interviewcake.com, question #16, "The Cake Thief"
         * Complexity:
             * (n, k) = (len(cake_tuples), bag_capacity)
             * Ideal:
